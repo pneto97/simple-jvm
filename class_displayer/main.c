@@ -8,4 +8,6 @@ int main(){
     java_class = ( class_structure* ) malloc( sizeof(class_structure) );
 
     printf("Rodou!\n");
+
+    free(java_class);
 }
