@@ -43,12 +43,26 @@ int main(int argc , char* argv[]){
         exit(1);
     }
 
-    class_structure* jclass;
     FILE *fclass = fopen(argv[1], "rb");
+    if(fclass == NULL){
+        printf("Erro ao abrir o arquivo!\n");
+        exit(1);
+    }
+
+    class_structure* jclass;
     jclass = ( class_structure* ) malloc( sizeof(class_structure) );
 
     jclass->magic = read32(fclass);
     printf("%x\n",jclass->magic);
+
+    jclass->minor_version = read16(fclass);
+    printf("%x\n",jclass->minor_version);
+
+    jclass->major_version = read16(fclass);
+    printf("%d\n",jclass->major_version);
+
+    jclass->constant_pool_count = read16(fclass);
+    printf("%d\n",jclass->constant_pool_count);
 
     free(jclass);
     fclose(fclass);
