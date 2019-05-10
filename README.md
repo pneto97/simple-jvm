@@ -5,3 +5,5 @@ made in C99
 
 useful links:
   https://docs.oracle.com/javase/specs/jvms/se8/jvms8.pdf
+  https://github.com/atcol/cfr/tree/master/src
+  https://www.geeksforgeeks.org/java-class-file/
