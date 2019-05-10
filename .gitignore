@@ -4,4 +4,4 @@
 !class_displayer/makefile
 !class_displayer/*.c
 !class_displayer/*.h
-!class_displayer/examples/
+!class_displayer/examples/*.java
