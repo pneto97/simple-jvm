@@ -31,9 +31,8 @@ typedef struct constant_pool{
         InvokeDynamicInfo invokeDynamicInfo; //CONSTANT_InvokeDynamic_info
 
     }info;
-    
-} cp_info;
 
+} cp_info;
 
 typedef struct attribute_info{
     uint16_t attribute_name_index;
@@ -41,21 +40,51 @@ typedef struct attribute_info{
     uint8_t *info;
 } attribute_info;
 
+
 typedef struct field_info{
    uint16_t access_flags;
    uint16_t name_index;
    uint16_t descriptor_index;
    uint16_t attributes_count;
-   attribute_info* attributes;
+   attribute_info *attributes;
 } field_info;
+
+//constant_value_attribute é associado ao field_info
+typedef struct constant_value_attribute {
+    uint16_t attribute_name_index;
+    uint32_t attribute_length;
+    uint16_t constantvalue_index;
+}constant_value_attribute;
 
 typedef struct method_info{
     uint16_t access_flags;
     uint16_t name_index;
     uint16_t descriptor_index;
     uint16_t attributes_count;
-    attribute_info* attributes;
+    attribute_info *attributes;
 } method_info;
+
+//code_attribute é relacionado ao method_info
+typedef struct code_attribute {
+    uint16_t attribute_name_index;
+    uint32_t attribute_length;
+    uint16_t max_stack;
+    uint16_t max_locals;
+    uint32_t code_length;
+    //uint8_t code[code_length];  ler secao 4.9 da documentacao
+    uint16_t exception_table_length;
+    uint16_t *exception_table;
+    uint16_t attributes_count;
+    attribute_info *attributes;
+} code_attribute;
+
+typedef struct exception_table {
+    uint16_t start_pc;
+    uint16_t end_pc;
+    uint16_t handler_pc;
+    uint16_t catch_type;
+} exception_table;
+
 
 //estrutura da classe. Guarda os lados lidos do .class
 typedef struct class_structure {
@@ -78,5 +107,5 @@ typedef struct class_structure {
     method_info *methods;
     //Jomas
     uint16_t attributes_cont;
-    attribute_info* attributes;
+    attribute_info *attributes;
 } class_structure ;
