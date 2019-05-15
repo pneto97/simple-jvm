@@ -3,23 +3,23 @@
 #include "j8_class_reader.h"
 #include <stdint.h>
 #include <stdlib.h>
-#include "read_utils.h" 
+#include "read_utils.h"
 
 //leitura do constant pool, o class_file precisa estar já na posição correta
 void readConstantPool(FILE *class_file, class_structure* jclass){
-    
+
     //aloca o campo do cp_info, esse -1 é porque o indice do constant pool começa em 1
     jclass->constant_pool = (cp_info *) malloc(
-        (jclass->constant_pool_count-1) * sizeof(cp_info)       
+        (jclass->constant_pool_count-1) * sizeof(cp_info)
     );
-    
-    //lê cada tag, de acordo com a tag, le os campos corretos da union "info" 
+
+    //lê cada tag, de acordo com a tag, le os campos corretos da union "info"
     // recomendo ler o capitulo 4 da doc da jvm para entender essa parte, na parte do constant_pool
     for(int i = 0; i < jclass->constant_pool_count-1 ; i++){
-        
+
         //le a tag de 8 bits
         jclass->constant_pool[i].tag = beRead8(class_file);
-        
+
         switch(jclass->constant_pool[i].tag){
 
             case CONSTANT_Class:
@@ -37,7 +37,7 @@ void readConstantPool(FILE *class_file, class_structure* jclass){
                 break;
 
             case CONSTANT_String:
-                
+
                 jclass->constant_pool[i].info.stringInfo.string_index = beRead16(class_file);
 
                 break;
@@ -57,31 +57,31 @@ void readConstantPool(FILE *class_file, class_structure* jclass){
                 break;
 
             case CONSTANT_NameAndType:
-                
+
                 jclass->constant_pool[i].info.nameAndTypeInfo.name_index = beRead16(class_file);
                 jclass->constant_pool[i].info.nameAndTypeInfo.descriptor_index = beRead16(class_file);
                 break;
             case CONSTANT_Utf8:
-                
+
                 //pega o tamanho da string
                 jclass->constant_pool[i].info.utf8Info.length = beRead16(class_file);
 
                 //aloca espaço para esse tamanho
-                jclass->constant_pool[i].info.utf8Info.bytes = 
+                jclass->constant_pool[i].info.utf8Info.bytes =
                     (uint8_t*) malloc(
                         jclass->constant_pool[i].info.utf8Info.length * sizeof(uint8_t)
-                    ); 
-                
+                    );
+
                 //le a string do arquivo para o espaço alocado
                 fread(jclass->constant_pool[i].info.utf8Info.bytes,
                       sizeof(uint8_t),
                       jclass->constant_pool[i].info.utf8Info.length,
                       class_file
                 );
-                
+
                 break;
             case CONSTANT_MethodHandle:
-                
+
                 jclass->constant_pool[i].info.methodHandleInfo.reference_kind = beRead8(class_file);
                 jclass->constant_pool[i].info.methodHandleInfo.reference_index = beRead16(class_file);
                 break;
@@ -91,7 +91,7 @@ void readConstantPool(FILE *class_file, class_structure* jclass){
 
                 break;
             case CONSTANT_InvokeDynamic:
-                
+
                 jclass->constant_pool[i].info.invokeDynamicInfo.bootstrap_method_attr_index =
                     beRead16(class_file);
                 jclass->constant_pool[i].info.invokeDynamicInfo.name_and_type_index =
@@ -106,21 +106,65 @@ void readConstantPool(FILE *class_file, class_structure* jclass){
     }
 }
 
+void readAtributtes(FILE *class_file, class_structure* jclass){
+    jclass->attribute = (attribute *) malloc(
+        (jclass->attributes_count) * sizeof(attribute)
+    );
+
+    jclass->attribute.attribute_name_index = beRead16(class_file);
+    jclass->attribute.length = beRead32(class_file);
+
+    if(jclass->attribute.attribute.name_index == "Code" ){
+
+    }
+    else if(jclass->attribute.attribute.name_index == "ConstantValue" ){
+
+        jclass->attribute.attribute_info.constant_value_attribute.constantvalue_index
+        = beRead16(class_file);
+    }
+    else if(jclass->attribute.attribute.name_index == "Exceptions" ){
+
+        jclass->attribute.attribute_info.exceptions_attribute.number_of_exceptions
+        = beRead16(class_file);
+        
+        //alocacao para a tabela de excessoes
+        jclass->attribute.attribute_info.exceptions_attribute.excepetions_table = (uint16_t*) malloc(
+            (jclass->attribute.attribute_info.exceptions_attribute.number_of_exceptions)
+            * sizeof(uint16_t)
+        );
+
+        for(i=0;i<jclass->attribute.attribute_info.exceptions_attribute.number_of_exceptions;i++){
+            //nao tenho certeza se sao 2 bytes
+            jclass->attribute.attribute_info.exceptions_attribute.excepetions_table = beRead16(class_file)
+        }
+
+    }
+    else if(jclass->attribute.attribute.name_index == "InnerClass" ){
+
+
+    }
+
+    //Faltam ainda mais opcoes de name.index!
+
+}
+
+
+
 //desaloca a classe incluindo o utf8 do constant pool
 void freeClass(class_structure *jclass){
-    
+
     if(jclass != NULL){
 
         for(int i = 0; i < jclass->constant_pool_count-1 ; i++){
             if(jclass->constant_pool[i].info.utf8Info.bytes != NULL)
                 free(jclass->constant_pool[i].info.utf8Info.bytes);
         }
-        
+
         if(jclass->constant_pool != NULL){
             free(jclass->constant_pool);
         }
 
         free(jclass);
     }
-    
+
 }
