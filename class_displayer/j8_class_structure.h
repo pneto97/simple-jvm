@@ -40,6 +40,19 @@ typedef struct attribute_info{
     uint8_t *info;
 } attribute_info;
 
+typedef struct inner_classes_attribute {
+    uint16_t attribute_name_index;
+    uint32_t attribute_length;
+    uint16_t number_of_classes;
+    classes  *classes;
+} inner_classes_attribute;
+
+typedef struct classes{
+    uint16_t inner_class_info_index;
+    uint16_t outer_class_info_index;
+    uint16_t inner_name_index;
+    uint16_t inner_class_access_flags;
+}classes;
 
 typedef struct field_info{
    uint16_t access_flags;
@@ -61,7 +74,7 @@ typedef struct method_info{
     uint16_t name_index;
     uint16_t descriptor_index;
     uint16_t attributes_count;
-    attribute_info *attributes;
+    attribute_info *attribute_info;
 } method_info;
 
 //code_attribute é relacionado ao method_info
@@ -78,13 +91,19 @@ typedef struct code_attribute {
     attribute_info *attributes;
 } code_attribute;
 
+typedef struct exceptions_attribute {
+       uint16_t attribute_name_index;
+       uint32_t attribute_length;
+       uint16_t number_of_exceptions;
+       uint16_t *info; //ponteiro para a leitura de info->classInfo
+} exceptions_attribute;
+
 typedef struct exception_table {
     uint16_t start_pc;
     uint16_t end_pc;
     uint16_t handler_pc;
     uint16_t catch_type;
 } exception_table;
-
 
 //estrutura da classe. Guarda os lados lidos do .class
 typedef struct class_structure {
