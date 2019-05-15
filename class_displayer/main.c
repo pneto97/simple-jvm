@@ -47,6 +47,9 @@ int main(int argc , char* argv[]){
     jclass->access_flags = beRead16(class_file);
     printf("Access Flags: %d\n",jclass->access_flags);
 
+    jclass->this_class = beRead16(class_file);
+    printf("This class: %d\n",jclass->this_class);
+
     //TODO: fazer o parse dos outros campos...
     
     freeClass(jclass);
