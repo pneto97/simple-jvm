@@ -78,7 +78,7 @@ typedef struct class_structure {
     uint16_t minor_version;
     uint16_t major_version;
     uint16_t constant_pool_count;
-    cp_info* constant_pool;
+    cp_info *constant_pool;
     uint16_t access_flags;
     uint16_t this_class;
     uint16_t super_class;
