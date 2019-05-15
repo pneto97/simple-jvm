@@ -44,6 +44,9 @@ int main(int argc , char* argv[]){
     readConstantPool(class_file, jclass);
     printConstantPool(class_file, jclass);
 
+    jclass->access_flags = beRead16(class_file);
+    printf("Access Flags: %d\n",jclass->access_flags);
+
     //TODO: fazer o parse dos outros campos...
     
     freeClass(jclass);
