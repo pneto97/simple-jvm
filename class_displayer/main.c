@@ -53,6 +53,9 @@ int main(int argc , char* argv[]){
     jclass->super_class = beRead16(class_file);
     printf("Super class: %d\n",jclass->super_class);
 
+    jclass->interfaces_count = beRead16(class_file);
+    printf("Interfaces Count: %d\n",jclass->interfaces_count);
+    
     //TODO: fazer o parse dos outros campos...
     
     freeClass(jclass);
