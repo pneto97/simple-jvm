@@ -50,6 +50,9 @@ int main(int argc , char* argv[]){
     jclass->this_class = beRead16(class_file);
     printf("This class: %d\n",jclass->this_class);
 
+    jclass->super_class = beRead16(class_file);
+    printf("Super class: %d\n",jclass->super_class);
+
     //TODO: fazer o parse dos outros campos...
     
     freeClass(jclass);
