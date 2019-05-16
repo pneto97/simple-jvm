@@ -145,9 +145,9 @@ void printInterfaces(class_structure *jclass){
 
     u_int16_t interfaces_count = jclass->interfaces_count;
 
-    printf("Interfaces:\n");
-    for (int i = 0; i < interfaces_count; i++)
-    {
-        printf("\t%d\n", jclass->interfaces[i]);
+    if(interfaces_count > 0){
+        printf("Interfaces: \n");
+        for (int i = 0; i < interfaces_count; i++)
+            printf("\t%d\n", jclass->interfaces[i]);
     }
 }
