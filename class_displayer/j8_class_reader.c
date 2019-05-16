@@ -106,45 +106,55 @@ void readConstantPool(FILE *class_file, class_structure* jclass){
     }
 }
 
-void readAtributtes(FILE *class_file, class_structure* jclass){
-    jclass->attribute = (attribute *) malloc(
-        (jclass->attributes_count) * sizeof(attribute)
+void readAtributtes(FILE *class_file, class_structure *jclass){
+    jclass->attribute = (attribute_info *) malloc(
+        (jclass->attributes_count) * sizeof(attribute_info)
     );
 
-    jclass->attribute.attribute_name_index = beRead16(class_file);
-    jclass->attribute.length = beRead32(class_file);
+    jclass->attribute->attribute_name_index = beRead16(class_file);
+    jclass->attribute->attribute_length = beRead32(class_file);
 
-    if(jclass->attribute.attribute.name_index == "Code" ){
+    /* QUAL VARIAVEL DEVE-SE FAZER O SWITCH?
+    switch ( ) {
+
+        case "Code":
+            //falta implementacao
+            break;
+
+        case "ConstantValue":
+
+            jclass->attribute->info.constant_value_attribute.constantvalue_index
+            = beRead16(class_file);
+            break;
+
+        case "Exceptions":
+
+            jclass->attribute->info.exceptions_attribute.number_of_exceptions
+            = beRead16(class_file);
+
+            //alocacao para a tabela de excessoes
+            jclass->attribute->info.exceptions_attribute.excepetions_table = (uint16_t*) malloc(
+                (jclass->attribute->info.exceptions_attribute.number_of_exceptions)
+                * sizeof(uint16_t)
+            );
+
+            for(int i=0;i<jclass->attribute->info.exceptions_attribute.number_of_exceptions;i++){
+                //nao tenho certeza se sao 2 bytes
+                jclass->attribute->info.exceptions_attribute.excepetions_table[i] = beRead16(class_file);
+            }
+
+            break;
+
+        case "InnerClass":
+        //falta implementacao
+            break;
+
+
+        //Faltam ainda mais opcoes de name.index!
+
 
     }
-    else if(jclass->attribute.attribute.name_index == "ConstantValue" ){
-
-        jclass->attribute.attribute_info.constant_value_attribute.constantvalue_index
-        = beRead16(class_file);
-    }
-    else if(jclass->attribute.attribute.name_index == "Exceptions" ){
-
-        jclass->attribute.attribute_info.exceptions_attribute.number_of_exceptions
-        = beRead16(class_file);
-        
-        //alocacao para a tabela de excessoes
-        jclass->attribute.attribute_info.exceptions_attribute.excepetions_table = (uint16_t*) malloc(
-            (jclass->attribute.attribute_info.exceptions_attribute.number_of_exceptions)
-            * sizeof(uint16_t)
-        );
-
-        for(i=0;i<jclass->attribute.attribute_info.exceptions_attribute.number_of_exceptions;i++){
-            //nao tenho certeza se sao 2 bytes
-            jclass->attribute.attribute_info.exceptions_attribute.excepetions_table = beRead16(class_file)
-        }
-
-    }
-    else if(jclass->attribute.attribute.name_index == "InnerClass" ){
-
-
-    }
-
-    //Faltam ainda mais opcoes de name.index!
+    */
 
 }
 

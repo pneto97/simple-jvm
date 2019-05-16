@@ -44,16 +44,16 @@ typedef struct attribute{
         constant_value_attribute constant_value_attribute;
         exceptions_attribute exceptions_attribute;
         inner_classes_attribute inner_classes_attribute;
-    }attribute_info;
+    }info;
 
-} attribute;
+} attribute_info;
 
 typedef struct field_info{
    uint16_t access_flags;
    uint16_t name_index;
    uint16_t descriptor_index;
    uint16_t attributes_count;
-   attribute *attributes_info;
+   attribute_info *attributes;
 } field_info;
 
 
@@ -62,7 +62,7 @@ typedef struct method_info{
     uint16_t name_index;
     uint16_t descriptor_index;
     uint16_t attributes_count;
-    attribute *attribute_info;
+    attribute_info *attributes;
 } method_info;
 
 typedef struct exception_table {
@@ -93,5 +93,5 @@ typedef struct class_structure {
     method_info *methods;
     //Jomas
     uint16_t attributes_count;
-    attribute *attributes;
+    attribute_info *attribute;
 } class_structure ;
