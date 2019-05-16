@@ -48,15 +48,16 @@ int main(int argc , char* argv[]){
     printAccessFlags(jclass);
 
     jclass->this_class = beRead16(class_file);
-    printf("This class: %d\n",jclass->this_class);
+    printf("This Class: ");
+    printClassName(jclass->this_class, jclass);
 
     jclass->super_class = beRead16(class_file);
-    printf("Super class: %d\n",jclass->super_class);
+    printf("Super Class: ");
+    printClassName(jclass->super_class, jclass);
 
     jclass->interfaces_count = beRead16(class_file);
     printf("Interfaces Count: %d\n",jclass->interfaces_count);
 
-    
     readInterfaces(class_file, jclass);
     printInterfaces(jclass);
     
