@@ -134,6 +134,10 @@ void freeClass(class_structure *jclass){
                 free(jclass->constant_pool[i].info.utf8Info.bytes);
         }
         
+        if(jclass->interfaces != NULL){
+            free(jclass->interfaces);
+        }
+
         if(jclass->constant_pool != NULL){
             free(jclass->constant_pool);
         }
