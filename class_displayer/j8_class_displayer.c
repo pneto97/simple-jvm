@@ -126,18 +126,20 @@ void printAccessFlags(class_structure *jclass){
     
     if(access_flag & ACC_PUBLIC)
         printf("Public ");
-    if(access_flag & ACC_PRIVATE)
-        printf("Private ");
-    if(access_flag & ACC_PROTECTED)
-        printf("Protected ");
-    if(access_flag & ACC_STATIC)
-        printf("Static ");
     if(access_flag & ACC_FINAL)
         printf("Final ");
-    if(access_flag & ACC_SYNCHRONIZED)
-        printf("Sincronized ");
-    if(access_flag & ACC_STRICT)
-        printf("Strict ");
+    if(access_flag & ACC_SUPER)
+        printf("Super ");
+    if(access_flag & ACC_INTERFACE)
+        printf("Final ");
+    if(access_flag & ACC_ABSTRACT)
+        printf("Abstract ");
+    if(access_flag & ACC_SYNTHETIC)
+        printf("Synthetic ");
+    if(access_flag & ACC_ANNOTATION)
+        printf("Annotation ");
+    if(access_flag & ACC_ENUM)
+        printf("Enum ");
     printf("\n");
 }
 
