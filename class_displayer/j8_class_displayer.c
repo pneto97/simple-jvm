@@ -1,6 +1,7 @@
 //j8_class_displayer.c 
 #include "j8_class_displayer.h"
 #include <string.h>
+#include "j8_access_flags.h"
 
 //de acordo com a tag do constant pool, altera a string tagType para o significado
 void cpTagToString(uint8_t tag, char *tagType){
@@ -115,4 +116,27 @@ void printConstantPool(FILE* class_file, class_structure* jclass){
                 break;
         } 
     } 
+}
+
+// Imprime o nome das flags presentes classe
+void printAccessFlags(class_structure* jclass){
+    uint16_t access_flag = jclass->access_flags;
+
+    printf("Access Flags:\n\t");
+    
+    if(access_flag & ACC_PUBLIC)
+        printf("Public ");
+    if(access_flag & ACC_PRIVATE)
+        printf("Private ");
+    if(access_flag & ACC_PROTECTED)
+        printf("Protected ");
+    if(access_flag & ACC_STATIC)
+        printf("Static ");
+    if(access_flag & ACC_FINAL)
+        printf("Final ");
+    if(access_flag & ACC_SYNCHRONIZED)
+        printf("Sincronized ");
+    if(access_flag & ACC_STRICT)
+        printf("Strict ");
+    printf("\n");
 }

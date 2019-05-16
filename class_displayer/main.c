@@ -45,7 +45,7 @@ int main(int argc , char* argv[]){
     printConstantPool(class_file, jclass);
 
     jclass->access_flags = beRead16(class_file);
-    printf("Access Flags: %d\n",jclass->access_flags);
+    printAccessFlags(jclass);
 
     jclass->this_class = beRead16(class_file);
     printf("This class: %d\n",jclass->this_class);
@@ -55,7 +55,7 @@ int main(int argc , char* argv[]){
 
     jclass->interfaces_count = beRead16(class_file);
     printf("Interfaces Count: %d\n",jclass->interfaces_count);
-    
+
     //TODO: fazer o parse dos outros campos...
     
     freeClass(jclass);

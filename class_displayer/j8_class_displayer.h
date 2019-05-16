@@ -15,3 +15,6 @@ void cpTagToString(uint8_t tag, char *tagType);
 
 //printa todos os campos da classe
 void printConstantPool(FILE* class_file, class_structure* jclass);
+
+// Imprime o nome das flags presentes classe
+void printAccessFlags(class_structure* jclass);
