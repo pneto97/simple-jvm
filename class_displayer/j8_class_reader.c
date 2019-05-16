@@ -69,7 +69,7 @@ void readConstantPool(FILE *class_file, class_structure* jclass){
                 //aloca espaço para esse tamanho
                 jclass->constant_pool[i].info.utf8Info.bytes = 
                     (uint8_t*) malloc(
-                        jclass->constant_pool[i].info.utf8Info.length * sizeof(uint8_t)
+                        (jclass->constant_pool[i].info.utf8Info.length+1) * sizeof(uint8_t)
                     ); 
                 
                 //le a string do arquivo para o espaço alocado
@@ -78,6 +78,8 @@ void readConstantPool(FILE *class_file, class_structure* jclass){
                       jclass->constant_pool[i].info.utf8Info.length,
                       class_file
                 );
+
+                jclass->constant_pool[i].info.utf8Info.bytes[jclass->constant_pool[i].info.utf8Info.length] = '\0';
                 
                 break;
             case CONSTANT_MethodHandle:
