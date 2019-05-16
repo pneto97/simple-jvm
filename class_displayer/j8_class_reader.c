@@ -106,6 +106,22 @@ void readConstantPool(FILE *class_file, class_structure* jclass){
     }
 }
 
+void readInterfaces(FILE *class_file, class_structure* jclass){
+
+    u_int8_t interfaces_count = 
+    jclass->interfaces_count; 
+
+    //aloca o vetor de indices de constantes
+    jclass->interfaces = (u_int16_t *) malloc(
+        (jclass->constant_pool_count-1) * sizeof(u_int16_t)
+    );
+
+    //lê do arquivo os indices e armazena no vetor de interfaces
+    for(int i = 0; i < jclass->interfaces_count; i++){
+        jclass->interfaces[i] = beRead16(class_file);
+    }
+}
+
 //desaloca a classe incluindo o utf8 do constant pool
 void freeClass(class_structure *jclass){
     

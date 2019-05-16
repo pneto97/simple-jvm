@@ -119,7 +119,7 @@ void printConstantPool(FILE* class_file, class_structure* jclass){
 }
 
 // Imprime o nome das flags presentes classe
-void printAccessFlags(class_structure* jclass){
+void printAccessFlags(class_structure *jclass){
     uint16_t access_flag = jclass->access_flags;
 
     printf("Access Flags:\n\t");
@@ -139,4 +139,15 @@ void printAccessFlags(class_structure* jclass){
     if(access_flag & ACC_STRICT)
         printf("Strict ");
     printf("\n");
+}
+
+void printInterfaces(class_structure *jclass){
+
+    u_int16_t interfaces_count = jclass->interfaces_count;
+
+    printf("Interfaces:\n");
+    for (int i = 0; i < interfaces_count; i++)
+    {
+        printf("\t%d\n", jclass->interfaces[i]);
+    }
 }

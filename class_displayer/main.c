@@ -56,6 +56,10 @@ int main(int argc , char* argv[]){
     jclass->interfaces_count = beRead16(class_file);
     printf("Interfaces Count: %d\n",jclass->interfaces_count);
 
+    
+    readInterfaces(class_file, jclass);
+    printInterfaces(jclass);
+    
     //TODO: fazer o parse dos outros campos...
     
     freeClass(jclass);

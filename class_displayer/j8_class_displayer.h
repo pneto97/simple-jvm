@@ -17,4 +17,7 @@ void cpTagToString(uint8_t tag, char *tagType);
 void printConstantPool(FILE* class_file, class_structure* jclass);
 
 // Imprime o nome das flags presentes classe
-void printAccessFlags(class_structure* jclass);
+void printAccessFlags(class_structure*);
+
+// Imprime as Interfaces
+void printInterfaces(class_structure*);
