@@ -112,7 +112,7 @@ void freeClass(class_structure *jclass){
     if(jclass != NULL){
 
         for(int i = 0; i < jclass->constant_pool_count-1 ; i++){
-            if(jclass->constant_pool[i].info.utf8Info.bytes != NULL)
+            if(jclass->constant_pool[i].info.utf8Info.bytes != NULL && jclass->constant_pool[i].tag == CONSTANT_Utf8)
                 free(jclass->constant_pool[i].info.utf8Info.bytes);
         }
         
