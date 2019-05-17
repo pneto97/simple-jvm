@@ -135,7 +135,11 @@ void readFields(FILE *class_file, class_structure* jclass){
     // //lê do arquivo os indices e armazena no vetor de interfaces
     // for(int i = 0; i < jclass->interfaces_count; i++){
     //     jclass->interfaces[i] = beRead16(class_file);
-    // }
+
+}
+
+void readMethods(FILE *class_file, class_structure* jclass){
+
 }
 
 //desaloca a classe incluindo o utf8 do constant pool
