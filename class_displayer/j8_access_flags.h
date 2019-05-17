@@ -11,3 +11,4 @@
 #define ACC_SYNTHETIC       0x1000 
 #define ACC_ANNOTATION      0x2000
 #define ACC_ENUM            0x4000
+#define ACC_VOLATILE        0X0040
