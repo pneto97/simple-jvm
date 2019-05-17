@@ -109,19 +109,20 @@ void readConstantPool(FILE *class_file, class_structure* jclass){
     }
 }
 
-void readAtributtes(FILE *class_file, class_structure *jclass){
-    jclass->attribute = (attribute_info *) malloc(
-        (jclass->attributes_count) * sizeof(attribute_info)
-    );
+void readAtributtes(FILE *class_file, attribute_info *attribute_info, uint16_t attribute_count, class_structure *jclass){
+    int i = 0;
+    printf("count  %d\n", attribute_count);
+    for(i = 0; i < (int)attribute_count; i++){
+        printf("for loop %d\n", i);
+        attribute_info[i].attribute_name_index = beRead16(class_file);
+        attribute_info[i].attribute_length = beRead32(class_file);
 
 
-    for(int i = 0; i < jclass->attributes_count; i++){
+        uint16_t name_index = attribute_info[i].attribute_name_index;
 
-        jclass->attribute[i].attribute_name_index = beRead16(class_file);
-        jclass->attribute[i].attribute_length = beRead32(class_file);
-
-
-        uint16_t name_index = jclass->attribute[i].attribute_name_index;
+        printf("Attribute[%d]\n",i);
+        printf("\t name_index: %u\n", attribute_info[i].attribute_name_index);
+        printf("\t attribute_length: %u\n", attribute_info[i].attribute_length);
 
         char *attribute_type  = (char *) malloc(
             (jclass->constant_pool[name_index-1].info.utf8Info.length+1) * sizeof(char *)
@@ -129,49 +130,61 @@ void readAtributtes(FILE *class_file, class_structure *jclass){
 
         attribute_type = (char *) jclass->constant_pool[name_index-1].info.utf8Info.bytes;
 
-        // QUAL VARIAVEL DEVE-SE FAZER O SWITCH?
-
         if(strcmp(attribute_type, "Code")){
             //falta implementacao
-            fseek(class_file,jclass->attribute[i].attribute_length,SEEK_CUR);
+            fseek(class_file,attribute_info[i].attribute_length,SEEK_CUR);
         }
 
         else if(strcmp(attribute_type, "ConstantValue")){
 
-            jclass->attribute[i].info.constant_value_attribute.constantvalue_index
+            /*attribute_info[i].info.constant_value_attribute.constantvalue_index
                 = beRead16(class_file);
+            */
+            fseek(class_file,attribute_info[i].attribute_length,SEEK_CUR);
         }
         else if(strcmp(attribute_type, "Exceptions")){
-
-            jclass->attribute[i].info.exceptions_attribute.number_of_exceptions = beRead16(class_file);
+            /*
+            attribute_info[i].info.exceptions_attribute.number_of_exceptions = beRead16(class_file);
 
                 //alocacao para a tabela de excessoes
-            jclass->attribute[i].info.exceptions_attribute.excepetions_table = (uint16_t*) malloc(
-                (jclass->attribute[i].info.exceptions_attribute.number_of_exceptions)
+            attribute_info[i].info.exceptions_attribute.excepetions_table = (uint16_t*) malloc(
+                (attribute_info[i].info.exceptions_attribute.number_of_exceptions)
                     * sizeof(uint16_t)
                 );
 
-            for(int i=0;i<jclass->attribute[i].info.exceptions_attribute.number_of_exceptions;i++){
+            for(int i=0;i<attribute_info[i].info.exceptions_attribute.number_of_exceptions;i++){
                 //nao tenho certeza se sao 2 bytes
-                    jclass->attribute[i].info.exceptions_attribute.excepetions_table[i] = beRead16(class_file);
+                    attribute_info[i].info.exceptions_attribute.excepetions_table[i] = beRead16(class_file);
                 }
-
+            */
+            fseek(class_file,attribute_info[i].attribute_length,SEEK_CUR);
         }
         else if(strcmp(attribute_type, "StackMapTable")){
             //falta implementacao
-            fseek(class_file,jclass->attribute[i].attribute_length,SEEK_CUR);
+            fseek(class_file,attribute_info[i].attribute_length,SEEK_CUR);
         }
 
         else if(strcmp(attribute_type, "BootstrapMethods")){
             //falta implementacao
-            fseek(class_file,jclass->attribute[i].attribute_length,SEEK_CUR);
+            fseek(class_file,attribute_info[i].attribute_length,SEEK_CUR);
 
         }
         else {
-            fseek(class_file,jclass->attribute[i].attribute_length,SEEK_CUR);
+            fseek(class_file,attribute_info[i].attribute_length,SEEK_CUR);
         }
         //Faltam ainda mais opcoes de name.index!
+
+
+        //Free na string auxiliar (serve apenas para realizar a comparacao dos tipos de atributo)
+        printf("ola inicio %d\n", i);
+        if(attribute_type!=NULL){
+
+            //free(attribute_type);
+
+        }
+        printf("ola fim\n");
     }
+
 }
 
 
@@ -209,16 +222,18 @@ void readMethods(FILE *class_file, class_structure* jclass){
     uint8_t methods_count = jclass->methods_count;
 
     jclass->methods = (method_info *) malloc(
-        (jclass->methods_count-1) * sizeof(method_info)
+        (jclass->methods_count) * sizeof(method_info)
     );
 
     for(int i = 0; i < methods_count; i++){
         jclass->methods[i].access_flags = beRead16(class_file);
+        jclass->methods[i].name_index = beRead16(class_file);
         jclass->methods[i].descriptor_index = beRead16(class_file);
         jclass->methods[i].attributes_count = beRead16(class_file);
 
         printf("Index: %d\n\n", i);
         printf("Access Flag: %u\n", jclass->methods[i].access_flags);
+        printf("Name Index: %u\n", jclass->methods[i].name_index);
         printf("Descriptor Index: %u\n", jclass->methods[i].descriptor_index);
         printf("Attribute Count: %u\n", jclass->methods[i].attributes_count);
 
@@ -226,19 +241,16 @@ void readMethods(FILE *class_file, class_structure* jclass){
         uint16_t attribute_count = jclass->methods[i].attributes_count;
 
         jclass->methods[i].attributes = (attribute_info*) malloc(
-            (attribute_count-1) * sizeof(attribute_info)
+            (attribute_count) * sizeof(attribute_info)
         );
 
-        for(int j = 0; j < attribute_count; j++){
-            readAtributtes(class_file, jclass);
-        }
+        readAtributtes(class_file, jclass->methods[i].attributes, attribute_count, jclass);
 
     }
 }
 
 //desaloca a classe incluindo o utf8 do constant pool
 void freeClass(class_structure *jclass){
-
     if(jclass != NULL){
 
         for(int i = 0; i < jclass->constant_pool_count-1 ; i++){
