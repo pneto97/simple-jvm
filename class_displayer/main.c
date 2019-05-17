@@ -70,6 +70,8 @@ int main(int argc , char* argv[]){
     jclass->methods_count = beRead16(class_file);
     printf("Methods Count: %d\n",jclass->methods_count);
 
+    readMethods(class_file, jclass);
+
     //TODO: fazer o parse dos outros campos...
     
     freeClass(jclass);

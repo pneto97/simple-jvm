@@ -133,6 +133,7 @@ void readAtributtes(FILE *class_file, class_structure *jclass){
 
         if(strcmp(attribute_type, "Code")){
             //falta implementacao
+            fseek(class_file,jclass->attribute[i].attribute_length,SEEK_CUR);
         }
 
         else if(strcmp(attribute_type, "ConstantValue")){
@@ -158,12 +159,16 @@ void readAtributtes(FILE *class_file, class_structure *jclass){
         }
         else if(strcmp(attribute_type, "StackMapTable")){
             //falta implementacao
-
+            fseek(class_file,jclass->attribute[i].attribute_length,SEEK_CUR);
         }
 
         else if(strcmp(attribute_type, "BootstrapMethods")){
             //falta implementacao
+            fseek(class_file,jclass->attribute[i].attribute_length,SEEK_CUR);
 
+        }
+        else {
+            fseek(class_file,jclass->attribute[i].attribute_length,SEEK_CUR);
         }
         //Faltam ainda mais opcoes de name.index!
     }
@@ -201,7 +206,34 @@ void readFields(FILE *class_file, class_structure* jclass){
 }
 
 void readMethods(FILE *class_file, class_structure* jclass){
+    uint8_t methods_count = jclass->methods_count;
 
+    jclass->methods = (method_info *) malloc(
+        (jclass->methods_count-1) * sizeof(method_info)
+    );
+
+    for(int i = 0; i < methods_count; i++){
+        jclass->methods[i].access_flags = beRead16(class_file);
+        jclass->methods[i].descriptor_index = beRead16(class_file);
+        jclass->methods[i].attributes_count = beRead16(class_file);
+
+        printf("Index: %d\n\n", i);
+        printf("Access Flag: %u\n", jclass->methods[i].access_flags);
+        printf("Descriptor Index: %u\n", jclass->methods[i].descriptor_index);
+        printf("Attribute Count: %u\n", jclass->methods[i].attributes_count);
+
+
+        uint16_t attribute_count = jclass->methods[i].attributes_count;
+
+        jclass->methods[i].attributes = (attribute_info*) malloc(
+            (attribute_count-1) * sizeof(attribute_info)
+        );
+
+        for(int j = 0; j < attribute_count; j++){
+            readAtributtes(class_file, jclass);
+        }
+
+    }
 }
 
 //desaloca a classe incluindo o utf8 do constant pool

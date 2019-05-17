@@ -35,20 +35,6 @@ typedef struct constant_pool{
 
 } cp_info;
 
-typedef struct attribute{
-    uint16_t attribute_name_index;
-    uint32_t attribute_length;
-    //attribute_info;
-    union{
-        code_attribute code_attribute;
-        constant_value_attribute constant_value_attribute;
-        exceptions_attribute exceptions_attribute;
-        stackMapTable_attribute stackMapTable_attribute;
-        bootstrapMethods_attribute bootstrapMethods_attribute;
-    }info;
-
-} attribute_info;
-
 typedef struct field_info{
    uint16_t access_flags;
    uint16_t name_index;
@@ -65,13 +51,6 @@ typedef struct method_info{
     uint16_t attributes_count;
     attribute_info *attributes;
 } method_info;
-
-typedef struct exception_table {
-    uint16_t start_pc;
-    uint16_t end_pc;
-    uint16_t handler_pc;
-    uint16_t catch_type;
-} exception_table;
 
 //estrutura da classe. Guarda os lados lidos do .class
 typedef struct class_structure {
