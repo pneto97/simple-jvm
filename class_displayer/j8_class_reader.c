@@ -167,6 +167,11 @@ void readAtributtes(FILE *class_file, class_structure *jclass){
             fseek(class_file,jclass->attribute[i].attribute_length,SEEK_CUR);
 
         }
+        else if(strcmp(attribute_type, "Signature")){
+
+            jclass->attribute[i].info.signature_attribute.signature_index
+                = beRead16(class_file);
+        }
         else {
             fseek(class_file,jclass->attribute[i].attribute_length,SEEK_CUR);
         }
@@ -204,7 +209,7 @@ void readFields(FILE *class_file, class_structure* jclass){
         jclass->fields[i].descriptor_index = beRead16(class_file);
         jclass->fields[i].attributes_count = beRead16(class_file);
 
-        
+
         for (int i = 0; i < jclass->fields[i].attributes_count; i++)
         {
             /* TODO */
