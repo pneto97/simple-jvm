@@ -54,6 +54,10 @@ typedef struct exceptions_attribute {
     uint16_t *excepetions_table;
 }exceptions_attribute;
 
+typedef struct signature_attribute {
+    uint16_t signature_index;
+}signature_attribute;
+
 //Atribute info
 typedef struct attribute{
     uint16_t attribute_name_index;
@@ -65,6 +69,7 @@ typedef struct attribute{
         exceptions_attribute exceptions_attribute;
         stackMapTable_attribute stackMapTable_attribute;
         bootstrapMethods_attribute bootstrapMethods_attribute;
+        signature_attribute signature_attribute;
     }info;
 } attribute_info;
 
