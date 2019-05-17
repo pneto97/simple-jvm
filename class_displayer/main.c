@@ -44,6 +44,32 @@ int main(int argc , char* argv[]){
     readConstantPool(class_file, jclass);
     printConstantPool(class_file, jclass);
 
+    jclass->access_flags = beRead16(class_file);
+    printAccessFlags(jclass);
+
+    jclass->this_class = beRead16(class_file);
+    printf("This Class: ");
+    printClassName(jclass->this_class, jclass);
+
+    jclass->super_class = beRead16(class_file);
+    printf("Super Class: ");
+    printClassName(jclass->super_class, jclass);
+
+    jclass->interfaces_count = beRead16(class_file);
+    printf("Interfaces Count: %d\n",jclass->interfaces_count);
+
+    readInterfaces(class_file, jclass);
+    printInterfaces(jclass);
+      
+    jclass->fields_count = beRead16(class_file);
+    printf("Fields Count: %d\n",jclass->fields_count);
+
+    // readFields(class_file, jclass);
+    // printFields(jclass);
+    
+    jclass->methods_count = beRead16(class_file);
+    printf("Methods Count: %d\n",jclass->methods_count);
+
     //TODO: fazer o parse dos outros campos...
     
     freeClass(jclass);

@@ -70,7 +70,7 @@ void readConstantPool(FILE *class_file, class_structure* jclass){
                 //aloca espaço para esse tamanho
                 jclass->constant_pool[i].info.utf8Info.bytes =
                     (uint8_t*) malloc(
-                        jclass->constant_pool[i].info.utf8Info.length * sizeof(uint8_t)
+                        (jclass->constant_pool[i].info.utf8Info.length+1) * sizeof(uint8_t)
                     );
 
                 //le a string do arquivo para o espaço alocado
@@ -79,6 +79,8 @@ void readConstantPool(FILE *class_file, class_structure* jclass){
                       jclass->constant_pool[i].info.utf8Info.length,
                       class_file
                 );
+
+                jclass->constant_pool[i].info.utf8Info.bytes[jclass->constant_pool[i].info.utf8Info.length] = '\0';
 
                 break;
             case CONSTANT_MethodHandle:
@@ -168,6 +170,39 @@ void readAtributtes(FILE *class_file, class_structure *jclass){
 }
 
 
+void readInterfaces(FILE *class_file, class_structure* jclass){
+
+    uint8_t interfaces_count = jclass->interfaces_count;
+
+    //aloca o vetor de indices de constantes
+    jclass->interfaces = (uint16_t *) malloc(
+        (jclass->constant_pool_count-1) * sizeof(uint16_t)
+    );
+
+    //lê do arquivo os indices e armazena no vetor de interfaces
+    for(int i = 0; i < jclass->interfaces_count; i++){
+        jclass->interfaces[i] = beRead16(class_file);
+    }
+}
+
+void readFields(FILE *class_file, class_structure* jclass){
+
+    uint8_t fields_count = jclass->fields_count;
+
+    //aloca o vetor de indices de constantes
+    // jclass->fields = (uint16_t *) malloc(
+    //     (jclass->constant_pool_count-1) * sizeof(uint16_t)
+    // );
+
+    // //lê do arquivo os indices e armazena no vetor de interfaces
+    // for(int i = 0; i < jclass->interfaces_count; i++){
+    //     jclass->interfaces[i] = beRead16(class_file);
+
+}
+
+void readMethods(FILE *class_file, class_structure* jclass){
+
+}
 
 //desaloca a classe incluindo o utf8 do constant pool
 void freeClass(class_structure *jclass){
@@ -175,8 +210,12 @@ void freeClass(class_structure *jclass){
     if(jclass != NULL){
 
         for(int i = 0; i < jclass->constant_pool_count-1 ; i++){
-            if(jclass->constant_pool[i].info.utf8Info.bytes != NULL)
+            if(jclass->constant_pool[i].info.utf8Info.bytes != NULL && jclass->constant_pool[i].tag == CONSTANT_Utf8)
                 free(jclass->constant_pool[i].info.utf8Info.bytes);
+        }
+
+        if(jclass->interfaces != NULL){
+            free(jclass->interfaces);
         }
 
         if(jclass->constant_pool != NULL){

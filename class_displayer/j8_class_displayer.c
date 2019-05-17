@@ -1,6 +1,7 @@
 //j8_class_displayer.c 
 #include "j8_class_displayer.h"
 #include <string.h>
+#include "j8_access_flags.h"
 
 //de acordo com a tag do constant pool, altera a string tagType para o significado
 void cpTagToString(uint8_t tag, char *tagType){
@@ -115,4 +116,49 @@ void printConstantPool(FILE* class_file, class_structure* jclass){
                 break;
         } 
     } 
+}
+
+// Imprime o nome das flags presentes classe
+void printAccessFlags(class_structure *jclass){
+    uint16_t access_flag = jclass->access_flags;
+
+    printf("Access Flags:\n\t");
+    
+    if(access_flag & ACC_PUBLIC)
+        printf("Public ");
+    if(access_flag & ACC_FINAL)
+        printf("Final ");
+    if(access_flag & ACC_SUPER)
+        printf("Super ");
+    if(access_flag & ACC_INTERFACE)
+        printf("Final ");
+    if(access_flag & ACC_ABSTRACT)
+        printf("Abstract ");
+    if(access_flag & ACC_SYNTHETIC)
+        printf("Synthetic ");
+    if(access_flag & ACC_ANNOTATION)
+        printf("Annotation ");
+    if(access_flag & ACC_ENUM)
+        printf("Enum ");
+    printf("\n");
+}
+
+// Imprime o nome das interfaces
+void printInterfaces(class_structure *jclass){
+
+    uint16_t interfaces_count = jclass->interfaces_count;
+
+    if(interfaces_count > 0){
+        printf("Interfaces: \n");
+        for (int i = 0; i < interfaces_count; i++){
+            printf("\t");
+            printClassName(jclass->interfaces[i], jclass);
+        }
+    }
+}
+
+// Imprime o nome de uma class a partir de seu índice
+void printClassName(uint16_t index, class_structure *jclass){
+    uint16_t name_index = jclass->constant_pool[index-1].info.classInfo.name_index;
+    printf("%s\n", jclass->constant_pool[name_index-1].info.utf8Info.bytes);
 }
