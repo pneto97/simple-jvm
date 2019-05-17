@@ -209,10 +209,14 @@ void readFields(FILE *class_file, class_structure* jclass){
         jclass->fields[i].descriptor_index = beRead16(class_file);
         jclass->fields[i].attributes_count = beRead16(class_file);
 
+        // jclass->methods[i].attributes = (attribute_info *) malloc (
+        //     (jclass->attributes_count-1) * sizeof(attribute_info)
+        // );
 
         for (int i = 0; i < jclass->fields[i].attributes_count; i++)
         {
-            /* TODO */
+            // Creio que readAtributes precisa receber attributes_count como parâmetro
+            // readAtributtes(class_file,jclass,attributes_count);
         }
         
     }
