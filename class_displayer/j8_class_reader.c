@@ -3,6 +3,7 @@
 #include "j8_class_reader.h"
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 #include "read_utils.h"
 
 //leitura do constant pool, o class_file precisa estar já na posição correta
@@ -111,51 +112,59 @@ void readAtributtes(FILE *class_file, class_structure *jclass){
         (jclass->attributes_count) * sizeof(attribute_info)
     );
 
-    jclass->attribute->attribute_name_index = beRead16(class_file);
-    jclass->attribute->attribute_length = beRead32(class_file);
 
-    /* QUAL VARIAVEL DEVE-SE FAZER O SWITCH?
-    switch ( ) {
+    for(int i = 0; i < jclass->attributes_count; i++){
 
-        case "Code":
+        jclass->attribute[i].attribute_name_index = beRead16(class_file);
+        jclass->attribute[i].attribute_length = beRead32(class_file);
+
+
+        uint16_t name_index = jclass->attribute[i].attribute_name_index;
+
+        char *attribute_type  = (char *) malloc(
+            (jclass->constant_pool[name_index-1].info.utf8Info.length+1) * sizeof(char *)
+        );
+
+        attribute_type = (char *) jclass->constant_pool[name_index-1].info.utf8Info.bytes;
+
+        // QUAL VARIAVEL DEVE-SE FAZER O SWITCH?
+
+        if(strcmp(attribute_type, "Code")){
             //falta implementacao
-            break;
+        }
 
-        case "ConstantValue":
+        else if(strcmp(attribute_type, "ConstantValue")){
 
-            jclass->attribute->info.constant_value_attribute.constantvalue_index
-            = beRead16(class_file);
-            break;
+            jclass->attribute[i].info.constant_value_attribute.constantvalue_index
+                = beRead16(class_file);
+        }
+        else if(strcmp(attribute_type, "Exceptions")){
 
-        case "Exceptions":
+            jclass->attribute[i].info.exceptions_attribute.number_of_exceptions = beRead16(class_file);
 
-            jclass->attribute->info.exceptions_attribute.number_of_exceptions
-            = beRead16(class_file);
+                //alocacao para a tabela de excessoes
+            jclass->attribute[i].info.exceptions_attribute.excepetions_table = (uint16_t*) malloc(
+                (jclass->attribute[i].info.exceptions_attribute.number_of_exceptions)
+                    * sizeof(uint16_t)
+                );
 
-            //alocacao para a tabela de excessoes
-            jclass->attribute->info.exceptions_attribute.excepetions_table = (uint16_t*) malloc(
-                (jclass->attribute->info.exceptions_attribute.number_of_exceptions)
-                * sizeof(uint16_t)
-            );
-
-            for(int i=0;i<jclass->attribute->info.exceptions_attribute.number_of_exceptions;i++){
+            for(int i=0;i<jclass->attribute[i].info.exceptions_attribute.number_of_exceptions;i++){
                 //nao tenho certeza se sao 2 bytes
-                jclass->attribute->info.exceptions_attribute.excepetions_table[i] = beRead16(class_file);
-            }
+                    jclass->attribute[i].info.exceptions_attribute.excepetions_table[i] = beRead16(class_file);
+                }
 
-            break;
+        }
+        else if(strcmp(attribute_type, "StackMapTable")){
+            //falta implementacao
 
-        case "InnerClass":
-        //falta implementacao
-            break;
+        }
 
+        else if(strcmp(attribute_type, "BootstrapMethods")){
+            //falta implementacao
 
+        }
         //Faltam ainda mais opcoes de name.index!
-
-
     }
-    */
-
 }
 
 

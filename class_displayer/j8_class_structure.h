@@ -43,7 +43,8 @@ typedef struct attribute{
         code_attribute code_attribute;
         constant_value_attribute constant_value_attribute;
         exceptions_attribute exceptions_attribute;
-        inner_classes_attribute inner_classes_attribute;
+        stackMapTable_attribute stackMapTable_attribute;
+        bootstrapMethods_attribute bootstrapMethods_attribute;
     }info;
 
 } attribute_info;
