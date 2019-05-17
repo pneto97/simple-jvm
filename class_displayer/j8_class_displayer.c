@@ -146,7 +146,7 @@ void printAccessFlags(class_structure *jclass){
 // Imprime o nome das interfaces
 void printInterfaces(class_structure *jclass){
 
-    u_int16_t interfaces_count = jclass->interfaces_count;
+    uint16_t interfaces_count = jclass->interfaces_count;
 
     if(interfaces_count > 0){
         printf("Interfaces: \n");
@@ -158,7 +158,7 @@ void printInterfaces(class_structure *jclass){
 }
 
 // Imprime o nome de uma class a partir de seu índice
-void printClassName(u_int16_t index, class_structure *jclass){
-    u_int16_t name_index = jclass->constant_pool[index-1].info.classInfo.name_index;
+void printClassName(uint16_t index, class_structure *jclass){
+    uint16_t name_index = jclass->constant_pool[index-1].info.classInfo.name_index;
     printf("%s\n", jclass->constant_pool[name_index-1].info.utf8Info.bytes);
 }

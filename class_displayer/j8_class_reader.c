@@ -110,12 +110,12 @@ void readConstantPool(FILE *class_file, class_structure* jclass){
 
 void readInterfaces(FILE *class_file, class_structure* jclass){
 
-    u_int8_t interfaces_count = 
+    uint8_t interfaces_count = 
     jclass->interfaces_count; 
 
     //aloca o vetor de indices de constantes
-    jclass->interfaces = (u_int16_t *) malloc(
-        (jclass->constant_pool_count-1) * sizeof(u_int16_t)
+    jclass->interfaces = (uint16_t *) malloc(
+        (jclass->constant_pool_count-1) * sizeof(uint16_t)
     );
 
     //lê do arquivo os indices e armazena no vetor de interfaces

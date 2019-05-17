@@ -23,4 +23,4 @@ void printAccessFlags(class_structure*);
 void printInterfaces(class_structure*);
 
 // Imprime o nome de uma constant tipo Class
-void printClassName(u_int16_t, class_structure *);
+void printClassName(uint16_t, class_structure *);
