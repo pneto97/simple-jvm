@@ -194,14 +194,23 @@ void readFields(FILE *class_file, class_structure* jclass){
 
     uint8_t fields_count = jclass->fields_count;
 
-    //aloca o vetor de indices de constantes
-    // jclass->fields = (uint16_t *) malloc(
-    //     (jclass->constant_pool_count-1) * sizeof(uint16_t)
-    // );
+    jclass->fields = (field_info *) malloc (
+        (jclass->fields_count-1) * sizeof(field_info)
+    );
 
-    // //lê do arquivo os indices e armazena no vetor de interfaces
-    // for(int i = 0; i < jclass->interfaces_count; i++){
-    //     jclass->interfaces[i] = beRead16(class_file);
+    for(int i = 0; i < fields_count; i++){
+        jclass->fields[i].access_flags = beRead16(class_file);
+        jclass->fields[i].name_index = beRead16(class_file);
+        jclass->fields[i].descriptor_index = beRead16(class_file);
+        jclass->fields[i].attributes_count = beRead16(class_file);
+
+        
+        for (int i = 0; i < jclass->fields[i].attributes_count; i++)
+        {
+            /* TODO */
+        }
+        
+    }
 
 }
 
