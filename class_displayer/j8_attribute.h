@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-struct attribute_info;
-struct code_attribute;
+// struct attribute_info;
+// struct code_attribute;
 
 //Exception_table
 typedef struct exception_table {
@@ -28,7 +28,7 @@ typedef struct code_attribute {
     uint16_t exception_table_length;
     exception_table *exception_table;
     uint16_t attributes_count;
-    struct attribute_info *attributes;
+    struct attribute *attributes;
 }code_attribute;
 
 typedef struct stackMapTable_attribute {

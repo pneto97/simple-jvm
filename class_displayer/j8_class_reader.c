@@ -1,5 +1,6 @@
 //j8_class_reader.c
 
+#include "j8_class_displayer.h" // RETIRAR
 #include "j8_class_reader.h"
 #include <stdint.h>
 #include <stdlib.h>
@@ -109,18 +110,18 @@ void readConstantPool(FILE *class_file, class_structure* jclass){
     }
 }
 
-void readAttributes(FILE *class_file, attribute_info *attribute_info, uint16_t attribute_count, class_structure *jclass){
+void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attribute_count, class_structure *jclass){
     
     for(int i = 0; i < attribute_count; i++){
-        attribute_info[i].attribute_name_index = beRead16(class_file);
-        attribute_info[i].attribute_length = beRead32(class_file);
+        attr_info[i].attribute_name_index = beRead16(class_file);
+        attr_info[i].attribute_length = beRead32(class_file);
 
 
-        uint16_t name_index = attribute_info[i].attribute_name_index;
+        uint16_t name_index = attr_info[i].attribute_name_index;
 
         printf("Attribute: %d\n",i+1);
-        printf("\tname_index: %u\n", attribute_info[i].attribute_name_index);
-        printf("\tattribute_length: %u\n", attribute_info[i].attribute_length);
+        printf("\tname_index: %u\n", attr_info[i].attribute_name_index);
+        printf("\tattribute_length: %u\n", attr_info[i].attribute_length);
 
         char *attribute_type  = (char *) malloc(
             (jclass->constant_pool[name_index-1].info.utf8Info.length+1) * sizeof(char *)
@@ -131,46 +132,121 @@ void readAttributes(FILE *class_file, attribute_info *attribute_info, uint16_t a
 
         if(!strcmp(attribute_type, "Code")){
             //falta implementacao
-            fseek(class_file,attribute_info[i].attribute_length,SEEK_CUR);
+            //fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
+            attr_info[i].info.code_attribute.max_stack = beRead16(class_file);
+            attr_info[i].info.code_attribute.max_locals = beRead16(class_file);
+            attr_info[i].info.code_attribute.code_length = beRead32(class_file);
+            printf("Max stack: %d\n", attr_info[i].info.code_attribute.max_stack);
+            printf("Max locals: %d\n", attr_info[i].info.code_attribute.max_locals);
+            printf("Code Length: %d\n", attr_info[i].info.code_attribute.code_length);
+
+            //aloca o vetor para code
+            if(attr_info[i].info.code_attribute.code_length > 0){
+            attr_info[i].info.code_attribute.code = (uint8_t *) malloc(
+                (attr_info[i].info.code_attribute.code_length) * sizeof(uint8_t)
+            );
+            }
+            else{
+                attr_info[i].info.code_attribute.code = NULL;
+            }
+            for (int j = 0; j < attr_info[i].info.code_attribute.code_length; j++)
+            {
+                attr_info[i].info.code_attribute.code[j] = beRead8(class_file);
+                printf("\tCode[%d]: %hhx\n", j+1,attr_info[i].info.code_attribute.code[j]);
+            }
+
+            
+            attr_info[i].info.code_attribute.exception_table_length = beRead16(class_file);
+            printf("exception_table_length: %d \n", attr_info[i].info.code_attribute.exception_table_length);
+            //aloca o vetor para exception_table
+
+            if (attr_info[i].info.code_attribute.exception_table_length != 0){
+            attr_info[i].info.code_attribute.exception_table = (exception_table *) malloc(
+                (attr_info[i].info.code_attribute.exception_table_length) * sizeof(exception_table)
+            );
+            }
+            else {
+                attr_info[i].info.code_attribute.exception_table = NULL;
+            }
+            for (int j = 0; j < attr_info[i].info.code_attribute.exception_table_length; j++)
+            {
+                attr_info[i].info.code_attribute.exception_table[j].start_pc = beRead16(class_file);
+                attr_info[i].info.code_attribute.exception_table[j].end_pc = beRead16(class_file);
+                attr_info[i].info.code_attribute.exception_table[j].handler_pc = beRead16(class_file);
+                attr_info[i].info.code_attribute.exception_table[j].catch_type = beRead16(class_file);
+                printf("EXCEPTION %d",j+1);
+                printf("\tstart_pc[%d]: %d\n", j+1,attr_info[i].info.code_attribute.exception_table[j].start_pc);
+                printf("\tend_pc[%d]: %d\n", j+1,attr_info[i].info.code_attribute.exception_table[j].end_pc);
+                printf("\thandler_pc[%d]: %d\n", j+1,attr_info[i].info.code_attribute.exception_table[j].handler_pc);
+                printf("\tCatch Type: ");
+                printClassName(attr_info[i].info.code_attribute.exception_table[j].catch_type,jclass);
+                printf("\n");
+            }
+
+            attr_info[i].info.code_attribute.attributes_count = beRead16(class_file);
+            
+            //aloca o vetor para attributes
+            if (attr_info[i].info.code_attribute.attributes_count != 0){
+                attr_info[i].info.code_attribute.attributes = (attribute_info *) malloc(
+                (attr_info[i].info.code_attribute.attributes_count) * sizeof(attribute_info)
+            );
+            }
+            else {
+                attr_info[i].info.code_attribute.attributes = NULL;
+            }
+            
+            // Leitura dos atributos de cada atributo code (Sim, a parada é recursiva :o )
+            readAttributes(class_file,attr_info[i].info.code_attribute.attributes,
+                 attr_info[i].info.code_attribute.attributes_count,jclass);
 
         } else if(!strcmp(attribute_type, "ConstantValue")){
 
-            attribute_info[i].info.constant_value_attribute.constantvalue_index
+            attr_info[i].info.constant_value_attribute.constantvalue_index
                 = beRead16(class_file);
-            printf("\tConstant Value Index: %d\n", attribute_info[i].info.constant_value_attribute.constantvalue_index);
+            printf("\tConstant Value Index: %d\n", attr_info[i].info.constant_value_attribute.constantvalue_index);
 
         } else if(!strcmp(attribute_type, "Exceptions")){
-            /*
-            attribute_info[i].info.exceptions_attribute.number_of_exceptions = beRead16(class_file);
+            
+            attr_info[i].info.exceptions_attribute.number_of_exceptions = beRead16(class_file);
+            printf("number_of_oxceptions: %d\n", attr_info[i].info.exceptions_attribute.number_of_exceptions);
 
-                //alocacao para a tabela de excessoes
-            attribute_info[i].info.exceptions_attribute.excepetions_table = (uint16_t*) malloc(
-                (attribute_info[i].info.exceptions_attribute.number_of_exceptions)
+            //alocacao para a tabela de excessoes
+            if (attr_info[i].info.exceptions_attribute.number_of_exceptions != 0){
+            attr_info[i].info.exceptions_attribute.excepetions_table = (uint16_t*) malloc(
+                (attr_info[i].info.exceptions_attribute.number_of_exceptions)
                     * sizeof(uint16_t)
                 );
-
-            for(int i=0;i<attribute_info[i].info.exceptions_attribute.number_of_exceptions;i++){
+            }
+            else{
+                attr_info[i].info.exceptions_attribute.excepetions_table = NULL;
+            }
+            for(int j=0;i<attr_info[i].info.exceptions_attribute.number_of_exceptions;j++){
                 //nao tenho certeza se sao 2 bytes
-                    attribute_info[i].info.exceptions_attribute.excepetions_table[i] = beRead16(class_file);
+                    attr_info[i].info.exceptions_attribute.excepetions_table[j] = beRead16(class_file);
+                    printf("excepetions_table[%d]: %d\n", j+1,attr_info[i].info.exceptions_attribute.excepetions_table[j]);
                 }
-            */
-            fseek(class_file,attribute_info[i].attribute_length,SEEK_CUR);
+            
+            fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
         } else if(!strcmp(attribute_type, "StackMapTable")){
-            //falta implementacao
-            fseek(class_file,attribute_info[i].attribute_length,SEEK_CUR);
+            printf("\tSem implementação\n");
+            fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
         } else if(!strcmp(attribute_type, "BootstrapMethods")){
-            //falta implementacao
-            fseek(class_file,attribute_info[i].attribute_length,SEEK_CUR);
+            printf("\tSem implementação\n");
+            fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
 
         } else if(!strcmp(attribute_type, "Signature")){
 
-            attribute_info[i].info.signature_attribute.signature_index
+            attr_info[i].info.signature_attribute.signature_index
                 = beRead16(class_file);
-            printf("\tSignature Index: %d\n", attribute_info[i].info.signature_attribute.signature_index);
+            printf("\tSignature Index: %d\n", attr_info[i].info.signature_attribute.signature_index);
 
-        } else {
+        } else if(!strcmp(attribute_type, "LineNumberTable")){
             printf("\tSem implementação\n");
-            fseek(class_file,attribute_info[i].attribute_length,SEEK_CUR);
+           //falta implementacao
+            fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
+        } else {
+            printf("\tDesconhecido.\n");
+            fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
         }
         //Faltam ainda mais opcoes de name.index!
 
