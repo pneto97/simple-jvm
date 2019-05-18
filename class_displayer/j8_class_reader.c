@@ -119,28 +119,27 @@ void readAttributes(FILE *class_file, attribute_info *attribute_info, uint16_t a
         uint16_t name_index = attribute_info[i].attribute_name_index;
 
         printf("Attribute: %d\n",i+1);
-        printf("\t name_index: %u\n", attribute_info[i].attribute_name_index);
-        printf("\t attribute_length: %u\n", attribute_info[i].attribute_length);
+        printf("\tname_index: %u\n", attribute_info[i].attribute_name_index);
+        printf("\tattribute_length: %u\n", attribute_info[i].attribute_length);
 
         char *attribute_type  = (char *) malloc(
             (jclass->constant_pool[name_index-1].info.utf8Info.length+1) * sizeof(char *)
         );
 
         strcpy(attribute_type,(char *)jclass->constant_pool[name_index-1].info.utf8Info.bytes);
+        printf("\tType: %s\n", attribute_type);
 
-        if(strcmp(attribute_type, "Code")){
+        if(!strcmp(attribute_type, "Code")){
             //falta implementacao
             fseek(class_file,attribute_info[i].attribute_length,SEEK_CUR);
-        }
 
-        else if(strcmp(attribute_type, "ConstantValue")){
+        } else if(!strcmp(attribute_type, "ConstantValue")){
 
-            /*attribute_info[i].info.constant_value_attribute.constantvalue_index
+            attribute_info[i].info.constant_value_attribute.constantvalue_index
                 = beRead16(class_file);
-            */
-            fseek(class_file,attribute_info[i].attribute_length,SEEK_CUR);
-        }
-        else if(strcmp(attribute_type, "Exceptions")){
+            printf("\tConstant Value Index: %d\n", attribute_info[i].info.constant_value_attribute.constantvalue_index);
+
+        } else if(!strcmp(attribute_type, "Exceptions")){
             /*
             attribute_info[i].info.exceptions_attribute.number_of_exceptions = beRead16(class_file);
 
@@ -156,23 +155,21 @@ void readAttributes(FILE *class_file, attribute_info *attribute_info, uint16_t a
                 }
             */
             fseek(class_file,attribute_info[i].attribute_length,SEEK_CUR);
-        }
-        else if(strcmp(attribute_type, "StackMapTable")){
+        } else if(!strcmp(attribute_type, "StackMapTable")){
             //falta implementacao
             fseek(class_file,attribute_info[i].attribute_length,SEEK_CUR);
-        }
-
-        else if(strcmp(attribute_type, "BootstrapMethods")){
+        } else if(!strcmp(attribute_type, "BootstrapMethods")){
             //falta implementacao
             fseek(class_file,attribute_info[i].attribute_length,SEEK_CUR);
 
-        }
-        else if(strcmp(attribute_type, "Signature")){
+        } else if(!strcmp(attribute_type, "Signature")){
 
             attribute_info[i].info.signature_attribute.signature_index
                 = beRead16(class_file);
-        }
-        else {
+            printf("\tSignature Index: %d\n", attribute_info[i].info.signature_attribute.signature_index);
+
+        } else {
+            printf("\tSem implementação\n");
             fseek(class_file,attribute_info[i].attribute_length,SEEK_CUR);
         }
         //Faltam ainda mais opcoes de name.index!
