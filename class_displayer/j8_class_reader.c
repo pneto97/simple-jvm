@@ -241,9 +241,31 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             printf("\tSignature Index: %d\n", attr_info[i].info.signature_attribute.signature_index);
 
         } else if(!strcmp(attribute_type, "LineNumberTable")){
-            printf("\tSem implementação\n");
-           //falta implementacao
-            fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
+            attr_info[i].info.lineNumberTable_attribute.line_number_table_length = beRead16(class_file);
+            printf("line_number_table_length: %d\n", attr_info[i].info.lineNumberTable_attribute.line_number_table_length);
+            if (attr_info[i].info.lineNumberTable_attribute.line_number_table_length != 0)
+            {
+                attr_info[i].info.lineNumberTable_attribute.line_number_table = (line_number_table *) malloc(
+                    (attr_info[i].info.lineNumberTable_attribute.line_number_table_length) 
+                    * sizeof(line_number_table)
+                );
+            }
+            else
+            {
+                attr_info[i].info.lineNumberTable_attribute.line_number_table = NULL;
+            }
+            printf("Line : Start Program Counter\n");
+            for (int j = 0; j < attr_info[i].info.lineNumberTable_attribute.line_number_table_length; j++)
+            {
+                attr_info[i].info.lineNumberTable_attribute.line_number_table->start_pc = beRead16(class_file);
+                attr_info[i].info.lineNumberTable_attribute.line_number_table->line_number = beRead16(class_file);
+                printf("%d : %d\n",attr_info[i].info.lineNumberTable_attribute.line_number_table->line_number,attr_info[i].info.lineNumberTable_attribute.line_number_table->start_pc);
+                
+            }
+            
+
+            //falta implementacao
+            //fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
         } else {
             printf("\tDesconhecido.\n");
             fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);

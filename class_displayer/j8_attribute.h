@@ -58,6 +58,16 @@ typedef struct signature_attribute {
     uint16_t signature_index;
 }signature_attribute;
 
+typedef struct lineNumberTable_attribute {
+    uint16_t line_number_table_length;
+    struct line_number_table *line_number_table;
+}lineNumberTable_attribute;
+
+typedef struct line_number_table {
+    uint16_t start_pc;
+    uint16_t line_number;
+}line_number_table;
+
 //Atribute info
 typedef struct attribute{
     uint16_t attribute_name_index;
@@ -70,6 +80,7 @@ typedef struct attribute{
         stackMapTable_attribute stackMapTable_attribute;
         bootstrapMethods_attribute bootstrapMethods_attribute;
         signature_attribute signature_attribute;
+        lineNumberTable_attribute lineNumberTable_attribute;
     }info;
 } attribute_info;
 
