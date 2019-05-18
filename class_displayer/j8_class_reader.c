@@ -109,7 +109,7 @@ void readConstantPool(FILE *class_file, class_structure* jclass){
     }
 }
 
-void readAtributtes(FILE *class_file, attribute_info *attribute_info, uint16_t attribute_count, class_structure *jclass){
+void readAttributes(FILE *class_file, attribute_info *attribute_info, uint16_t attribute_count, class_structure *jclass){
     
     for(int i = 0; i < attribute_count; i++){
         attribute_info[i].attribute_name_index = beRead16(class_file);
@@ -228,7 +228,7 @@ void readFields(FILE *class_file, class_structure* jclass){
             jclass->fields[i].attributes = (attribute_info *) malloc (
                 (attribute_count) * sizeof(attribute_info)
             );
-            readAtributtes(class_file, jclass->fields[i].attributes, attribute_count, jclass);
+            readAttributes(class_file, jclass->fields[i].attributes, attribute_count, jclass);
         } else{
             jclass->fields[i].attributes = NULL;
         }
@@ -262,10 +262,24 @@ void readMethods(FILE *class_file, class_structure* jclass){
             jclass->methods[i].attributes = (attribute_info *) malloc(
                 (attribute_count) * sizeof(attribute_info)
             );
-            readAtributtes(class_file, jclass->methods[i].attributes, attribute_count, jclass);
+            readAttributes(class_file, jclass->methods[i].attributes, attribute_count, jclass);
         } else {
             jclass->methods[i].attributes = NULL;
         }
+    }
+}
+
+void readClassAttributes(FILE *class_file, class_structure* jclass){
+        
+    uint16_t attribute_class_count = jclass->attributes_count;
+
+    if(attribute_class_count > 0){
+        jclass->attribute = (attribute_info *) malloc(
+            (attribute_class_count) * sizeof(attribute_info)
+        );
+        readAttributes(class_file, jclass->attribute, attribute_class_count, jclass);
+    } else {
+        jclass->attribute = NULL;
     }
 }
 

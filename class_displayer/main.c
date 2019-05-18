@@ -72,6 +72,13 @@ int main(int argc , char* argv[]){
 
     readMethods(class_file, jclass);
 
+    jclass->attributes_count = beRead16(class_file);
+    printf("Class Attributes Count: %d\n",jclass->attributes_count);
+
+    readClassAttributes(class_file,jclass);
+
+    
+    //readClassAttributes(class_file, jclass);
     //TODO: fazer o parse dos outros campos...
     
     freeClass(jclass);
