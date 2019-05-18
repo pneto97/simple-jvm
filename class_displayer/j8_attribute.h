@@ -68,6 +68,10 @@ typedef struct line_number_table {
     uint16_t line_number;
 }line_number_table;
 
+typedef struct sourceFile_attribute {
+    uint16_t sourcefile_index;
+}sourceFile_attribute;
+
 //Atribute info
 typedef struct attribute{
     uint16_t attribute_name_index;
@@ -81,6 +85,7 @@ typedef struct attribute{
         bootstrapMethods_attribute bootstrapMethods_attribute;
         signature_attribute signature_attribute;
         lineNumberTable_attribute lineNumberTable_attribute;
+        sourceFile_attribute sourceFile_attribute;
     }info;
 } attribute_info;
 

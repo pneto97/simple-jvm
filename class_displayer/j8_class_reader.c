@@ -266,7 +266,17 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
 
             //falta implementacao
             //fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
-        } else {
+        } else if(!strcmp(attribute_type, "SourceFile")){
+
+            attr_info[i].info.sourceFile_attribute.sourcefile_index
+                = beRead16(class_file);
+            
+            uint16_t sourcefile_index = attr_info[i].info.sourceFile_attribute.sourcefile_index;
+            printf("\tSourceFile Index: %s\n", jclass->constant_pool[sourcefile_index-1].info.utf8Info.bytes);
+
+
+        }
+         else {
             printf("\tDesconhecido.\n");
             fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
         }
