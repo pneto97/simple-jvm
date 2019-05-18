@@ -162,3 +162,134 @@ void printClassName(uint16_t index, class_structure *jclass){
     uint16_t name_index = jclass->constant_pool[index-1].info.classInfo.name_index;
     printf("%s\n", jclass->constant_pool[name_index-1].info.utf8Info.bytes);
 }
+
+
+void printAttributes(attribute_info* attr_info,uint16_t attribute_count, class_structure* jclass){
+    for(int i = 0; i < attribute_count; i++){
+
+        uint16_t name_index = attr_info[i].attribute_name_index;
+
+        printf("Attribute: %d\n",i+1);
+        printf("\tname_index: %u\n", attr_info[i].attribute_name_index);
+        printf("\tattribute_length: %u\n", attr_info[i].attribute_length);
+
+        char *attribute_type  = (char *) malloc(
+            (jclass->constant_pool[name_index-1].info.utf8Info.length+1) * sizeof(char *)
+        );
+        strcpy(attribute_type,(char *)jclass->constant_pool[name_index-1].info.utf8Info.bytes);
+
+
+        printf("\tType: %s\n", (char *)jclass->constant_pool[name_index-1].info.utf8Info.bytes);
+
+        if(!strcmp(attribute_type, "Code")){
+
+            printCodes(attr_info[i].info.code_attribute, jclass);
+
+        } else if(!strcmp(attribute_type, "ConstantValue")){
+
+            printf("\tConstant Value Index: %d\n", attr_info[i].info.constant_value_attribute.constantvalue_index);
+
+        } else if(!strcmp(attribute_type, "Exceptions")){
+
+            printf("number_of_oxceptions: %d\n", attr_info[i].info.exceptions_attribute.number_of_exceptions);
+
+            for(int j=0;i<attr_info[i].info.exceptions_attribute.number_of_exceptions;j++){
+                //nao tenho certeza se sao 2 bytes
+                    printf("excepetions_table[%d]: %d\n", j+1,attr_info[i].info.exceptions_attribute.excepetions_table[j]);
+                }
+
+        } else if(!strcmp(attribute_type, "StackMapTable")){
+            printf("\tSem implementação\n");
+        } else if(!strcmp(attribute_type, "BootstrapMethods")){
+
+            printf("Bootstrap Methods\n");
+            printf("Num Bootstrap methods: %d\n", attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods);
+
+
+            for(int j = 0; j < attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods; j++){
+                
+                
+                printf("\tMethod Ref: #%d\n", attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_method_ref);
+                printf("\tNum bootstrap arguments: %d\n", attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments);
+
+                for(int k = 0; k < attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments; k++){
+                  
+                    printf("\t\tBootstrap arguments: #%d\n", attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments[k]);
+
+                }
+
+            }
+
+        } else if(!strcmp(attribute_type, "Signature")){
+
+            printf("\tSignature Index: %d\n", attr_info[i].info.signature_attribute.signature_index);
+
+        } else if(!strcmp(attribute_type, "LineNumberTable")){
+            printf("line_number_table_length: %d\n", attr_info[i].info.lineNumberTable_attribute.line_number_table_length);
+
+            printf("Line : Start Program Counter\n");
+            for (int j = 0; j < attr_info[i].info.lineNumberTable_attribute.line_number_table_length; j++)
+            {
+                printf("%d : %d\n",attr_info[i].info.lineNumberTable_attribute.line_number_table[j].line_number,attr_info[i].info.lineNumberTable_attribute.line_number_table->start_pc);
+
+            }
+
+        } else if(!strcmp(attribute_type, "SourceFile")){
+
+
+            uint16_t sourcefile_index = attr_info[i].info.sourceFile_attribute.sourcefile_index;
+            printf("\tSourceFile Index: %s\n", jclass->constant_pool[sourcefile_index-1].info.utf8Info.bytes);
+
+        } else if(!strcmp(attribute_type, "InnerClasses")){
+
+            printf("number_of_classes: %d\n",attr_info[i].info.innerClasses_attribute.number_of_classes);
+
+            for (int j = 0; j < attr_info[i].info.innerClasses_attribute.number_of_classes; j++)
+            {
+                printf("InnerClasses:\n");
+                printf("#%d = ",attr_info[i].info.innerClasses_attribute.classes[j].inner_name_index);
+                printf("#%d",attr_info[i].info.innerClasses_attribute.classes[j].outer_class_info_index);
+                printf(" of #%d;\n",attr_info[i].info.innerClasses_attribute.classes[j].inner_class_info_index);
+                printf("inner_class_access_flags: %d\n",attr_info[i].info.innerClasses_attribute.classes[j].inner_class_access_flags);
+            }
+        }
+
+         else {
+            printf("\tDesconhecido!\n");
+        }
+        //Faltam ainda mais opcoes de name.index!
+
+
+        //Free na string auxiliar (serve apenas para realizar a comparacao dos tipos de atributo)
+        free(attribute_type);
+
+    }
+    
+}
+
+void printCodes(code_attribute code_attribute, class_structure* jclass){
+    printf("Max stack: %d\n", code_attribute.max_stack);
+    printf("Max locals: %d\n", code_attribute.max_locals);
+    printf("Code Length: %d\n", code_attribute.code_length);
+
+    for (int j = 0; j < code_attribute.code_length; j++)
+    {
+        printf("\tCode[%d]: %hhx\n", j+1,code_attribute.code[j]);
+    }
+
+    printf("exception_table_length: %d \n", code_attribute.exception_table_length);
+
+    for (int j = 0; j < code_attribute.exception_table_length; j++)
+    {
+        printf("EXCEPTION %d",j+1);
+        printf("\tstart_pc[%d]: %d\n", j+1,code_attribute.exception_table[j].start_pc);
+        printf("\tend_pc[%d]: %d\n", j+1,code_attribute.exception_table[j].end_pc);
+        printf("\thandler_pc[%d]: %d\n", j+1,code_attribute.exception_table[j].handler_pc);
+        printf("\tCatch Type: ");
+        printClassName(code_attribute.exception_table[j].catch_type,jclass);
+        printf("\n");
+    }
+
+    // Leitura dos atributos de cada atributo code (Sim, a parada é recursiva :o )
+    printAttributes(code_attribute.attributes,code_attribute.attributes_count, jclass);
+}

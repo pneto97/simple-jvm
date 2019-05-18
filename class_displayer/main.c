@@ -77,6 +77,8 @@ int main(int argc , char* argv[]){
 
     readClassAttributes(class_file,jclass);
 
+    //printAttributes(jclass->attribute,jclass->attributes_count,jclass);
+
     
     //readClassAttributes(class_file, jclass);
     //TODO: fazer o parse dos outros campos...

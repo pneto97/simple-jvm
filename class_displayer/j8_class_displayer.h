@@ -24,3 +24,9 @@ void printInterfaces(class_structure*);
 
 // Imprime o nome de uma constant tipo Class
 void printClassName(uint16_t, class_structure *);
+
+// Função-mestre dos atributos que chama todas os prints de atributos
+void printAttributes(attribute_info* attr_info,uint16_t attribute_count, class_structure* jclass);
+
+// Função que printa os codigos
+void printCodes(code_attribute code_attribute, class_structure* jclass);
