@@ -145,6 +145,9 @@ void printAccessFlags(class_structure *jclass){
 
 // Imprime o nome das interfaces
 void printInterfaces(class_structure *jclass){
+    printf("\n------------------------------\n");
+    printf("             INTERFACES         \n");
+    printf("Interfaces Count: %d\n",jclass->interfaces_count);
 
     uint16_t interfaces_count = jclass->interfaces_count;
 
@@ -157,14 +160,61 @@ void printInterfaces(class_structure *jclass){
     }
 }
 
+void printFields(class_structure* jclass){
+    printf("\n------------------------------\n");
+    printf("             FIELDS             \n");
+    printf("Fields Count: %d\n",jclass->fields_count);
+
+    uint8_t fields_count = jclass->fields_count;
+
+    for(int i = 0; i < fields_count; i++){
+        printf("\n------------------------------\n");
+        printf("FIELD: %d\n", i+1);
+        printf("Access Flag: %u\n", jclass->fields[i].access_flags);
+        printf("Name Index: %u\n", jclass->fields[i].name_index);
+        printf("Descriptor Index: %u\n", jclass->fields[i].descriptor_index);
+        printf("Attribute Count: %u\n", jclass->fields[i].attributes_count);
+
+        uint16_t attribute_count = jclass->fields[i].attributes_count;
+
+        printAttributes(jclass->fields[i].attributes, attribute_count, jclass);
+    }
+}
+
+void printMethods(class_structure* jclass){
+    printf("\n------------------------------\n");
+    printf("             METHODS            \n");
+    printf("Methods Count: %d\n",jclass->methods_count);
+    uint8_t methods_count = jclass->methods_count;
+
+    for(int i = 0; i < methods_count; i++){
+        printf("\n------------------------------\n");
+        printf("METHOD: %d\n", i+1);
+        printf("Access Flag: %u\n", jclass->methods[i].access_flags);
+        printf("Name Index: %u\n", jclass->methods[i].name_index);
+        printf("Descriptor Index: %u\n", jclass->methods[i].descriptor_index);
+        printf("Attribute Count: %u\n", jclass->methods[i].attributes_count);
+
+        uint16_t attribute_count = jclass->methods[i].attributes_count;
+
+        printAttributes(jclass->methods[i].attributes, attribute_count, jclass);
+    }
+}
+
 // Imprime o nome de uma class a partir de seu índice
 void printClassName(uint16_t index, class_structure *jclass){
     uint16_t name_index = jclass->constant_pool[index-1].info.classInfo.name_index;
     printf("%s\n", jclass->constant_pool[name_index-1].info.utf8Info.bytes);
 }
 
+void printClassAttributes(class_structure *jclass){
+    printf("\n------------------------------\n");
+    printf("        CLASS ATTRIBUTES        \n");
+    printf("Class Attributes Count: %d\n",jclass->attributes_count);
+    printAttributes(jclass->attribute, jclass->attributes_count, jclass);
+}
 
-void printAttributes(attribute_info* attr_info,uint16_t attribute_count, class_structure* jclass){
+void printAttributes(attribute_info* attr_info, uint16_t attribute_count, class_structure* jclass){
     for(int i = 0; i < attribute_count; i++){
 
         uint16_t name_index = attr_info[i].attribute_name_index;
@@ -252,19 +302,15 @@ void printAttributes(attribute_info* attr_info,uint16_t attribute_count, class_s
                 printf(" of #%d;\n",attr_info[i].info.innerClasses_attribute.classes[j].inner_class_info_index);
                 printf("inner_class_access_flags: %d\n",attr_info[i].info.innerClasses_attribute.classes[j].inner_class_access_flags);
             }
-        }
-
-         else {
+        } else {
             printf("\tDesconhecido!\n");
         }
         //Faltam ainda mais opcoes de name.index!
 
-
         //Free na string auxiliar (serve apenas para realizar a comparacao dos tipos de atributo)
         free(attribute_type);
 
-    }
-    
+    }  
 }
 
 void printCodes(code_attribute code_attribute, class_structure* jclass){

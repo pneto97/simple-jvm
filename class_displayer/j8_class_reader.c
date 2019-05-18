@@ -119,16 +119,12 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
 
         uint16_t name_index = attr_info[i].attribute_name_index;
 
-        printf("Attribute: %d\n",i+1);
-        printf("\tname_index: %u\n", attr_info[i].attribute_name_index);
-        printf("\tattribute_length: %u\n", attr_info[i].attribute_length);
 
         char *attribute_type  = (char *) malloc(
             (jclass->constant_pool[name_index-1].info.utf8Info.length+1) * sizeof(char *)
         );
 
         strcpy(attribute_type,(char *)jclass->constant_pool[name_index-1].info.utf8Info.bytes);
-        printf("\tType: %s\n", attribute_type);
 
         if(!strcmp(attribute_type, "Code")){
             //falta implementacao
@@ -136,9 +132,6 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             attr_info[i].info.code_attribute.max_stack = beRead16(class_file);
             attr_info[i].info.code_attribute.max_locals = beRead16(class_file);
             attr_info[i].info.code_attribute.code_length = beRead32(class_file);
-            printf("Max stack: %d\n", attr_info[i].info.code_attribute.max_stack);
-            printf("Max locals: %d\n", attr_info[i].info.code_attribute.max_locals);
-            printf("Code Length: %d\n", attr_info[i].info.code_attribute.code_length);
 
             //aloca o vetor para code
             if(attr_info[i].info.code_attribute.code_length > 0){
@@ -152,12 +145,10 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             for (int j = 0; j < attr_info[i].info.code_attribute.code_length; j++)
             {
                 attr_info[i].info.code_attribute.code[j] = beRead8(class_file);
-                printf("\tCode[%d]: %hhx\n", j+1,attr_info[i].info.code_attribute.code[j]);
             }
 
 
             attr_info[i].info.code_attribute.exception_table_length = beRead16(class_file);
-            printf("exception_table_length: %d \n", attr_info[i].info.code_attribute.exception_table_length);
             //aloca o vetor para exception_table
 
             if (attr_info[i].info.code_attribute.exception_table_length != 0){
@@ -174,13 +165,7 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                 attr_info[i].info.code_attribute.exception_table[j].end_pc = beRead16(class_file);
                 attr_info[i].info.code_attribute.exception_table[j].handler_pc = beRead16(class_file);
                 attr_info[i].info.code_attribute.exception_table[j].catch_type = beRead16(class_file);
-                printf("EXCEPTION %d",j+1);
-                printf("\tstart_pc[%d]: %d\n", j+1,attr_info[i].info.code_attribute.exception_table[j].start_pc);
-                printf("\tend_pc[%d]: %d\n", j+1,attr_info[i].info.code_attribute.exception_table[j].end_pc);
-                printf("\thandler_pc[%d]: %d\n", j+1,attr_info[i].info.code_attribute.exception_table[j].handler_pc);
-                printf("\tCatch Type: ");
                 printClassName(attr_info[i].info.code_attribute.exception_table[j].catch_type,jclass);
-                printf("\n");
             }
 
             attr_info[i].info.code_attribute.attributes_count = beRead16(class_file);
@@ -203,12 +188,10 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
 
             attr_info[i].info.constant_value_attribute.constantvalue_index
                 = beRead16(class_file);
-            printf("\tConstant Value Index: %d\n", attr_info[i].info.constant_value_attribute.constantvalue_index);
 
         } else if(!strcmp(attribute_type, "Exceptions")){
 
             attr_info[i].info.exceptions_attribute.number_of_exceptions = beRead16(class_file);
-            printf("number_of_oxceptions: %d\n", attr_info[i].info.exceptions_attribute.number_of_exceptions);
 
             //alocacao para a tabela de excessoes
             if (attr_info[i].info.exceptions_attribute.number_of_exceptions != 0){
@@ -223,19 +206,15 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             for(int j=0;i<attr_info[i].info.exceptions_attribute.number_of_exceptions;j++){
                 //nao tenho certeza se sao 2 bytes
                     attr_info[i].info.exceptions_attribute.excepetions_table[j] = beRead16(class_file);
-                    printf("excepetions_table[%d]: %d\n", j+1,attr_info[i].info.exceptions_attribute.excepetions_table[j]);
                 }
 
             fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
         } else if(!strcmp(attribute_type, "StackMapTable")){
-            printf("\tSem implementação\n");
             fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
         } else if(!strcmp(attribute_type, "BootstrapMethods")){
 
-            printf("Bootstrap Methods\n");
             attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods
                 = beRead16(class_file);
-            printf("Num Bootstrap methods: %d\n", attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods);
             if(attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods != 0){
                 attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods = (bootstrap_methods *) malloc(
                     (attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods) * sizeof(bootstrap_methods));
@@ -247,8 +226,6 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             for(int j = 0; j < attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods; j++){
                 attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_method_ref = beRead16(class_file);
                 attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments = beRead16(class_file);
-                printf("\tMethod Ref: #%d\n", attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_method_ref);
-                printf("\tNum bootstrap arguments: %d\n", attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments);
                 if(attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments != 0){
                     attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments = (uint16_t *) malloc(
                         (attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments) * sizeof(uint16_t));
@@ -258,7 +235,6 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                 }
                 for(int k = 0; k < attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments; k++){
                     attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments[k] = beRead16(class_file);
-                    printf("\t\tBootstrap arguments: #%d\n", attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments[k]);
 
                 }
 
@@ -268,11 +244,9 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
 
             attr_info[i].info.signature_attribute.signature_index
                 = beRead16(class_file);
-            printf("\tSignature Index: %d\n", attr_info[i].info.signature_attribute.signature_index);
 
         } else if(!strcmp(attribute_type, "LineNumberTable")){
             attr_info[i].info.lineNumberTable_attribute.line_number_table_length = beRead16(class_file);
-            printf("line_number_table_length: %d\n", attr_info[i].info.lineNumberTable_attribute.line_number_table_length);
             if (attr_info[i].info.lineNumberTable_attribute.line_number_table_length != 0)
             {
                 attr_info[i].info.lineNumberTable_attribute.line_number_table = (line_number_table *) malloc(
@@ -284,12 +258,10 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             {
                 attr_info[i].info.lineNumberTable_attribute.line_number_table = NULL;
             }
-            printf("Line : Start Program Counter\n");
             for (int j = 0; j < attr_info[i].info.lineNumberTable_attribute.line_number_table_length; j++)
             {
                 attr_info[i].info.lineNumberTable_attribute.line_number_table[j].start_pc = beRead16(class_file);
                 attr_info[i].info.lineNumberTable_attribute.line_number_table[j].line_number = beRead16(class_file);
-                printf("%d : %d\n",attr_info[i].info.lineNumberTable_attribute.line_number_table[j].line_number,attr_info[i].info.lineNumberTable_attribute.line_number_table->start_pc);
 
             }
 
@@ -299,13 +271,11 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                 = beRead16(class_file);
 
             uint16_t sourcefile_index = attr_info[i].info.sourceFile_attribute.sourcefile_index;
-            printf("\tSourceFile Index: %s\n", jclass->constant_pool[sourcefile_index-1].info.utf8Info.bytes);
 
         } else if(!strcmp(attribute_type, "InnerClasses")){
 
             attr_info[i].info.innerClasses_attribute.number_of_classes = beRead16(class_file);
 
-            printf("number_of_classes: %d\n",attr_info[i].info.innerClasses_attribute.number_of_classes);
 
             if(attr_info[i].info.innerClasses_attribute.number_of_classes != 0){
 
@@ -324,16 +294,8 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                 attr_info[i].info.innerClasses_attribute.classes[j].outer_class_info_index = beRead16(class_file);
                 attr_info[i].info.innerClasses_attribute.classes[j].inner_name_index = beRead16(class_file);
                 attr_info[i].info.innerClasses_attribute.classes[j].inner_class_access_flags = beRead16(class_file);
-                printf("InnerClasses:\n");
-                printf("#%d = ",attr_info[i].info.innerClasses_attribute.classes[j].inner_name_index);
-                printf("#%d",attr_info[i].info.innerClasses_attribute.classes[j].outer_class_info_index);
-                printf(" of #%d;\n",attr_info[i].info.innerClasses_attribute.classes[j].inner_class_info_index);
-                printf("inner_class_access_flags: %d\n",attr_info[i].info.innerClasses_attribute.classes[j].inner_class_access_flags);
             }
-        }
-
-         else {
-            printf("\tDesconhecido!\n");
+        } else {
             fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
         }
         //Faltam ainda mais opcoes de name.index!
@@ -348,6 +310,7 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
 
 
 void readInterfaces(FILE *class_file, class_structure* jclass){
+    jclass->interfaces_count = beRead16(class_file);
 
     uint8_t interfaces_count = jclass->interfaces_count;
 
@@ -363,6 +326,7 @@ void readInterfaces(FILE *class_file, class_structure* jclass){
 }
 
 void readFields(FILE *class_file, class_structure* jclass){
+    jclass->fields_count = beRead16(class_file);
 
     uint8_t fields_count = jclass->fields_count;
 
@@ -376,12 +340,6 @@ void readFields(FILE *class_file, class_structure* jclass){
         jclass->fields[i].descriptor_index = beRead16(class_file);
         jclass->fields[i].attributes_count = beRead16(class_file);
 
-        printf("\n------------------------------\n");
-        printf("FIELD: %d\n", i+1);
-        printf("Access Flag: %u\n", jclass->fields[i].access_flags);
-        printf("Name Index: %u\n", jclass->fields[i].name_index);
-        printf("Descriptor Index: %u\n", jclass->fields[i].descriptor_index);
-        printf("Attribute Count: %u\n", jclass->fields[i].attributes_count);
 
         uint16_t attribute_count = jclass->fields[i].attributes_count;
 
@@ -398,6 +356,8 @@ void readFields(FILE *class_file, class_structure* jclass){
 }
 
 void readMethods(FILE *class_file, class_structure* jclass){
+    jclass->methods_count = beRead16(class_file);
+
     uint8_t methods_count = jclass->methods_count;
 
     jclass->methods = (method_info *) malloc(
@@ -410,12 +370,6 @@ void readMethods(FILE *class_file, class_structure* jclass){
         jclass->methods[i].descriptor_index = beRead16(class_file);
         jclass->methods[i].attributes_count = beRead16(class_file);
 
-        printf("\n------------------------------\n");
-        printf("METHOD: %d\n", i+1);
-        printf("Access Flag: %u\n", jclass->methods[i].access_flags);
-        printf("Name Index: %u\n", jclass->methods[i].name_index);
-        printf("Descriptor Index: %u\n", jclass->methods[i].descriptor_index);
-        printf("Attribute Count: %u\n", jclass->methods[i].attributes_count);
 
         uint16_t attribute_count = jclass->methods[i].attributes_count;
 
@@ -431,6 +385,7 @@ void readMethods(FILE *class_file, class_structure* jclass){
 }
 
 void readClassAttributes(FILE *class_file, class_structure* jclass){
+    jclass->attributes_count = beRead16(class_file);
 
     uint16_t attribute_class_count = jclass->attributes_count;
 

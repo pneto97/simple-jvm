@@ -13,8 +13,6 @@
 #include "j8_class_displayer.h"
 
 int main(int argc , char* argv[]){
-
-
     if(argc != 2){
         printf("Especifique um arquivo .class!\n");
         exit(1);
@@ -55,30 +53,17 @@ int main(int argc , char* argv[]){
     printf("Super Class: ");
     printClassName(jclass->super_class, jclass);
 
-    jclass->interfaces_count = beRead16(class_file);
-    printf("Interfaces Count: %d\n",jclass->interfaces_count);
-
     readInterfaces(class_file, jclass);
     printInterfaces(jclass);
-      
-    jclass->fields_count = beRead16(class_file);
-    printf("Fields Count: %d\n",jclass->fields_count);
 
     readFields(class_file, jclass);
-    //printFields(jclass);
+    printFields(jclass);
     
-    jclass->methods_count = beRead16(class_file);
-    printf("Methods Count: %d\n",jclass->methods_count);
-
     readMethods(class_file, jclass);
+    printMethods(jclass);
 
-    jclass->attributes_count = beRead16(class_file);
-    printf("Class Attributes Count: %d\n",jclass->attributes_count);
-
-    readClassAttributes(class_file,jclass);
-
-    //printAttributes(jclass->attribute,jclass->attributes_count,jclass);
-
+    readClassAttributes(class_file, jclass);
+    printClassAttributes(jclass);
     
     //readClassAttributes(class_file, jclass);
     //TODO: fazer o parse dos outros campos...

@@ -3,9 +3,6 @@
 
 #include <stdint.h>
 
-// struct attribute_info;
-// struct code_attribute;
-
 //Exception_table
 typedef struct exception_table {
     uint16_t start_pc;
