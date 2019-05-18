@@ -17,5 +17,8 @@ void readInterfaces(FILE *class_file, class_structure* jclass);
 //le os metodos se o arquivo estiver na posicao certo
 void readMethods(FILE *class_file, class_structure* jclass);
 
+//le os campos se o arquivo estiver na posicao certo
+void readFields(FILE *class_file, class_structure* jclass);
+
 //desaloca a classe incluindo o utf8 do constant pool
 void freeClass(class_structure *jclass);

@@ -64,8 +64,8 @@ int main(int argc , char* argv[]){
     jclass->fields_count = beRead16(class_file);
     printf("Fields Count: %d\n",jclass->fields_count);
 
-    // readFields(class_file, jclass);
-    // printFields(jclass);
+    readFields(class_file, jclass);
+    //printFields(jclass);
     
     jclass->methods_count = beRead16(class_file);
     printf("Methods Count: %d\n",jclass->methods_count);
