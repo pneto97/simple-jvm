@@ -235,7 +235,7 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             printf("Bootstrap Methods\n");
             attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods
                 = beRead16(class_file);
-
+            printf("Num Bootstrap methods: %d\n", attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods);
             if(attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods != 0){
                 attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods = (bootstrap_methods *) malloc(
                     (attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods) * sizeof(bootstrap_methods));
@@ -247,7 +247,8 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             for(int j = 0; j < attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods; j++){
                 attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_method_ref = beRead16(class_file);
                 attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments = beRead16(class_file);
-
+                printf("\tMethod Ref: #%d\n", attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_method_ref);
+                printf("\tNum bootstrap arguments: %d\n", attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments);
                 if(attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments != 0){
                     attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments = (uint16_t *) malloc(
                         (attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments) * sizeof(uint16_t));
@@ -257,6 +258,8 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                 }
                 for(int k = 0; k < attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments; k++){
                     attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments[k] = beRead16(class_file);
+                    printf("\t\tBootstrap arguments: #%d\n", attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments[k]);
+
                 }
 
             }
