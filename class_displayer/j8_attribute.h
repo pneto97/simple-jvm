@@ -72,6 +72,18 @@ typedef struct sourceFile_attribute {
     uint16_t sourcefile_index;
 }sourceFile_attribute;
 
+typedef struct innerClasses_attribute {
+    uint16_t number_of_classes;
+    struct classes *classes;
+}innerClasses_attribute;
+
+typedef struct classes {
+    uint16_t inner_class_info_index;
+        uint16_t outer_class_info_index;
+        uint16_t inner_name_index;
+        uint16_t inner_class_access_flags;
+}classes;
+
 //Atribute info
 typedef struct attribute{
     uint16_t attribute_name_index;
@@ -86,6 +98,7 @@ typedef struct attribute{
         signature_attribute signature_attribute;
         lineNumberTable_attribute lineNumberTable_attribute;
         sourceFile_attribute sourceFile_attribute;
+        innerClasses_attribute innerClasses_attribute;
     }info;
 } attribute_info;
 

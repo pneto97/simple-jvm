@@ -257,15 +257,12 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             printf("Line : Start Program Counter\n");
             for (int j = 0; j < attr_info[i].info.lineNumberTable_attribute.line_number_table_length; j++)
             {
-                attr_info[i].info.lineNumberTable_attribute.line_number_table->start_pc = beRead16(class_file);
-                attr_info[i].info.lineNumberTable_attribute.line_number_table->line_number = beRead16(class_file);
-                printf("%d : %d\n",attr_info[i].info.lineNumberTable_attribute.line_number_table->line_number,attr_info[i].info.lineNumberTable_attribute.line_number_table->start_pc);
+                attr_info[i].info.lineNumberTable_attribute.line_number_table[j].start_pc = beRead16(class_file);
+                attr_info[i].info.lineNumberTable_attribute.line_number_table[j].line_number = beRead16(class_file);
+                printf("%d : %d\n",attr_info[i].info.lineNumberTable_attribute.line_number_table[j].line_number,attr_info[i].info.lineNumberTable_attribute.line_number_table->start_pc);
                 
             }
-            
 
-            //falta implementacao
-            //fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
         } else if(!strcmp(attribute_type, "SourceFile")){
 
             attr_info[i].info.sourceFile_attribute.sourcefile_index
@@ -274,10 +271,39 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             uint16_t sourcefile_index = attr_info[i].info.sourceFile_attribute.sourcefile_index;
             printf("\tSourceFile Index: %s\n", jclass->constant_pool[sourcefile_index-1].info.utf8Info.bytes);
 
+        } else if(!strcmp(attribute_type, "InnerClasses")){
 
+            attr_info[i].info.innerClasses_attribute.number_of_classes = beRead16(class_file);
+
+            printf("number_of_classes: %d\n",attr_info[i].info.innerClasses_attribute.number_of_classes);
+
+            if(attr_info[i].info.innerClasses_attribute.number_of_classes != 0){
+
+                attr_info[i].info.innerClasses_attribute.classes = (classes *) malloc (
+                    (attr_info[i].info.innerClasses_attribute.number_of_classes) 
+                        * sizeof(classes)
+                );
+
+            } else {
+                attr_info[i].info.innerClasses_attribute.classes = NULL;
+            }
+
+            for (int j = 0; j < attr_info[i].info.innerClasses_attribute.number_of_classes; j++)
+            {
+                attr_info[i].info.innerClasses_attribute.classes[j].inner_class_info_index = beRead16(class_file);
+                attr_info[i].info.innerClasses_attribute.classes[j].outer_class_info_index = beRead16(class_file);
+                attr_info[i].info.innerClasses_attribute.classes[j].inner_name_index = beRead16(class_file);
+                attr_info[i].info.innerClasses_attribute.classes[j].inner_class_access_flags = beRead16(class_file);
+                printf("InnerClasses:\n");
+                printf("#%d = ",attr_info[i].info.innerClasses_attribute.classes[j].inner_name_index);
+                printf("#%d",attr_info[i].info.innerClasses_attribute.classes[j].outer_class_info_index);
+                printf(" of #%d;\n",attr_info[i].info.innerClasses_attribute.classes[j].inner_class_info_index);
+                printf("inner_class_access_flags: %d\n",attr_info[i].info.innerClasses_attribute.classes[j].inner_class_access_flags);
+            }
         }
+
          else {
-            printf("\tDesconhecido.\n");
+            printf("\tDesconhecido!\n");
             fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
         }
         //Faltam ainda mais opcoes de name.index!
