@@ -111,7 +111,7 @@ void readConstantPool(FILE *class_file, class_structure* jclass){
 }
 
 void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attribute_count, class_structure *jclass){
-    
+
     for(int i = 0; i < attribute_count; i++){
         attr_info[i].attribute_name_index = beRead16(class_file);
         attr_info[i].attribute_length = beRead32(class_file);
@@ -155,7 +155,7 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                 printf("\tCode[%d]: %hhx\n", j+1,attr_info[i].info.code_attribute.code[j]);
             }
 
-            
+
             attr_info[i].info.code_attribute.exception_table_length = beRead16(class_file);
             printf("exception_table_length: %d \n", attr_info[i].info.code_attribute.exception_table_length);
             //aloca o vetor para exception_table
@@ -184,7 +184,7 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             }
 
             attr_info[i].info.code_attribute.attributes_count = beRead16(class_file);
-            
+
             //aloca o vetor para attributes
             if (attr_info[i].info.code_attribute.attributes_count != 0){
                 attr_info[i].info.code_attribute.attributes = (attribute_info *) malloc(
@@ -194,7 +194,7 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             else {
                 attr_info[i].info.code_attribute.attributes = NULL;
             }
-            
+
             // Leitura dos atributos de cada atributo code (Sim, a parada é recursiva :o )
             readAttributes(class_file,attr_info[i].info.code_attribute.attributes,
                  attr_info[i].info.code_attribute.attributes_count,jclass);
@@ -206,7 +206,7 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             printf("\tConstant Value Index: %d\n", attr_info[i].info.constant_value_attribute.constantvalue_index);
 
         } else if(!strcmp(attribute_type, "Exceptions")){
-            
+
             attr_info[i].info.exceptions_attribute.number_of_exceptions = beRead16(class_file);
             printf("number_of_oxceptions: %d\n", attr_info[i].info.exceptions_attribute.number_of_exceptions);
 
@@ -225,14 +225,41 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                     attr_info[i].info.exceptions_attribute.excepetions_table[j] = beRead16(class_file);
                     printf("excepetions_table[%d]: %d\n", j+1,attr_info[i].info.exceptions_attribute.excepetions_table[j]);
                 }
-            
+
             fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
         } else if(!strcmp(attribute_type, "StackMapTable")){
             printf("\tSem implementação\n");
             fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
         } else if(!strcmp(attribute_type, "BootstrapMethods")){
-            printf("\tSem implementação\n");
-            fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
+
+            printf("Bootstrap Methods\n");
+            attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods
+                = beRead16(class_file);
+
+            if(attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods != 0){
+                attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods = (bootstrap_methods *) malloc(
+                    (attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods) * sizeof(bootstrap_methods));
+
+            }else{
+                attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods = NULL;
+            }
+
+            for(int j = 0; j < attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods; j++){
+                attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_method_ref = beRead16(class_file);
+                attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments = beRead16(class_file);
+
+                if(attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments != 0){
+                    attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments = (uint16_t *) malloc(
+                        (attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments) * sizeof(uint16_t));
+
+                }else{
+                    attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments = NULL;
+                }
+                for(int k = 0; k < attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments; k++){
+                    attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments[k] = beRead16(class_file);
+                }
+
+            }
 
         } else if(!strcmp(attribute_type, "Signature")){
 
@@ -246,7 +273,7 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             if (attr_info[i].info.lineNumberTable_attribute.line_number_table_length != 0)
             {
                 attr_info[i].info.lineNumberTable_attribute.line_number_table = (line_number_table *) malloc(
-                    (attr_info[i].info.lineNumberTable_attribute.line_number_table_length) 
+                    (attr_info[i].info.lineNumberTable_attribute.line_number_table_length)
                     * sizeof(line_number_table)
                 );
             }
@@ -260,14 +287,14 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                 attr_info[i].info.lineNumberTable_attribute.line_number_table[j].start_pc = beRead16(class_file);
                 attr_info[i].info.lineNumberTable_attribute.line_number_table[j].line_number = beRead16(class_file);
                 printf("%d : %d\n",attr_info[i].info.lineNumberTable_attribute.line_number_table[j].line_number,attr_info[i].info.lineNumberTable_attribute.line_number_table->start_pc);
-                
+
             }
 
         } else if(!strcmp(attribute_type, "SourceFile")){
 
             attr_info[i].info.sourceFile_attribute.sourcefile_index
                 = beRead16(class_file);
-            
+
             uint16_t sourcefile_index = attr_info[i].info.sourceFile_attribute.sourcefile_index;
             printf("\tSourceFile Index: %s\n", jclass->constant_pool[sourcefile_index-1].info.utf8Info.bytes);
 
@@ -280,7 +307,7 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             if(attr_info[i].info.innerClasses_attribute.number_of_classes != 0){
 
                 attr_info[i].info.innerClasses_attribute.classes = (classes *) malloc (
-                    (attr_info[i].info.innerClasses_attribute.number_of_classes) 
+                    (attr_info[i].info.innerClasses_attribute.number_of_classes)
                         * sizeof(classes)
                 );
 
@@ -386,7 +413,7 @@ void readMethods(FILE *class_file, class_structure* jclass){
         printf("Name Index: %u\n", jclass->methods[i].name_index);
         printf("Descriptor Index: %u\n", jclass->methods[i].descriptor_index);
         printf("Attribute Count: %u\n", jclass->methods[i].attributes_count);
-        
+
         uint16_t attribute_count = jclass->methods[i].attributes_count;
 
         if(attribute_count > 0){
@@ -401,7 +428,7 @@ void readMethods(FILE *class_file, class_structure* jclass){
 }
 
 void readClassAttributes(FILE *class_file, class_structure* jclass){
-        
+
     uint16_t attribute_class_count = jclass->attributes_count;
 
     if(attribute_class_count > 0){

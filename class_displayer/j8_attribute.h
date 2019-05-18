@@ -38,16 +38,16 @@ typedef struct stackMapTable_attribute {
     //stack_map_frame *entries;
 }stackMapTable_attribute;
 
-typedef struct bootstrapMethods_attribute {
-    uint16_t attribute_name_index;
-    uint32_t attribute_length;
+typedef struct bootstrapMethods_attributes {
     uint16_t num_bootstrap_methods;
-    /*union{
-        uint16_t bootstrap_method_ref;
-        uint16_t num_bootstrap_arguments;
-        uint16_t *bootstrap_arguments;
-    } bootstrap_methods;*/
-}bootstrapMethods_attribute;
+    struct bootstrap_methods *bootstrap_methods;
+}bootstrapMethods_attributes;
+
+typedef struct bootstrap_methods {
+    uint16_t bootstrap_method_ref;
+    uint16_t num_bootstrap_arguments;
+    uint16_t *bootstrap_arguments;
+} bootstrap_methods;
 
 typedef struct exceptions_attribute {
     uint16_t number_of_exceptions;
@@ -94,7 +94,7 @@ typedef struct attribute{
         constant_value_attribute constant_value_attribute;
         exceptions_attribute exceptions_attribute;
         stackMapTable_attribute stackMapTable_attribute;
-        bootstrapMethods_attribute bootstrapMethods_attribute;
+        bootstrapMethods_attributes bootstrapMethods_attributes;
         signature_attribute signature_attribute;
         lineNumberTable_attribute lineNumberTable_attribute;
         sourceFile_attribute sourceFile_attribute;
