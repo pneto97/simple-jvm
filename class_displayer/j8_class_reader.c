@@ -1,5 +1,6 @@
 //j8_class_reader.c
 
+#include "j8_class_displayer.h" // RETIRAR
 #include "j8_class_reader.h"
 #include <stdint.h>
 #include <stdlib.h>
@@ -173,10 +174,13 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                 attr_info[i].info.code_attribute.exception_table[j].end_pc = beRead16(class_file);
                 attr_info[i].info.code_attribute.exception_table[j].handler_pc = beRead16(class_file);
                 attr_info[i].info.code_attribute.exception_table[j].catch_type = beRead16(class_file);
+                printf("EXCEPTION %d",j+1);
                 printf("\tstart_pc[%d]: %d\n", j+1,attr_info[i].info.code_attribute.exception_table[j].start_pc);
                 printf("\tend_pc[%d]: %d\n", j+1,attr_info[i].info.code_attribute.exception_table[j].end_pc);
                 printf("\thandler_pc[%d]: %d\n", j+1,attr_info[i].info.code_attribute.exception_table[j].handler_pc);
-                printf("\tcatch_type[%d]: %d\n", j+1,attr_info[i].info.code_attribute.exception_table[j].catch_type);
+                printf("\tCatch Type: ");
+                printClassName(attr_info[i].info.code_attribute.exception_table[j].catch_type,jclass);
+                printf("\n");
             }
 
             attr_info[i].info.code_attribute.attributes_count = beRead16(class_file);
@@ -202,21 +206,26 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             printf("\tConstant Value Index: %d\n", attr_info[i].info.constant_value_attribute.constantvalue_index);
 
         } else if(!strcmp(attribute_type, "Exceptions")){
-            printf("\tSem implementação\n");
-            /*
+            
             attr_info[i].info.exceptions_attribute.number_of_exceptions = beRead16(class_file);
+            printf("number_of_oxceptions: %d\n", attr_info[i].info.exceptions_attribute.number_of_exceptions);
 
-                //alocacao para a tabela de excessoes
+            //alocacao para a tabela de excessoes
+            if (attr_info[i].info.exceptions_attribute.number_of_exceptions != 0){
             attr_info[i].info.exceptions_attribute.excepetions_table = (uint16_t*) malloc(
                 (attr_info[i].info.exceptions_attribute.number_of_exceptions)
                     * sizeof(uint16_t)
                 );
-
-            for(int i=0;i<attr_info[i].info.exceptions_attribute.number_of_exceptions;i++){
+            }
+            else{
+                attr_info[i].info.exceptions_attribute.excepetions_table = NULL;
+            }
+            for(int j=0;i<attr_info[i].info.exceptions_attribute.number_of_exceptions;j++){
                 //nao tenho certeza se sao 2 bytes
-                    attr_info[i].info.exceptions_attribute.excepetions_table[i] = beRead16(class_file);
+                    attr_info[i].info.exceptions_attribute.excepetions_table[j] = beRead16(class_file);
+                    printf("excepetions_table[%d]: %d\n", j+1,attr_info[i].info.exceptions_attribute.excepetions_table[j]);
                 }
-            */
+            
             fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
         } else if(!strcmp(attribute_type, "StackMapTable")){
             printf("\tSem implementação\n");
