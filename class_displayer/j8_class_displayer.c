@@ -1,7 +1,6 @@
 //j8_class_displayer.c 
 #include "j8_class_displayer.h"
 #include <string.h>
-#include "j8_access_flags.h"
 
 //de acordo com a tag do constant pool, altera a string tagType para o significado
 void cpTagToString(uint8_t tag, char *tagType){
@@ -119,26 +118,38 @@ void printConstantPool(FILE* class_file, class_structure* jclass){
 }
 
 // Imprime o nome das flags presentes classe
-void printAccessFlags(class_structure *jclass){
-    uint16_t access_flag = jclass->access_flags;
+void printAccessFlags(uint16_t access_flags, infotype type){
+    printf("Access Flags: (0x%04x)\n\t", access_flags);
 
-    printf("Access Flags:\n\t");
-    
-    if(access_flag & ACC_PUBLIC)
+    if(access_flags & ACC_PUBLIC)
         printf("Public ");
-    if(access_flag & ACC_FINAL)
+    if(access_flags & ACC_PRIVATE)
+        printf("Private ");
+    if(access_flags & ACC_PROTECTED)
+        printf("Protected ");
+    if(access_flags & ACC_STATIC)
+        printf("Static ");
+    if(access_flags & ACC_FINAL)
         printf("Final ");
-    if(access_flag & ACC_SUPER)
-        printf("Super ");
-    if(access_flag & ACC_INTERFACE)
-        printf("Final ");
-    if(access_flag & ACC_ABSTRACT)
+    if(access_flags & ACC_SUPER)
+        type == CLASS ? printf("Super ") : printf("Synchronized ");
+    if(access_flags & ACC_BRIDGE)
+        type == METHOD ? printf("Bridge ") : printf("Volatile ");
+    if(access_flags & ACC_VARARGS)
+        printf("Varargs ");
+    if(access_flags & ACC_NATIVE)
+        printf("Native ");
+    if(access_flags & ACC_INTERFACE)
+        printf("Interface ");
+    if(access_flags & ACC_ABSTRACT)
         printf("Abstract ");
-    if(access_flag & ACC_SYNTHETIC)
+    if(access_flags & ACC_STRICT)
+        printf("Strict ");
+    if(access_flags & ACC_SYNTHETIC)
         printf("Synthetic ");
-    if(access_flag & ACC_ANNOTATION)
+    if(access_flags & ACC_ANNOTATION)
         printf("Annotation ");
-    if(access_flag & ACC_ENUM)
+    if(access_flags & ACC_ENUM)
         printf("Enum ");
     printf("\n");
 }
@@ -170,7 +181,8 @@ void printFields(class_structure* jclass){
     for(int i = 0; i < fields_count; i++){
         printf("\n------------------------------\n");
         printf("FIELD: %d\n", i+1);
-        printf("Access Flag: %u\n", jclass->fields[i].access_flags);
+        // printf("Access Flag: %u\n", jclass->fields[i].access_flags);
+        printAccessFlags(jclass->fields[i].access_flags, FIELD);
         printf("Name Index: %u\n", jclass->fields[i].name_index);
         printf("Descriptor Index: %u\n", jclass->fields[i].descriptor_index);
         printf("Attribute Count: %u\n", jclass->fields[i].attributes_count);
@@ -190,7 +202,8 @@ void printMethods(class_structure* jclass){
     for(int i = 0; i < methods_count; i++){
         printf("\n------------------------------\n");
         printf("METHOD: %d\n", i+1);
-        printf("Access Flag: %u\n", jclass->methods[i].access_flags);
+        // printf("Access Flag: %u\n", jclass->methods[i].access_flags);
+        printAccessFlags(jclass->methods[i].access_flags, METHOD);
         printf("Name Index: %u\n", jclass->methods[i].name_index);
         printf("Descriptor Index: %u\n", jclass->methods[i].descriptor_index);
         printf("Attribute Count: %u\n", jclass->methods[i].attributes_count);
@@ -300,7 +313,8 @@ void printAttributes(attribute_info* attr_info, uint16_t attribute_count, class_
                 printf("#%d = ",attr_info[i].info.innerClasses_attribute.classes[j].inner_name_index);
                 printf("#%d",attr_info[i].info.innerClasses_attribute.classes[j].outer_class_info_index);
                 printf(" of #%d;\n",attr_info[i].info.innerClasses_attribute.classes[j].inner_class_info_index);
-                printf("inner_class_access_flags: %d\n",attr_info[i].info.innerClasses_attribute.classes[j].inner_class_access_flags);
+                // printf("inner_class_access_flags: %d\n",attr_info[i].info.innerClasses_attribute.classes[j].inner_class_access_flags);
+                printAccessFlags(attr_info[i].info.innerClasses_attribute.classes[j].inner_class_access_flags, CLASS);
             }
         } else {
             printf("\tDesconhecido!\n");

@@ -43,7 +43,7 @@ int main(int argc , char* argv[]){
     printConstantPool(class_file, jclass);
 
     jclass->access_flags = beRead16(class_file);
-    printAccessFlags(jclass);
+    printAccessFlags(jclass->access_flags, CLASS);
 
     jclass->this_class = beRead16(class_file);
     printf("This Class: ");

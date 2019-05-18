@@ -9,6 +9,7 @@
 #define H_J8_CLASS_STRUCTURE
 #include "j8_class_structure.h"
 #endif
+#include "j8_access_flags.h"
 
 //converte o numero da tag do constant pool para uma string que faz sentido
 void cpTagToString(uint8_t tag, char *tagType);
@@ -17,7 +18,7 @@ void cpTagToString(uint8_t tag, char *tagType);
 void printConstantPool(FILE* class_file, class_structure* jclass);
 
 // Imprime o nome das flags presentes classe
-void printAccessFlags(class_structure* jclass);
+void printAccessFlags(uint16_t access_flags, infotype type);
 
 // Imprime as Interfaces
 void printInterfaces(class_structure* jclass);
