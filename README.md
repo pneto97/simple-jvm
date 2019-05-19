@@ -18,4 +18,4 @@ Paulo Borges        - 15/0143753 <br>
 Christian           - ##/####### <br>
 Lucas Campos Jorge  - 15/0154135 <br>
 João Marcelo        - <br>
-Rodrigo Demetrio    - <br>
+Rodrigo Demetrio    - 15/0147384 <br>
