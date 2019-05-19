@@ -224,3 +224,6 @@
 #define BREAKPOINT  	0xca
 #define IMPDEP1 		0xfe
 #define IMPDEP2 		0xff
+
+#include <stdint.h>
+void printOpcode(uint8_t opcode);

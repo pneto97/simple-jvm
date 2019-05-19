@@ -1,6 +1,7 @@
 //j8_class_displayer.c 
 #include "j8_class_displayer.h"
 #include <string.h>
+#include "opcode.h"
 
 //de acordo com a tag do constant pool, altera a string tagType para o significado
 void cpTagToString(uint8_t tag, char *tagType){
@@ -82,6 +83,7 @@ void printConstantPool(FILE* class_file, class_structure* jclass){
                     jclass->constant_pool[i].info.number64Info.high_bytes,
                     jclass->constant_pool[i].info.number64Info.low_bytes
                 );
+                i++;
                 break;
             case CONSTANT_NameAndType:
                 printf("name index: #%d, descriptor_index: #%d\n",
@@ -364,7 +366,10 @@ void printCodes(code_attribute code_attribute, class_structure* jclass){
 
     for (int j = 0; j < code_attribute.code_length; j++)
     {
-        printf("\tCode[%d]: %hhx\n", j+1,code_attribute.code[j]);
+        //printf("\tCode[%d]: %hhx\n", j+1,code_attribute.code[j]);
+        printf("\tCode[%d]: %hhx:\t", j+1,code_attribute.code[j]);
+        printOpcode(code_attribute.code[j]);
+        printf("\n");
     }
 
     printf("exception_table_length: %d \n", code_attribute.exception_table_length);
