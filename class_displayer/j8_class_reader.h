@@ -29,3 +29,6 @@ void readClassAttributes(FILE *class_file, class_structure* jclass);
 //desaloca a classe incluindo o utf8 do constant pool
 void freeClass(class_structure *jclass);
 
+//desaloca attributos da class
+void freeAttributes(attribute_info *attr_info, uint16_t attribute_count, class_structure *jclass);
+

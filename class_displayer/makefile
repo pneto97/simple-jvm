@@ -1,4 +1,4 @@
-CC = gcc -std=c99
+CC = gcc -std=c99 -g
 SRC_FILES = main.c read_utils.c j8_class_reader.c j8_class_displayer.c
 EXEC = main
 

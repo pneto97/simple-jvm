@@ -127,7 +127,6 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
         strcpy(attribute_type,(char *)jclass->constant_pool[name_index-1].info.utf8Info.bytes);
 
         if(!strcmp(attribute_type, "Code")){
-            //falta implementacao
             //fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
             attr_info[i].info.code_attribute.max_stack = beRead16(class_file);
             attr_info[i].info.code_attribute.max_locals = beRead16(class_file);
@@ -135,9 +134,9 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
 
             //aloca o vetor para code
             if(attr_info[i].info.code_attribute.code_length > 0){
-            attr_info[i].info.code_attribute.code = (uint8_t *) malloc(
-                (attr_info[i].info.code_attribute.code_length) * sizeof(uint8_t)
-            );
+                attr_info[i].info.code_attribute.code = (uint8_t *) malloc(
+                    (attr_info[i].info.code_attribute.code_length) * sizeof(uint8_t)
+                );
             }
             else{
                 attr_info[i].info.code_attribute.code = NULL;
@@ -152,9 +151,9 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             //aloca o vetor para exception_table
 
             if (attr_info[i].info.code_attribute.exception_table_length != 0){
-            attr_info[i].info.code_attribute.exception_table = (exception_table *) malloc(
-                (attr_info[i].info.code_attribute.exception_table_length) * sizeof(exception_table)
-            );
+                attr_info[i].info.code_attribute.exception_table = (exception_table *) malloc(
+                    (attr_info[i].info.code_attribute.exception_table_length) * sizeof(exception_table)
+                );
             }
             else {
                 attr_info[i].info.code_attribute.exception_table = NULL;
@@ -172,8 +171,8 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             //aloca o vetor para attributes
             if (attr_info[i].info.code_attribute.attributes_count != 0){
                 attr_info[i].info.code_attribute.attributes = (attribute_info *) malloc(
-                (attr_info[i].info.code_attribute.attributes_count) * sizeof(attribute_info)
-            );
+                    (attr_info[i].info.code_attribute.attributes_count) * sizeof(attribute_info)
+                );
             }
             else {
                 attr_info[i].info.code_attribute.attributes = NULL;
@@ -423,13 +422,34 @@ void readClassAttributes(FILE *class_file, class_structure* jclass){
 void freeClass(class_structure *jclass){
     if(jclass != NULL){
 
-        for(int i = 0; i < jclass->constant_pool_count-1 ; i++){
-            if(jclass->constant_pool[i].info.utf8Info.bytes != NULL && jclass->constant_pool[i].tag == CONSTANT_Utf8)
-                free(jclass->constant_pool[i].info.utf8Info.bytes);
+        if(jclass->fields != NULL){
+            for (int i = 0; i < jclass->fields_count; i++){
+                freeAttributes(jclass->fields[i].attributes, jclass->fields[i].attributes_count, jclass);
+            }
+            
+            free(jclass->fields);
+        }
+
+        if(jclass->methods != NULL){
+            for (int i = 0; i < jclass->methods_count; i++){
+                freeAttributes(jclass->methods[i].attributes, jclass->methods[i].attributes_count, jclass);
+            }
+            free(jclass->methods);
+        }
+        
+        if(jclass->attribute != NULL){
+            freeAttributes(jclass->attribute, jclass->attributes_count, jclass);
         }
 
         if(jclass->interfaces != NULL){
             free(jclass->interfaces);
+        }
+
+        for(int i = 0; i < jclass->constant_pool_count-1 ; i++){
+            if(jclass->constant_pool[i].tag == CONSTANT_Utf8){
+                if(jclass->constant_pool[i].info.utf8Info.bytes != NULL)
+                    free(jclass->constant_pool[i].info.utf8Info.bytes);
+            }
         }
 
         if(jclass->constant_pool != NULL){
@@ -439,4 +459,68 @@ void freeClass(class_structure *jclass){
         free(jclass);
     }
 
+}
+
+void freeAttributes(attribute_info *attr_info, uint16_t attribute_count, class_structure *jclass){
+
+    for(int i = 0; i < attribute_count; i++){
+        uint16_t name_index = attr_info[i].attribute_name_index;
+
+        char *attribute_type  = (char *) malloc(
+            (jclass->constant_pool[name_index-1].info.utf8Info.length+1) * sizeof(char *)
+        );
+
+        strcpy(attribute_type,(char *)jclass->constant_pool[name_index-1].info.utf8Info.bytes);
+
+        if(!strcmp(attribute_type, "Code")){
+            
+            //aloca o vetor para code
+            if(attr_info[i].info.code_attribute.code != NULL){
+                free(attr_info[i].info.code_attribute.code);
+            }
+
+            //aloca o vetor para exception_table
+
+            if (attr_info[i].info.code_attribute.exception_table != NULL){
+                free(attr_info[i].info.code_attribute.exception_table);
+            }
+            
+            //aloca o vetor para attributes
+            if (attr_info[i].info.code_attribute.attributes != NULL){
+                freeAttributes(attr_info[i].info.code_attribute.attributes,
+                    attr_info[i].info.code_attribute.attributes_count,jclass);
+            } 
+        } else if(!strcmp(attribute_type, "LocalVariableTable")){
+
+            if (attr_info[i].info.localVariableTable_attribute.local_variable_table != NULL){
+                free(attr_info[i].info.localVariableTable_attribute.local_variable_table);
+            }
+        
+        } else if(!strcmp(attribute_type, "Exceptions")){
+            //alocacao para a tabela de excessoes
+            if (attr_info[i].info.exceptions_attribute.excepetions_table != NULL){
+                free(attr_info[i].info.exceptions_attribute.excepetions_table);
+            }
+        } else if(!strcmp(attribute_type, "BootstrapMethods")){
+            if(attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods != NULL){
+                for(int j = 0; j < attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods; j++){
+                    if(attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments != NULL){
+                        free(attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments);
+                    }
+                }
+                free(attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods);
+
+            }
+        } else if(!strcmp(attribute_type, "LineNumberTable")){
+            if (attr_info[i].info.lineNumberTable_attribute.line_number_table != NULL){
+                free(attr_info[i].info.lineNumberTable_attribute.line_number_table);
+            }
+        } else if(!strcmp(attribute_type, "InnerClasses")){
+            if(attr_info[i].info.innerClasses_attribute.classes != NULL){
+                free(attr_info[i].info.innerClasses_attribute.classes);
+            }
+        }
+        free(attribute_type);
+    }
+    free(attr_info);
 }
