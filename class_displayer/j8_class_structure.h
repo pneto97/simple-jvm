@@ -52,7 +52,7 @@ typedef struct method_info{
     attribute_info *attributes;
 } method_info;
 
-//estrutura da classe. Guarda os lados lidos do .class
+//estrutura da classe. Guarda os dados lidos do .class
 typedef struct class_structure {
     uint32_t magic;
     uint16_t minor_version;
