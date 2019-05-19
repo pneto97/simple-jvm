@@ -15,7 +15,7 @@ Made in C99
 
 ## developed by
 Paulo Borges        - 15/0143753 <br>
-Christian           - ##/####### <br>
+Christian           - 15/0153538 <br>
 Lucas Campos Jorge  - 15/0154135 <br>
-João Marcelo        - <br>
+João Marcelo        - 15/0132085 <br>
 Rodrigo Demetrio    - 15/0147384 <br>

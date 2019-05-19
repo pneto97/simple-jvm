@@ -10,8 +10,12 @@
 
 // Função que lê o jclass e returna uma struct com todas as infos
 class_structure* readClassFile(FILE *class_file){
-    class_structure* jclass;
-    jclass = ( class_structure* ) malloc( sizeof(class_structure) );
+    class_structure *jclass = ( class_structure* ) malloc( sizeof(class_structure));
+
+    if(jclass == NULL){
+        printf("Erro na alocacao!\n");
+        exit(2);
+    }
 
     readInitialParams(jclass, class_file); //magic, minor e major version
     readConstantPool(class_file, jclass); // Constant pool
@@ -33,8 +37,8 @@ int isClassFile(class_structure* jclass){
 // leitura do magic number, minor e major version
 void readInitialParams(class_structure* jclass, FILE *class_file){
     jclass->magic = beRead32(class_file);
-    jclass->minor_version = beRead16(class_file);    
-    jclass->major_version = beRead16(class_file);        
+    jclass->minor_version = beRead16(class_file);
+    jclass->major_version = beRead16(class_file);
 
 }
 
@@ -47,6 +51,11 @@ void readConstantPool(FILE *class_file, class_structure* jclass){
     jclass->constant_pool = (cp_info *) malloc(
         (jclass->constant_pool_count-1) * sizeof(cp_info)
     );
+
+    if(jclass->constant_pool == NULL){
+        printf("Erro na alocacao!\n");
+        exit(2);
+    }
 
     //lê cada tag, de acordo com a tag, le os campos corretos da union "info"
     // recomendo ler o capitulo 4 da doc da jvm para entender essa parte, na parte do constant_pool
@@ -107,6 +116,11 @@ void readConstantPool(FILE *class_file, class_structure* jclass){
                         (jclass->constant_pool[i].info.utf8Info.length+1) * sizeof(uint8_t)
                     );
 
+                if(jclass->constant_pool[i].info.utf8Info.bytes == NULL){
+                    printf("Erro na alocacao!\n");
+                    exit(2);
+                }
+
                 //le a string do arquivo para o espaço alocado
                 fread(jclass->constant_pool[i].info.utf8Info.bytes,
                       sizeof(uint8_t),
@@ -157,6 +171,11 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             (jclass->constant_pool[name_index-1].info.utf8Info.length+1) * sizeof(char *)
         );
 
+        if(attribute_type == NULL){
+            printf("Erro na alocacao!\n");
+            exit(2);
+        }
+
         strcpy(attribute_type,(char *)jclass->constant_pool[name_index-1].info.utf8Info.bytes);
 
         if(!strcmp(attribute_type, "Code")){
@@ -170,6 +189,10 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                 attr_info[i].info.code_attribute.code = (uint8_t *) malloc(
                     (attr_info[i].info.code_attribute.code_length) * sizeof(uint8_t)
                 );
+                if(attr_info[i].info.code_attribute.code == NULL){
+                    printf("Erro na alocacao!\n");
+                    exit(2);
+                }
             }
             else{
                 attr_info[i].info.code_attribute.code = NULL;
@@ -187,6 +210,10 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                 attr_info[i].info.code_attribute.exception_table = (exception_table *) malloc(
                     (attr_info[i].info.code_attribute.exception_table_length) * sizeof(exception_table)
                 );
+                if(attr_info[i].info.code_attribute.exception_table == NULL){
+                    printf("Erro na alocacao!\n");
+                    exit(2);
+                }
             }
             else {
                 attr_info[i].info.code_attribute.exception_table = NULL;
@@ -206,6 +233,10 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                 attr_info[i].info.code_attribute.attributes = (attribute_info *) malloc(
                     (attr_info[i].info.code_attribute.attributes_count) * sizeof(attribute_info)
                 );
+                if(attr_info[i].info.code_attribute.attributes == NULL){
+                    printf("Erro na alocacao!\n");
+                    exit(2);
+                }
             }
             else {
                 attr_info[i].info.code_attribute.attributes = NULL;
@@ -229,6 +260,10 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                 attr_info[i].info.localVariableTable_attribute.local_variable_table = (local_variable_table *) malloc(
                     (attr_info[i].info.localVariableTable_attribute.local_variable_table_length) * sizeof(local_variable_table)
             );
+                if(attr_info[i].info.localVariableTable_attribute.local_variable_table == NULL){
+                    printf("Erro na alocacao!\n");
+                    exit(2);
+                }
             }
             else {
                 attr_info[i].info.localVariableTable_attribute.local_variable_table = NULL;
@@ -240,7 +275,7 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                 attr_info[i].info.localVariableTable_attribute.local_variable_table[j].descriptor_index = beRead16(class_file);
                 attr_info[i].info.localVariableTable_attribute.local_variable_table[j].index = beRead16(class_file);
             }
-        
+
         } else if(!strcmp(attribute_type, "Exceptions")){
 
             attr_info[i].info.exceptions_attribute.number_of_exceptions = beRead16(class_file);
@@ -248,9 +283,14 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             //alocacao para a tabela de excessoes
             if (attr_info[i].info.exceptions_attribute.number_of_exceptions != 0){
             attr_info[i].info.exceptions_attribute.excepetions_table = (uint16_t*) malloc(
-                (attr_info[i].info.exceptions_attribute.number_of_exceptions)
+            (attr_info[i].info.exceptions_attribute.number_of_exceptions)
                     * sizeof(uint16_t)
                 );
+                if(attr_info[i].info.exceptions_attribute.excepetions_table == NULL){
+                    printf("Erro na alocacao!\n");
+                    exit(2);
+                }
+
             }
             else{
                 attr_info[i].info.exceptions_attribute.excepetions_table = NULL;
@@ -271,6 +311,11 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                 attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods = (bootstrap_methods *) malloc(
                     (attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods) * sizeof(bootstrap_methods));
 
+                    if(attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods == NULL){
+                        printf("Erro na alocacao!\n");
+                        exit(2);
+                    }
+
             }else{
                 attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods = NULL;
             }
@@ -281,6 +326,11 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                 if(attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments != 0){
                     attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments = (uint16_t *) malloc(
                         (attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments) * sizeof(uint16_t));
+
+                    if(attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments == NULL){
+                        printf("Erro na alocacao!\n");
+                        exit(2);
+                    }
 
                 }else{
                     attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments = NULL;
@@ -305,6 +355,10 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                     (attr_info[i].info.lineNumberTable_attribute.line_number_table_length)
                     * sizeof(line_number_table)
                 );
+                if(attr_info[i].info.lineNumberTable_attribute.line_number_table == NULL){
+                    printf("Erro na alocacao!\n");
+                    exit(2);
+                }
             }
             else
             {
@@ -335,6 +389,10 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                     (attr_info[i].info.innerClasses_attribute.number_of_classes)
                         * sizeof(classes)
                 );
+                if(attr_info[i].info.innerClasses_attribute.classes == NULL){
+                    printf("Erro na alocacao!\n");
+                    exit(2);
+                }
 
             } else {
                 attr_info[i].info.innerClasses_attribute.classes = NULL;
@@ -370,6 +428,10 @@ void readInterfaces(FILE *class_file, class_structure* jclass){
     jclass->interfaces = (uint16_t *) malloc(
         (jclass->constant_pool_count-1) * sizeof(uint16_t)
     );
+    if(jclass->interfaces == NULL){
+        printf("Erro na alocacao!\n");
+        exit(2);
+    }
 
     //lê do arquivo os indices e armazena no vetor de interfaces
     for(int i = 0; i < jclass->interfaces_count; i++){
@@ -386,6 +448,11 @@ void readFields(FILE *class_file, class_structure* jclass){
         (jclass->fields_count) * sizeof(field_info)
     );
 
+    if(jclass->fields  == NULL){
+        printf("Erro na alocacao!\n");
+        exit(2);
+    }
+
     for(int i = 0; i < fields_count; i++){
         jclass->fields[i].access_flags = beRead16(class_file);
         jclass->fields[i].name_index = beRead16(class_file);
@@ -399,6 +466,10 @@ void readFields(FILE *class_file, class_structure* jclass){
             jclass->fields[i].attributes = (attribute_info *) malloc (
                 (attribute_count) * sizeof(attribute_info)
             );
+            if(jclass->fields[i].attributes == NULL){
+                printf("Erro na alocacao!\n");
+                exit(2);
+            }
             readAttributes(class_file, jclass->fields[i].attributes, attribute_count, jclass);
         } else{
             jclass->fields[i].attributes = NULL;
@@ -415,6 +486,10 @@ void readMethods(FILE *class_file, class_structure* jclass){
     jclass->methods = (method_info *) malloc(
         (jclass->methods_count) * sizeof(method_info)
     );
+    if(jclass->methods == NULL){
+        printf("Erro na alocacao!\n");
+        exit(2);
+    }
 
     for(int i = 0; i < methods_count; i++){
         jclass->methods[i].access_flags = beRead16(class_file);
@@ -429,6 +504,10 @@ void readMethods(FILE *class_file, class_structure* jclass){
             jclass->methods[i].attributes = (attribute_info *) malloc(
                 (attribute_count) * sizeof(attribute_info)
             );
+            if(jclass->methods[i].attributes == NULL){
+                printf("Erro na alocacao!\n");
+                exit(2);
+            }
             readAttributes(class_file, jclass->methods[i].attributes, attribute_count, jclass);
         } else {
             jclass->methods[i].attributes = NULL;
@@ -445,6 +524,10 @@ void readClassAttributes(FILE *class_file, class_structure* jclass){
         jclass->attribute = (attribute_info *) malloc(
             (attribute_class_count) * sizeof(attribute_info)
         );
+        if(jclass->attribute == NULL){
+            printf("Erro na alocacao!\n");
+            exit(2);
+        }
         readAttributes(class_file, jclass->attribute, attribute_class_count, jclass);
     } else {
         jclass->attribute = NULL;
@@ -459,7 +542,7 @@ void freeClass(class_structure *jclass){
             for (int i = 0; i < jclass->fields_count; i++){
                 freeAttributes(jclass->fields[i].attributes, jclass->fields[i].attributes_count, jclass);
             }
-            
+
             free(jclass->fields);
         }
 
@@ -469,7 +552,7 @@ void freeClass(class_structure *jclass){
             }
             free(jclass->methods);
         }
-        
+
         if(jclass->attribute != NULL){
             freeAttributes(jclass->attribute, jclass->attributes_count, jclass);
         }
@@ -503,10 +586,15 @@ void freeAttributes(attribute_info *attr_info, uint16_t attribute_count, class_s
             (jclass->constant_pool[name_index-1].info.utf8Info.length+1) * sizeof(char *)
         );
 
+        if(attribute_type == NULL){
+            printf("Erro na alocacao!\n");
+            exit(2);
+        }
+
         strcpy(attribute_type,(char *)jclass->constant_pool[name_index-1].info.utf8Info.bytes);
 
         if(!strcmp(attribute_type, "Code")){
-            
+
             //aloca o vetor para code
             if(attr_info[i].info.code_attribute.code != NULL){
                 free(attr_info[i].info.code_attribute.code);
@@ -517,18 +605,18 @@ void freeAttributes(attribute_info *attr_info, uint16_t attribute_count, class_s
             if (attr_info[i].info.code_attribute.exception_table != NULL){
                 free(attr_info[i].info.code_attribute.exception_table);
             }
-            
+
             //aloca o vetor para attributes
             if (attr_info[i].info.code_attribute.attributes != NULL){
                 freeAttributes(attr_info[i].info.code_attribute.attributes,
                     attr_info[i].info.code_attribute.attributes_count,jclass);
-            } 
+            }
         } else if(!strcmp(attribute_type, "LocalVariableTable")){
 
             if (attr_info[i].info.localVariableTable_attribute.local_variable_table != NULL){
                 free(attr_info[i].info.localVariableTable_attribute.local_variable_table);
             }
-        
+
         } else if(!strcmp(attribute_type, "Exceptions")){
             //alocacao para a tabela de excessoes
             if (attr_info[i].info.exceptions_attribute.excepetions_table != NULL){
