@@ -8,6 +8,9 @@
 #include "j8_class_structure.h"
 #endif
 
+// leitura do magic number, minor e major version
+void readInitialParams(class_structure* jclass, FILE *class_file);
+
 //le o constant pool se o arquivo estiver na posicao certa
 void readConstantPool(FILE *class_file, class_structure* jclass);
 
@@ -32,3 +35,8 @@ void freeClass(class_structure *jclass);
 //desaloca attributos da class
 void freeAttributes(attribute_info *attr_info, uint16_t attribute_count, class_structure *jclass);
 
+//função que chama todos os outros readers
+void readClassFile(FILE *class_file, class_structure* jclass);
+
+// checa se é um class file
+int isClassFile(class_structure* jclass);

@@ -14,8 +14,11 @@
 //converte o numero da tag do constant pool para uma string que faz sentido
 void cpTagToString(uint8_t tag, char *tagType);
 
+// print do magic number, minor e major version
+void printInitialParams(class_structure* jclass);
+
 //printa todos os campos da classe
-void printConstantPool(FILE* class_file, class_structure* jclass);
+void printConstantPool(class_structure* jclass);
 
 // Imprime o nome das flags presentes classe
 void printAccessFlags(uint16_t access_flags, infotype type);
@@ -43,3 +46,6 @@ void printAttributes(attribute_info* attr_info,uint16_t attribute_count, class_s
 
 // Função default pra printar um utf-8 do constant_pool
 void printUtf8(uint16_t index, class_structure *jclass);
+
+// Função que chama todas as outras para printar
+void printClassFile(class_structure * jclass);

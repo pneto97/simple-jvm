@@ -3,6 +3,7 @@
 #include <string.h>
 #include "opcode.h"
 
+
 //de acordo com a tag do constant pool, altera a string tagType para o significado
 void cpTagToString(uint8_t tag, char *tagType){
     switch(tag){
@@ -49,10 +50,34 @@ void cpTagToString(uint8_t tag, char *tagType){
             strcpy(tagType,"InvokeDynamic");
     }
 }
+// Função que chama todas as outras que printam
+void printClassFile(class_structure* jclass){
+    printInitialParams(jclass); //magic, minor e major version
+    printConstantPool(jclass); // Constant pool
+    printAccessFlags(jclass->access_flags, CLASS); // access flag
+    printf("This Class: "); // This Class
+    printClassName(jclass->this_class, jclass);
+    printf("/n");
+    printf("Super Class: ");// Super class
+    printClassName(jclass->super_class, jclass);
+    printf("/n"); 
+    printInterfaces(jclass); // Interfaces
+    printFields(jclass); // Fields
+    printMethods(jclass); // Methods
+    printClassAttributes(jclass); // Class Attributes
+}
+
+// print do magic number, minor e major version
+void printInitialParams(class_structure* jclass){
+    printf("Magic Number: %x\n",jclass->magic);
+    printf("Minor Version: %x\n",jclass->minor_version);  
+    printf("Major Version: %d\n",jclass->major_version);     
+
+}
 
 //percorre a struct da classe e imprime todos os dados
-void printConstantPool(FILE* class_file, class_structure* jclass){
-
+void printConstantPool(class_structure* jclass){
+    printf("Constant Pool Count: %d\n",jclass->constant_pool_count);
     char tagType[18];
     printf("Mostrando o conteúdo do constant pool:\n");
     for(int i = 0; i < jclass->constant_pool_count-1 ; i++){

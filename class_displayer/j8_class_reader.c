@@ -7,9 +7,36 @@
 #include <string.h>
 #include "read_utils.h"
 
+void readClassFile(FILE *class_file, class_structure* jclass){
+    readInitialParams(jclass, class_file); //magic, minor e major version
+    readConstantPool(class_file, jclass); // Constant pool
+    jclass->access_flags = beRead16(class_file); // access flag
+    jclass->this_class = beRead16(class_file); // this class
+    jclass->super_class = beRead16(class_file); // Super class
+    readInterfaces(class_file, jclass); // Interfaces
+    readFields(class_file, jclass); // Fields
+    readMethods(class_file, jclass); // Methods
+    readClassAttributes(class_file, jclass); // Class Attributes
+}
+
+int isClassFile(class_structure* jclass){
+    int i = (jclass->magic == 0xCAFEBABE) ? 1 : 0;
+    return i;
+}
+
+// leitura do magic number, minor e major version
+void readInitialParams(class_structure* jclass, FILE *class_file){
+    jclass->magic = beRead32(class_file);
+    jclass->minor_version = beRead16(class_file);    
+    jclass->major_version = beRead16(class_file);        
+
+}
+
 //leitura do constant pool, o class_file precisa estar já na posição correta
 void readConstantPool(FILE *class_file, class_structure* jclass){
 
+    // leitura do constant pool count
+    jclass->constant_pool_count = beRead16(class_file);
     //aloca o campo do cp_info, esse -1 é porque o indice do constant pool começa em 1
     jclass->constant_pool = (cp_info *) malloc(
         (jclass->constant_pool_count-1) * sizeof(cp_info)
