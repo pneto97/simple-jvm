@@ -1,6 +1,6 @@
 # simple-jvm
 
-A simpe jvm for java 8 including a .class file displayer.
+A simple jvm for java 8 including a .class file displayer.
 Made in C99
 
 ## useful links:
@@ -16,6 +16,6 @@ Made in C99
 ## developed by
 Paulo Borges        - 15/0143753 <br>
 Christian           - ##/####### <br>
-Lucas               - 15/0154135 <br>
+Lucas Campos Jorge  - 15/0154135 <br>
 João Marcelo        - <br>
 Rodrigo Demetrio    - <br>
