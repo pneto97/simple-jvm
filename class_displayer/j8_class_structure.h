@@ -62,16 +62,12 @@ typedef struct class_structure {
     uint16_t access_flags;
     uint16_t this_class;
     uint16_t super_class;
-    //Lucas
     uint16_t interfaces_count;
     uint16_t *interfaces;
-    //Demetrio
     uint16_t fields_count;
     field_info *fields;
-    //Chris
     uint16_t methods_count;
     method_info *methods;
-    //Jomas
     uint16_t attributes_count;
     attribute_info *attribute;
 } class_structure ;

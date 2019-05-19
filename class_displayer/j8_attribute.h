@@ -11,12 +11,12 @@ typedef struct exception_table {
     uint16_t catch_type;
 } exception_table;
 
-//constant_value_attribute é associado ao field_info
+//constant_value_attribute é também associado ao field_info
 typedef struct constant_value_attribute {
     uint16_t constantvalue_index;
 }constant_value_attribute;
 
-//code_attribute é relacionado ao method_info
+//code_attribute é também relacionado ao method_info
 typedef struct code_attribute {
     uint16_t max_stack;
     uint16_t max_locals;
@@ -28,12 +28,12 @@ typedef struct code_attribute {
     struct attribute *attributes;
 }code_attribute;
 
+/*
 typedef struct stackMapTable_attribute {
-    uint16_t  attribute_name_index;
-    uint32_t  attribute_length;
     uint16_t  number_of_entries;
-    //stack_map_frame *entries;
+    stack_map_frame *entries;
 }stackMapTable_attribute;
+*/
 
 typedef struct bootstrapMethods_attributes {
     uint16_t num_bootstrap_methods;
@@ -93,7 +93,7 @@ typedef struct local_variable_table{
     uint16_t length;
     uint16_t name_index;
     uint16_t descriptor_index;
-    uint16_t index;   
+    uint16_t index;
 }local_variable_table;
 
 //Atribute info
@@ -105,7 +105,7 @@ typedef struct attribute{
         code_attribute code_attribute;
         constant_value_attribute constant_value_attribute;
         exceptions_attribute exceptions_attribute;
-        stackMapTable_attribute stackMapTable_attribute;
+        //stackMapTable_attribute stackMapTable_attribute;
         bootstrapMethods_attributes bootstrapMethods_attributes;
         signature_attribute signature_attribute;
         lineNumberTable_attribute lineNumberTable_attribute;
@@ -114,5 +114,3 @@ typedef struct attribute{
         localVariableTable_attribute localVariableTable_attribute;
     }info;
 } attribute_info;
-
-//ainda faltam mais estruturas!

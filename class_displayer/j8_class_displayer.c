@@ -314,7 +314,6 @@ void printAttributes(attribute_info* attr_info, uint16_t attribute_count, class_
             printf("number_of_oxceptions: %d\n", attr_info[i].info.exceptions_attribute.number_of_exceptions);
 
             for(int j=0;i<attr_info[i].info.exceptions_attribute.number_of_exceptions;j++){
-                //nao tenho certeza se sao 2 bytes
                     printf("excepetions_table[%d]: %d\n", j+1,attr_info[i].info.exceptions_attribute.excepetions_table[j]);
                 }
 
@@ -382,7 +381,6 @@ void printAttributes(attribute_info* attr_info, uint16_t attribute_count, class_
         } else {
             printf("\tDesconhecido!\n");
         }
-        //Faltam ainda mais opcoes de name.index!
 
         //Free na string auxiliar (serve apenas para realizar a comparacao dos tipos de atributo)
         free(attribute_type);
@@ -397,7 +395,6 @@ void printCodes(code_attribute code_attribute, class_structure* jclass){
 
     for (int j = 0; j < code_attribute.code_length; j++)
     {
-        //printf("\tCode[%d]: %hhx\n", j+1,code_attribute.code[j]);
         printf("\tCode[%d]: %hhx:\t", j+1,code_attribute.code[j]);
         printOpcode(code_attribute.code[j]);
         printf("\n");

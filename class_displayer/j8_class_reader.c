@@ -1,6 +1,5 @@
 //j8_class_reader.c
 
-#include "j8_class_displayer.h" // RETIRAR
 #include "j8_class_reader.h"
 #include <stdint.h>
 #include <stdlib.h>
@@ -179,7 +178,6 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
         strcpy(attribute_type,(char *)jclass->constant_pool[name_index-1].info.utf8Info.bytes);
 
         if(!strcmp(attribute_type, "Code")){
-            //fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
             attr_info[i].info.code_attribute.max_stack = beRead16(class_file);
             attr_info[i].info.code_attribute.max_locals = beRead16(class_file);
             attr_info[i].info.code_attribute.code_length = beRead32(class_file);
@@ -204,8 +202,8 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
 
 
             attr_info[i].info.code_attribute.exception_table_length = beRead16(class_file);
-            //aloca o vetor para exception_table
 
+            //aloca o vetor para exception_table
             if (attr_info[i].info.code_attribute.exception_table_length != 0){
                 attr_info[i].info.code_attribute.exception_table = (exception_table *) malloc(
                     (attr_info[i].info.code_attribute.exception_table_length) * sizeof(exception_table)
@@ -280,7 +278,7 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
 
             attr_info[i].info.exceptions_attribute.number_of_exceptions = beRead16(class_file);
 
-            //alocacao para a tabela de excessoes
+            //alocação para a tabela de exceções
             if (attr_info[i].info.exceptions_attribute.number_of_exceptions != 0){
             attr_info[i].info.exceptions_attribute.excepetions_table = (uint16_t*) malloc(
             (attr_info[i].info.exceptions_attribute.number_of_exceptions)
@@ -296,7 +294,6 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                 attr_info[i].info.exceptions_attribute.excepetions_table = NULL;
             }
             for(int j=0;i<attr_info[i].info.exceptions_attribute.number_of_exceptions;j++){
-                //nao tenho certeza se sao 2 bytes
                     attr_info[i].info.exceptions_attribute.excepetions_table[j] = beRead16(class_file);
                 }
 
@@ -408,9 +405,6 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
         } else {
             fseek(class_file,attr_info[i].attribute_length,SEEK_CUR);
         }
-        //Faltam ainda mais opcoes de name.index!
-
-
         //Free na string auxiliar (serve apenas para realizar a comparacao dos tipos de atributo)
         free(attribute_type);
 
@@ -618,7 +612,7 @@ void freeAttributes(attribute_info *attr_info, uint16_t attribute_count, class_s
             }
 
         } else if(!strcmp(attribute_type, "Exceptions")){
-            //alocacao para a tabela de excessoes
+            //alocacao para a tabela de exceções
             if (attr_info[i].info.exceptions_attribute.excepetions_table != NULL){
                 free(attr_info[i].info.exceptions_attribute.excepetions_table);
             }
