@@ -48,10 +48,12 @@ int main(int argc , char* argv[]){
     jclass->this_class = beRead16(class_file);
     printf("This Class: ");
     printClassName(jclass->this_class, jclass);
+    printf("/n");
 
     jclass->super_class = beRead16(class_file);
     printf("Super Class: ");
     printClassName(jclass->super_class, jclass);
+    printf("/n");
 
     readInterfaces(class_file, jclass);
     printInterfaces(jclass);

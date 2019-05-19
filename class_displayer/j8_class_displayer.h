@@ -40,3 +40,6 @@ void printCodes(code_attribute code_attribute, class_structure* jclass);
 
 // Função-mestre dos atributos que chama todas os prints de atributos
 void printAttributes(attribute_info* attr_info,uint16_t attribute_count, class_structure* jclass);
+
+// Função default pra printar um utf-8 do constant_pool
+void printUtf8(uint16_t index, class_structure *jclass);

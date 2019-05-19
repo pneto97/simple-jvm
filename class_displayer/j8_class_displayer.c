@@ -167,6 +167,7 @@ void printInterfaces(class_structure *jclass){
         for (int i = 0; i < interfaces_count; i++){
             printf("\t");
             printClassName(jclass->interfaces[i], jclass);
+            printf("/n");
         }
     }
 }
@@ -217,7 +218,7 @@ void printMethods(class_structure* jclass){
 // Imprime o nome de uma class a partir de seu índice
 void printClassName(uint16_t index, class_structure *jclass){
     uint16_t name_index = jclass->constant_pool[index-1].info.classInfo.name_index;
-    printf("%s\n", jclass->constant_pool[name_index-1].info.utf8Info.bytes);
+    printf("%s", jclass->constant_pool[name_index-1].info.utf8Info.bytes);
 }
 
 void printClassAttributes(class_structure *jclass){
@@ -227,13 +228,21 @@ void printClassAttributes(class_structure *jclass){
     printAttributes(jclass->attribute, jclass->attributes_count, jclass);
 }
 
+void printUtf8(uint16_t index, class_structure *jclass){
+    printf("%s",jclass->constant_pool[index-1].info.utf8Info.bytes);
+}
+
 void printAttributes(attribute_info* attr_info, uint16_t attribute_count, class_structure* jclass){
     for(int i = 0; i < attribute_count; i++){
 
         uint16_t name_index = attr_info[i].attribute_name_index;
 
         printf("Attribute: %d\n",i+1);
-        printf("\tname_index: %u\n", attr_info[i].attribute_name_index);
+        
+        printf("\tname_index: #%u\t", attr_info[i].attribute_name_index);
+        printf("//  ");
+        printUtf8(attr_info[i].attribute_name_index,jclass);
+        printf("\n");
         printf("\tattribute_length: %u\n", attr_info[i].attribute_length);
 
         char *attribute_type  = (char *) malloc(
@@ -308,7 +317,7 @@ void printAttributes(attribute_info* attr_info, uint16_t attribute_count, class_
             printf("Line : Start Program Counter\n");
             for (int j = 0; j < attr_info[i].info.lineNumberTable_attribute.line_number_table_length; j++)
             {
-                printf("%d : %d\n",attr_info[i].info.lineNumberTable_attribute.line_number_table[j].line_number,attr_info[i].info.lineNumberTable_attribute.line_number_table->start_pc);
+                printf("%d : %d\n",attr_info[i].info.lineNumberTable_attribute.line_number_table[j].line_number,attr_info[i].info.lineNumberTable_attribute.line_number_table[j].start_pc);
 
             }
 
@@ -326,9 +335,15 @@ void printAttributes(attribute_info* attr_info, uint16_t attribute_count, class_
             {
                 printf("InnerClasses:\n");
                 printf("#%d = ",attr_info[i].info.innerClasses_attribute.classes[j].inner_name_index);
-                printf("#%d",attr_info[i].info.innerClasses_attribute.classes[j].outer_class_info_index);
-                printf(" of #%d;\n",attr_info[i].info.innerClasses_attribute.classes[j].inner_class_info_index);
-                // printf("inner_class_access_flags: %d\n",attr_info[i].info.innerClasses_attribute.classes[j].inner_class_access_flags);
+                printf("#%d",attr_info[i].info.innerClasses_attribute.classes[j].inner_class_info_index);
+                printf(" of #%d;",attr_info[i].info.innerClasses_attribute.classes[j].outer_class_info_index);
+                printf(" //  ");
+                printUtf8(attr_info[i].info.innerClasses_attribute.classes[j].inner_name_index,jclass);
+                printf(" = ");
+                printClassName(attr_info[i].info.innerClasses_attribute.classes[j].inner_class_info_index,jclass);
+                printf(" of ");
+                printClassName(attr_info[i].info.innerClasses_attribute.classes[j].outer_class_info_index,jclass);
+                printf(";\n");
                 printAccessFlags(attr_info[i].info.innerClasses_attribute.classes[j].inner_class_access_flags, CLASS);
             }
         } else {
