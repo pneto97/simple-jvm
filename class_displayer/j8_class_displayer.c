@@ -1,4 +1,4 @@
-//j8_class_displayer.c 
+//j8_class_displayer.c
 #include "j8_class_displayer.h"
 #include <string.h>
 #include "opcode.h"
@@ -60,7 +60,7 @@ void printClassFile(class_structure* jclass){
     printf("/n");
     printf("Super Class: ");// Super class
     printClassName(jclass->super_class, jclass);
-    printf("/n"); 
+    printf("/n");
     printInterfaces(jclass); // Interfaces
     printFields(jclass); // Fields
     printMethods(jclass); // Methods
@@ -70,8 +70,8 @@ void printClassFile(class_structure* jclass){
 // print do magic number, minor e major version
 void printInitialParams(class_structure* jclass){
     printf("Magic Number: %x\n",jclass->magic);
-    printf("Minor Version: %x\n",jclass->minor_version);  
-    printf("Major Version: %d\n",jclass->major_version);     
+    printf("Minor Version: %x\n",jclass->minor_version);
+    printf("Major Version: %d\n",jclass->major_version);
 
 }
 
@@ -83,7 +83,7 @@ void printConstantPool(class_structure* jclass){
     for(int i = 0; i < jclass->constant_pool_count-1 ; i++){
 
         cpTagToString(jclass->constant_pool[i].tag, tagType);
-        printf("\t#%d: %-18s\t",(i+1),tagType); 
+        printf("\t#%d: %-18s\t",(i+1),tagType);
 
         switch(jclass->constant_pool[i].tag){
             case CONSTANT_Class:
@@ -119,29 +119,29 @@ void printConstantPool(class_structure* jclass){
             case CONSTANT_Utf8:
                 printf("length: #%d, bytes: \"%s\"\n",
                     jclass->constant_pool[i].info.utf8Info.length,
-                    jclass->constant_pool[i].info.utf8Info.bytes 
-                ); 
+                    jclass->constant_pool[i].info.utf8Info.bytes
+                );
                 break;
-                
+
             case CONSTANT_MethodHandle:
                 printf("reference kind: #%d, reference index: #%d\n",
                     jclass->constant_pool[i].info.methodHandleInfo.reference_kind,
                     jclass->constant_pool[i].info.methodHandleInfo.reference_index
-                ); 
+                );
                 break;
             case CONSTANT_MethodType:
                 printf("descriptor index: #%d\n",
                     jclass->constant_pool[i].info.methodTypeInfo.descriptor_index
-                ); 
+                );
                 break;
             case CONSTANT_InvokeDynamic:
                 printf("bootstrap method attr index: #%d, name and type index: #%d\n",
                     jclass->constant_pool[i].info.invokeDynamicInfo.bootstrap_method_attr_index,
-                    jclass->constant_pool[i].info.invokeDynamicInfo.name_and_type_index 
-                ); 
+                    jclass->constant_pool[i].info.invokeDynamicInfo.name_and_type_index
+                );
                 break;
-        } 
-    } 
+        }
+    }
 }
 
 // Imprime o nome das flags presentes classe
@@ -265,7 +265,7 @@ void printAttributes(attribute_info* attr_info, uint16_t attribute_count, class_
         uint16_t name_index = attr_info[i].attribute_name_index;
 
         printf("Attribute: %d\n",i+1);
-        
+
         printf("\tname_index: #%u\t", attr_info[i].attribute_name_index);
         printf("//  ");
         printUtf8(attr_info[i].attribute_name_index,jclass);
@@ -275,6 +275,12 @@ void printAttributes(attribute_info* attr_info, uint16_t attribute_count, class_
         char *attribute_type  = (char *) malloc(
             (jclass->constant_pool[name_index-1].info.utf8Info.length+1) * sizeof(char *)
         );
+
+        if(attribute_type == NULL){
+            printf("Erro na alocacao!\n");
+            exit(2);
+        }
+
         strcpy(attribute_type,(char *)jclass->constant_pool[name_index-1].info.utf8Info.bytes);
 
 
@@ -300,9 +306,9 @@ void printAttributes(attribute_info* attr_info, uint16_t attribute_count, class_
                 printf("Descriptor Index: %d\n",attr_info[i].info.localVariableTable_attribute.local_variable_table[j].descriptor_index);
                 printf("index: %d\n",attr_info[i].info.localVariableTable_attribute.local_variable_table[j].index);
             }
-        
+
         }
-         
+
         else if(!strcmp(attribute_type, "Exceptions")){
 
             printf("number_of_oxceptions: %d\n", attr_info[i].info.exceptions_attribute.number_of_exceptions);
@@ -321,13 +327,13 @@ void printAttributes(attribute_info* attr_info, uint16_t attribute_count, class_
 
 
             for(int j = 0; j < attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods; j++){
-                
-                
+
+
                 printf("\tMethod Ref: #%d\n", attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_method_ref);
                 printf("\tNum bootstrap arguments: %d\n", attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments);
 
                 for(int k = 0; k < attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments; k++){
-                  
+
                     printf("\t\tBootstrap arguments: #%d\n", attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments[k]);
 
                 }
@@ -381,7 +387,7 @@ void printAttributes(attribute_info* attr_info, uint16_t attribute_count, class_
         //Free na string auxiliar (serve apenas para realizar a comparacao dos tipos de atributo)
         free(attribute_type);
 
-    }  
+    }
 }
 
 void printCodes(code_attribute code_attribute, class_structure* jclass){
