@@ -36,7 +36,7 @@ void freeClass(class_structure *jclass);
 void freeAttributes(attribute_info *attr_info, uint16_t attribute_count, class_structure *jclass);
 
 //função que chama todos os outros readers
-void readClassFile(FILE *class_file, class_structure* jclass);
+class_structure* readClassFile(FILE *class_file);
 
 // checa se é um class file
 int isClassFile(class_structure* jclass);

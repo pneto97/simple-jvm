@@ -25,9 +25,8 @@ int main(int argc , char* argv[]){
     }
 
     class_structure* jclass;
-    jclass = ( class_structure* ) malloc( sizeof(class_structure) );
 
-    readClassFile(class_file, jclass);
+    jclass = readClassFile(class_file);
 
     if (isClassFile(jclass)) 
         printClassFile(jclass);

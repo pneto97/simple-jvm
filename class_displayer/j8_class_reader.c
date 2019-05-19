@@ -7,7 +7,12 @@
 #include <string.h>
 #include "read_utils.h"
 
-void readClassFile(FILE *class_file, class_structure* jclass){
+
+// Função que lê o jclass e returna uma struct com todas as infos
+class_structure* readClassFile(FILE *class_file){
+    class_structure* jclass;
+    jclass = ( class_structure* ) malloc( sizeof(class_structure) );
+
     readInitialParams(jclass, class_file); //magic, minor e major version
     readConstantPool(class_file, jclass); // Constant pool
     jclass->access_flags = beRead16(class_file); // access flag
@@ -17,6 +22,7 @@ void readClassFile(FILE *class_file, class_structure* jclass){
     readFields(class_file, jclass); // Fields
     readMethods(class_file, jclass); // Methods
     readClassAttributes(class_file, jclass); // Class Attributes
+    return jclass;
 }
 
 int isClassFile(class_structure* jclass){
