@@ -2,7 +2,7 @@
 #include "j8_class_displayer.h"
 #include <string.h>
 #include "opcode.h"
-
+#include <math.h>
 
 //de acordo com a tag do constant pool, altera a string tagType para o significado
 void cpTagToString(uint8_t tag, char *tagType){
@@ -57,10 +57,13 @@ void printClassFile(class_structure* jclass){
     printAccessFlags(jclass->access_flags, CLASS); // access flag
     printf("This Class: "); // This Class
     printClassName(jclass->this_class, jclass);
-    printf("/n");
+    printf("\n");
     printf("Super Class: ");// Super class
-    printClassName(jclass->super_class, jclass);
-    printf("/n");
+    if(jclass->super_class != 0)
+        printClassName(jclass->super_class, jclass);
+    else
+        printf("Object");
+    printf("\n");
     printInterfaces(jclass); // Interfaces
     printFields(jclass); // Fields
     printMethods(jclass); // Methods
@@ -87,35 +90,54 @@ void printConstantPool(class_structure* jclass){
 
         switch(jclass->constant_pool[i].tag){
             case CONSTANT_Class:
-                printf("name Index: #%d\n",jclass->constant_pool[i].info.classInfo.name_index);
+                printf("name Index: #%d\t//  ",jclass->constant_pool[i].info.classInfo.name_index);
+                printUtf8(jclass->constant_pool[i].info.classInfo.name_index, jclass);
+                printf("\n");
                 break;
             case CONSTANT_Fieldref:
             case CONSTANT_Methodref:
             case CONSTANT_InterfaceMethodref:
                 printf("class index: #%d, ",jclass->constant_pool[i].info.refInfo.class_index);
-                printf("name and type index: #%d\n",jclass->constant_pool[i].info.refInfo.name_and_type_index);
+                printf("name and type index: #%d\t //  ",jclass->constant_pool[i].info.refInfo.name_and_type_index);
+                printClassName(jclass->constant_pool[i].info.refInfo.class_index, jclass);
+                printf(".");
+                printNameAndType(jclass->constant_pool[i].info.refInfo.name_and_type_index, jclass);
+                printf("\n");
                 break;
             case CONSTANT_String:
                 printf("string index: #%d\n",jclass->constant_pool[i].info.stringInfo.string_index);
                 break;
             case CONSTANT_Integer:
-            case CONSTANT_Float:
                 printf("bytes: #%x\n",jclass->constant_pool[i].info.number32Info.bytes);
                 break;
+            case CONSTANT_Float:
+                printf("bytes: 0x%x -> ",jclass->constant_pool[i].info.number32Info.bytes);
+                printFloat(jclass->constant_pool[i].info.number32Info.bytes);
+                break;
             case CONSTANT_Long:
-            case CONSTANT_Double:
-                printf("high bytes: 0x%x, low bytes: 0x%x\n",
+                printf("high bytes: 0x%x, low bytes: 0x%x  -> ",
                     jclass->constant_pool[i].info.number64Info.high_bytes,
                     jclass->constant_pool[i].info.number64Info.low_bytes
                 );
+                printLong(jclass->constant_pool[i].info.number64Info.high_bytes, jclass->constant_pool[i].info.number64Info.low_bytes);
+                i++;
+                break;
+            case CONSTANT_Double:
+                printf("high bytes: 0x%x, low bytes: 0x%x  -> ",
+                    jclass->constant_pool[i].info.number64Info.high_bytes,
+                    jclass->constant_pool[i].info.number64Info.low_bytes
+                );
+                printDouble(jclass->constant_pool[i].info.number64Info.high_bytes, jclass->constant_pool[i].info.number64Info.low_bytes);
                 i++;
                 break;
             case CONSTANT_NameAndType:
-                printf("name index: #%d, descriptor_index: #%d\n",
+                printf("name index: #%d, descriptor_index: #%d\t //  ",
                         jclass->constant_pool[i].info.nameAndTypeInfo.name_index,
                         jclass->constant_pool[i].info.nameAndTypeInfo.descriptor_index
                       );
-                 break;
+                printNameAndType(i + 1, jclass);
+                printf("\n");
+                break;
             case CONSTANT_Utf8:
                 printf("length: #%d, bytes: \"%s\"\n",
                     jclass->constant_pool[i].info.utf8Info.length,
@@ -194,7 +216,7 @@ void printInterfaces(class_structure *jclass){
         for (int i = 0; i < interfaces_count; i++){
             printf("\t");
             printClassName(jclass->interfaces[i], jclass);
-            printf("/n");
+            printf("\n");
         }
     }
 }
@@ -415,4 +437,57 @@ void printCodes(code_attribute code_attribute, class_structure* jclass){
 
     // Leitura dos atributos de cada atributo code (Sim, a parada é recursiva :o )
     printAttributes(code_attribute.attributes,code_attribute.attributes_count, jclass);
+}
+
+void printFloat(uint32_t bytes){
+
+    float number;
+    if(bytes == 0x7f800000)
+        printf("Inf\n");
+    else if(bytes == 0xff800000)
+        printf("-Inf\n");
+    else if((bytes >= 0x7f800001 && bytes <=   0x7fffffff) || (bytes > 0xff800001 && bytes <=   0xffffffff))
+        printf("NaN\n");
+    else{
+        int s = ((bytes >> 31) == 0) ? 1 : -1;
+        int e = ((bytes >> 23) & 0xff);
+        int m = (e == 0) ? (bytes & 0x7fffff) << 1 : (bytes & 0x7fffff) | 0x800000;
+        number = s * m * pow(2, e-150);
+        printf("%f\n", number);
+    }
+}
+
+void printDouble(uint32_t high, uint32_t low){
+
+    uint64_t bytes;
+    double double_number;
+
+    bytes = ((uint64_t) high << 32) + low;
+    if(bytes == 0x7ff0000000000000L)
+        printf("Inf\n");
+    else if(bytes == 0xfff0000000000000L)
+        printf("-Inf\n");
+    else if((bytes >= 0x7ff0000000000001L && bytes <=   0x7ffffffffffffL) || (bytes > 0xfff0000000000001L && bytes <=   0xffffffffffffffffL))
+        printf("NaN\n");
+    else{
+        int s = ((bytes >> 63) == 0) ? 1 : -1;
+        int e = ((bytes >> 52) & 0x7ffL);
+        long m = (e == 0) ? (bytes & 0xfffffffffffffL) << 1 : (bytes & 0xfffffffffffffL) | 0x10000000000000L;
+
+        double_number = s * m * pow(2, e-1075);
+        printf("%lf\n", double_number);
+    }
+}
+
+void printLong(uint32_t high, uint32_t low){
+    uint64_t long_number = ((uint64_t) high << 32) + low;
+    printf("%llu\n", long_number);
+}
+
+void printNameAndType(uint16_t name_type_index, class_structure *jclass){
+    uint16_t name_index = jclass->constant_pool[name_type_index-1].info.nameAndTypeInfo.name_index;
+    uint16_t type_index = jclass->constant_pool[name_type_index-1].info.nameAndTypeInfo.descriptor_index;
+    printf("%s", jclass->constant_pool[name_index-1].info.utf8Info.bytes);
+    printf(":");
+    printf("%s", jclass->constant_pool[type_index-1].info.utf8Info.bytes);
 }

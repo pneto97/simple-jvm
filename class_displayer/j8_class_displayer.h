@@ -49,3 +49,15 @@ void printUtf8(uint16_t index, class_structure *jclass);
 
 // Função que chama todas as outras para printar
 void printClassFile(class_structure * jclass);
+
+// Função que imprime na tela um número formato Float
+void printFloat(uint32_t bytes);
+
+// Função que imprime na tela um número formato Long
+void printLong(uint32_t high, uint32_t low);
+
+// Função que imprime na tela um número formato Double
+void printDouble(uint32_t high, uint32_t low);
+
+// Função que imprime os Utf8 referentes ao NameAndType
+void printNameAndType(uint16_t name_type_index, class_structure *jclass);
