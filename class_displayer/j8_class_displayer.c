@@ -251,8 +251,23 @@ void printAttributes(attribute_info* attr_info, uint16_t attribute_count, class_
         } else if(!strcmp(attribute_type, "ConstantValue")){
 
             printf("\tConstant Value Index: %d\n", attr_info[i].info.constant_value_attribute.constantvalue_index);
-
-        } else if(!strcmp(attribute_type, "Exceptions")){
+        } else if(!strcmp(attribute_type, "Synthetic")){
+            // O synthetic não printa nada!
+            continue;
+        } else if(!strcmp(attribute_type, "LocalVariableTable")){
+            uint16_t local_variable_table_length = attr_info[i].info.localVariableTable_attribute.local_variable_table_length;
+            printf("local_variable_table_length: %d\n", local_variable_table_length);
+            for (int j = 0; j < local_variable_table_length; j++)
+            {
+                printf("Start PC: %d\n",attr_info[i].info.localVariableTable_attribute.local_variable_table[j].start_pc);
+                printf("Length: %d\n",attr_info[i].info.localVariableTable_attribute.local_variable_table[j].length);
+                printf("Descriptor Index: %d\n",attr_info[i].info.localVariableTable_attribute.local_variable_table[j].descriptor_index);
+                printf("index: %d\n",attr_info[i].info.localVariableTable_attribute.local_variable_table[j].index);
+            }
+        
+        }
+         
+        else if(!strcmp(attribute_type, "Exceptions")){
 
             printf("number_of_oxceptions: %d\n", attr_info[i].info.exceptions_attribute.number_of_exceptions);
 

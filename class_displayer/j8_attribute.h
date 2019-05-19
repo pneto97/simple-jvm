@@ -81,6 +81,21 @@ typedef struct classes {
         uint16_t inner_class_access_flags;
 }classes;
 
+typedef struct localVariableTable_attribute {
+    uint16_t attribute_name_index;
+    uint32_t attribute_length;
+    uint16_t local_variable_table_length;
+    struct local_variable_table *local_variable_table;
+}localVariableTable_attribute;
+
+typedef struct local_variable_table{
+    uint16_t start_pc;
+    uint16_t length;
+    uint16_t name_index;
+    uint16_t descriptor_index;
+    uint16_t index;   
+}local_variable_table;
+
 //Atribute info
 typedef struct attribute{
     uint16_t attribute_name_index;
@@ -96,6 +111,7 @@ typedef struct attribute{
         lineNumberTable_attribute lineNumberTable_attribute;
         sourceFile_attribute sourceFile_attribute;
         innerClasses_attribute innerClasses_attribute;
+        localVariableTable_attribute localVariableTable_attribute;
     }info;
 } attribute_info;
 

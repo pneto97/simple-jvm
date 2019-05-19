@@ -165,7 +165,6 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
                 attr_info[i].info.code_attribute.exception_table[j].end_pc = beRead16(class_file);
                 attr_info[i].info.code_attribute.exception_table[j].handler_pc = beRead16(class_file);
                 attr_info[i].info.code_attribute.exception_table[j].catch_type = beRead16(class_file);
-                printClassName(attr_info[i].info.code_attribute.exception_table[j].catch_type,jclass);
             }
 
             attr_info[i].info.code_attribute.attributes_count = beRead16(class_file);
@@ -188,7 +187,28 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
 
             attr_info[i].info.constant_value_attribute.constantvalue_index
                 = beRead16(class_file);
+        } else if(!strcmp(attribute_type, "Synthetic")){
+            // O synthetic não lê nada!
+            continue;
+        } else if(!strcmp(attribute_type, "LocalVariableTable")){
+            attr_info[i].info.localVariableTable_attribute.local_variable_table_length = beRead16(class_file);
 
+            if (attr_info[i].info.localVariableTable_attribute.local_variable_table_length != 0){
+                attr_info[i].info.localVariableTable_attribute.local_variable_table = (local_variable_table *) malloc(
+                    (attr_info[i].info.localVariableTable_attribute.local_variable_table_length) * sizeof(local_variable_table)
+            );
+            }
+            else {
+                attr_info[i].info.localVariableTable_attribute.local_variable_table = NULL;
+            }
+            for (int j = 0; j < attr_info[i].info.localVariableTable_attribute.local_variable_table_length; j++)
+            {
+                attr_info[i].info.localVariableTable_attribute.local_variable_table[j].start_pc = beRead16(class_file);
+                attr_info[i].info.localVariableTable_attribute.local_variable_table[j].length = beRead16(class_file);
+                attr_info[i].info.localVariableTable_attribute.local_variable_table[j].descriptor_index = beRead16(class_file);
+                attr_info[i].info.localVariableTable_attribute.local_variable_table[j].index = beRead16(class_file);
+            }
+        
         } else if(!strcmp(attribute_type, "Exceptions")){
 
             attr_info[i].info.exceptions_attribute.number_of_exceptions = beRead16(class_file);
