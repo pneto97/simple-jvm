@@ -11,11 +11,11 @@ Made in C99
 * cd into class_displayer
 * make
 * ./main someclassfile.class
-* you can generate class files by compiling java files with javac. Use jdk 8 or bellow.
+* you can generate class files by compiling java files with javac. Use jdk 8 or below.
 
 ## developed by
 Paulo Borges        - 15/0143753 <br>
-Christian           - 15/0153538 <br>
+Christian Luis      - 15/0153538 <br>
 Lucas Campos Jorge  - 15/0154135 <br>
 João Marcelo        - 15/0132085 <br>
 Rodrigo Demetrio    - 15/0147384 <br>

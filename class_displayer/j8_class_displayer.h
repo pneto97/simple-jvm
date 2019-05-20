@@ -2,8 +2,8 @@
 //recursos usados para fazer o display dos dados lidos do .class
 
 #include <stdint.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #ifndef H_J8_CLASS_STRUCTURE
 #define H_J8_CLASS_STRUCTURE
@@ -15,16 +15,16 @@
 void cpTagToString(uint8_t tag, char *tagType);
 
 // print do magic number, minor e major version
-void printInitialParams(class_structure* jclass);
+void printInitialParams(class_structure *jclass);
 
 //printa todos os campos da classe
-void printConstantPool(class_structure* jclass);
+void printConstantPool(class_structure *jclass);
 
 // Imprime o nome das flags presentes classe
 void printAccessFlags(uint16_t access_flags, infotype type);
 
 // Imprime as Interfaces
-void printInterfaces(class_structure* jclass);
+void printInterfaces(class_structure *jclass);
 
 // Imprime o nome de uma constant tipo Class
 void printClassName(uint16_t index, class_structure *jclass);
@@ -39,16 +39,16 @@ void printMethods(class_structure *jclass);
 void printClassAttributes(class_structure *jclass);
 
 // Função que printa os codigos
-void printCodes(code_attribute code_attribute, class_structure* jclass);
+void printCodes(code_attribute code_attribute, class_structure *jclass);
 
 // Função-mestre dos atributos que chama todas os prints de atributos
-void printAttributes(attribute_info* attr_info,uint16_t attribute_count, class_structure* jclass);
+void printAttributes(attribute_info *attr_info, uint16_t attribute_count, class_structure *jclass);
 
 // Função default pra printar um utf-8 do constant_pool
 void printUtf8(uint16_t index, class_structure *jclass);
 
 // Função que chama todas as outras para printar
-void printClassFile(class_structure * jclass);
+void printClassFile(class_structure *jclass);
 
 // Função que imprime na tela um número formato Float
 void printFloat(uint32_t bytes);
