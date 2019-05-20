@@ -230,6 +230,9 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
 		} else if (!strcmp(attribute_type, "Synthetic")) {
 			// O synthetic não lê nada!
 			continue;
+        } else if (!strcmp(attribute_type, "Deprecated")) {
+			// O deprecated não lê nada!
+			continue;
 		} else if (!strcmp(attribute_type, "LocalVariableTable")) {
 			attr_info[i].info.localVariableTable_attribute.local_variable_table_length = beRead16(class_file);
 

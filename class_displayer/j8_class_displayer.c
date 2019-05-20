@@ -310,6 +310,9 @@ void printAttributes(attribute_info *attr_info, uint16_t attribute_count, class_
 		} else if (!strcmp(attribute_type, "Synthetic")) {
 			// O synthetic não printa nada!
 			continue;
+        } else if (!strcmp(attribute_type, "Deprecated")) {
+			// O deprecated não printa nada!
+			continue;
 		} else if (!strcmp(attribute_type, "LocalVariableTable")) {
 			uint16_t local_variable_table_length = attr_info[i].info.localVariableTable_attribute.local_variable_table_length;
 			printf("local_variable_table_length: %d\n", local_variable_table_length);
