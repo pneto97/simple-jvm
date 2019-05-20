@@ -113,11 +113,11 @@ void printConstantPool(class_structure* jclass){
                 printf("bytes: #%x\n",jclass->constant_pool[i].info.number32Info.bytes);
                 break;
             case CONSTANT_Float:
-                printf("bytes: 0x%x -> ",jclass->constant_pool[i].info.number32Info.bytes);
+                printf("bytes: 0x%x\t\t\t\t // ",jclass->constant_pool[i].info.number32Info.bytes);
                 printFloat(jclass->constant_pool[i].info.number32Info.bytes);
                 break;
             case CONSTANT_Long:
-                printf("high bytes: 0x%x, low bytes: 0x%x  -> ",
+                printf("high bytes: 0x%08x, low bytes: 0x%08x\t // ",
                     jclass->constant_pool[i].info.number64Info.high_bytes,
                     jclass->constant_pool[i].info.number64Info.low_bytes
                 );
@@ -125,7 +125,7 @@ void printConstantPool(class_structure* jclass){
                 i++;
                 break;
             case CONSTANT_Double:
-                printf("high bytes: 0x%x, low bytes: 0x%x  -> ",
+                printf("high bytes: 0x%08x, low bytes: 0x%08x  \t // ",
                     jclass->constant_pool[i].info.number64Info.high_bytes,
                     jclass->constant_pool[i].info.number64Info.low_bytes
                 );
@@ -133,7 +133,7 @@ void printConstantPool(class_structure* jclass){
                 i++;
                 break;
             case CONSTANT_NameAndType:
-                printf("name index: #%d, descriptor_index: #%d\t\t //  ",
+                printf("name index: #%d, descriptor_index: #%d\t\t // ",
                         jclass->constant_pool[i].info.nameAndTypeInfo.name_index,
                         jclass->constant_pool[i].info.nameAndTypeInfo.descriptor_index
                       );
