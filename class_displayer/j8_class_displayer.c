@@ -90,7 +90,7 @@ void printConstantPool(class_structure* jclass){
 
         switch(jclass->constant_pool[i].tag){
             case CONSTANT_Class:
-                printf("name Index: #%d\t//  ",jclass->constant_pool[i].info.classInfo.name_index);
+                printf("name Index: #%d\t\t\t\t\t //  ",jclass->constant_pool[i].info.classInfo.name_index);
                 printUtf8(jclass->constant_pool[i].info.classInfo.name_index, jclass);
                 printf("\n");
                 break;
@@ -98,14 +98,16 @@ void printConstantPool(class_structure* jclass){
             case CONSTANT_Methodref:
             case CONSTANT_InterfaceMethodref:
                 printf("class index: #%d, ",jclass->constant_pool[i].info.refInfo.class_index);
-                printf("name and type index: #%d\t //  ",jclass->constant_pool[i].info.refInfo.name_and_type_index);
+                printf("name and type index: #%d\t // ",jclass->constant_pool[i].info.refInfo.name_and_type_index);
                 printClassName(jclass->constant_pool[i].info.refInfo.class_index, jclass);
                 printf(".");
                 printNameAndType(jclass->constant_pool[i].info.refInfo.name_and_type_index, jclass);
                 printf("\n");
                 break;
             case CONSTANT_String:
-                printf("string index: #%d\n",jclass->constant_pool[i].info.stringInfo.string_index);
+                printf("string index: #%d\t\t\t\t //  ",jclass->constant_pool[i].info.stringInfo.string_index);
+                printUtf8(jclass->constant_pool[i].info.stringInfo.string_index, jclass);
+                printf("\n");
                 break;
             case CONSTANT_Integer:
                 printf("bytes: #%x\n",jclass->constant_pool[i].info.number32Info.bytes);
@@ -131,7 +133,7 @@ void printConstantPool(class_structure* jclass){
                 i++;
                 break;
             case CONSTANT_NameAndType:
-                printf("name index: #%d, descriptor_index: #%d\t //  ",
+                printf("name index: #%d, descriptor_index: #%d\t\t //  ",
                         jclass->constant_pool[i].info.nameAndTypeInfo.name_index,
                         jclass->constant_pool[i].info.nameAndTypeInfo.descriptor_index
                       );
