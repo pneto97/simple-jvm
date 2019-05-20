@@ -8,9 +8,9 @@ Made in C99
   https://www.geeksforgeeks.org/java-class-file/ <br>
 
 ## How to run:
-* cd into class_displayer
-* make
-* ./main someclassfile.class
+* `cd into class_displayer`
+* `make`
+* `./main someclassfile.class`
 * you can generate class files by compiling java files with javac. Use jdk 8 or below.
 
 ## developed by
