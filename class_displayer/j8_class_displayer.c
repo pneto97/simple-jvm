@@ -347,7 +347,7 @@ void printAttributes(attribute_info *attr_info, uint16_t attribute_count, class_
 
 				for (int k = 0; k < attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].num_bootstrap_arguments; k++) {
 
-					printf("\t\tBootstrap arguments: #%d\n", attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments[k]);
+					printf("\t\tBootstrap arguments: #%d", attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods[j].bootstrap_arguments[k]);
 				}
 			}
 
@@ -358,9 +358,9 @@ void printAttributes(attribute_info *attr_info, uint16_t attribute_count, class_
 		} else if (!strcmp(attribute_type, "LineNumberTable")) {
 			printf("line_number_table_length: %d\n", attr_info[i].info.lineNumberTable_attribute.line_number_table_length);
 
-			printf("Line : Start Program Counter\n");
+			printf("Line \t: \tStart Program Counter\n");
 			for (int j = 0; j < attr_info[i].info.lineNumberTable_attribute.line_number_table_length; j++) {
-				printf("%d : %d\n", attr_info[i].info.lineNumberTable_attribute.line_number_table[j].line_number, attr_info[i].info.lineNumberTable_attribute.line_number_table[j].start_pc);
+				printf("%d \t: \t%d\n", attr_info[i].info.lineNumberTable_attribute.line_number_table[j].line_number, attr_info[i].info.lineNumberTable_attribute.line_number_table[j].start_pc);
 			}
 
 		} else if (!strcmp(attribute_type, "SourceFile")) {
@@ -396,12 +396,13 @@ void printAttributes(attribute_info *attr_info, uint16_t attribute_count, class_
 }
 
 void printCodes(code_attribute code_attribute, class_structure *jclass) {
-	printf("Max stack: %d\n", code_attribute.max_stack);
-	printf("Max locals: %d\n", code_attribute.max_locals);
-	printf("Code Length: %d\n", code_attribute.code_length);
+    printf("Code:\n");
+	printf("   stack=%d, locals=%d, args_size=\n", code_attribute.max_stack,code_attribute.max_locals);
+	//printf("Max locals: %d\n", code_attribute.max_locals);
+	//printf("Code Length: %d\n", code_attribute.code_length);
 
 	for (int j = 0; j < code_attribute.code_length; j++) {
-		printf("\tCode[%d]: %hhx:\t", j + 1, code_attribute.code[j]);
+		printf("\t%d: (0x%hhx)\t", j, code_attribute.code[j]);
 		printOpcode(code_attribute.code[j]);
 		printf("\n");
 	}
