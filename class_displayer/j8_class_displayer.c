@@ -585,13 +585,14 @@ int printCode(uint8_t *code, int pc, class_structure *jclass) {
         printf(" %d (%d)", pc + offset, offset);
         return 4;
     } else if (op == TABLESWITCH) {
-        uint32_t default_byte = build32(code[pc + 5], code[pc + 6], code[pc + 7], code[pc + 8]);
-		uint32_t low_byte = build32(code[pc + 9], code[pc + 10], code[pc + 11], code[pc + 12]);
-		uint32_t high_byte = build32(code[pc + 13], code[pc + 14], code[pc + 15], code[pc + 16]);
-        printf("default: %d ", default_byte);
-		printf("low: %d ", low_byte);
-		printf("high: %d ", high_byte);
-        return 16;
+        uint32_t default_variable = build32(code[pc + 5], code[pc + 6], code[pc + 7], code[pc + 8]);
+		uint32_t low_variable = build32(code[pc + 9], code[pc + 10], code[pc + 11], code[pc + 12]);
+		uint32_t high_variable = build32(code[pc + 13], code[pc + 14], code[pc + 15], code[pc + 16]);
+		uint32_t offset = high_variable - low_variable + 1;
+        printf("default: %d ", default_variable);
+		printf("low: %d ", low_variable);
+		printf("high: %d ", high_variable);
+        return (16+offset);
     } else {
         return 0;
     }
