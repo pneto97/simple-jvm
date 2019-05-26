@@ -557,10 +557,18 @@ int printCode(uint8_t *code, int pc, class_structure *jclass) {
         return 1;
     } else if (op == WIDE) {
         uint8_t opcode = code[pc + 1];
-        //Falta Implementar
+        //Falta saber se é isso que printa mesmo
         if (opcode == IINC) {
+			printOpcode(opcode);
+			uint16_t index = build16(code[pc + 2], code[pc + 3]);
+			printf("index: #%d ", index);
+			uint16_t constbyte = build16(code[pc + 4], code[pc + 5]);
+			printf("constbyte: #%d ", constbyte);
             return 5;
         } else {
+			printOpcode(opcode);
+			uint16_t index = build16(code[pc + 2], code[pc + 3]);
+			printf("index: #%d ", index);
             return 3;
         }
     } else if (op == MULTIANEWARRAY) {
@@ -576,6 +584,14 @@ int printCode(uint8_t *code, int pc, class_structure *jclass) {
         uint32_t offset = build32(code[pc + 1], code[pc + 2], code[pc + 3], code[pc + 4]);
         printf(" %d (%d)", pc + offset, offset);
         return 4;
+    } else if (op == TABLESWITCH) {
+        uint32_t default_byte = build32(code[pc + 5], code[pc + 6], code[pc + 7], code[pc + 8]);
+		uint32_t low_byte = build32(code[pc + 9], code[pc + 10], code[pc + 11], code[pc + 12]);
+		uint32_t high_byte = build32(code[pc + 13], code[pc + 14], code[pc + 15], code[pc + 16]);
+        printf("default: %d ", default_byte);
+		printf("low: %d ", low_byte);
+		printf("high: %d ", high_byte);
+        return 16;
     } else {
         return 0;
     }
