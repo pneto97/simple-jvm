@@ -39,8 +39,17 @@ uint32_t beRead32(FILE *fp) {
     return buff;
 }
 
+//Constroi valor de 16 bits a partir de dois de 8 bits
+uint16_t build16(uint8_t hi, uint8_t low) {
+    return ((uint16_t)hi << 8) | low;
+}
 
 //Constroi valor de 16 bits a partir de dois de 8 bits
-uint16_t build16(uint8_t hi, uint8_t low){
-    return ((uint16_t)hi << 8) | low;
+uint32_t build32(uint8_t byte1, uint8_t byte2, uint8_t byte3, uint8_t byte4) {
+    uint32_t aux32;
+    aux32 = ((uint32_t)byte1 << 24) |
+        ((uint32_t)byte2 << 16) |
+        ((uint32_t)byte3 << 8) |
+        ((uint32_t)byte4);
+    return aux32;
 }

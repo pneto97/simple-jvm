@@ -67,3 +67,6 @@ void printMethodsRef(uint16_t method_index, class_structure *jclass);
 
 //Funcao que imprime os args do code
 int printCode(uint8_t *code, int pc, class_structure *jclass);
+
+//Funcao que imprime os argumentos do ConstantPool
+void printConstantPoolValue(int index,class_structure *jclass);
