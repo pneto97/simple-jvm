@@ -1,5 +1,5 @@
 //Constants
-#define NOP         	0x00             
+#define NOP         	0x00
 #define ACONST_NULL 	0x01
 #define ICONST_M1   	0x02
 #define ICONST_0    	0x03

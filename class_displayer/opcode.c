@@ -1,4 +1,5 @@
 #include "opcode.h"
+#include "read_utils.h"
 #include <stdio.h>
 
 void printOpcode(uint8_t op){
@@ -211,4 +212,5 @@ void printOpcode(uint8_t op){
         case IMPDEP2: printf("IMPDEP2"); break;
         default: printf("OPCODE não encontrado");
     }
+
 }

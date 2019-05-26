@@ -1,6 +1,7 @@
 //j8_class_displayer.c
 #include "j8_class_displayer.h"
 #include "opcode.h"
+#include "read_utils.h"
 #include <math.h>
 #include <string.h>
 
@@ -403,7 +404,7 @@ void printCodes(code_attribute code_attribute, class_structure *jclass) {
 
 	for (int j = 0; j < code_attribute.code_length; j++) {
 		printf("\t%d: (0x%hhx)\t", j, code_attribute.code[j]);
-		printOpcode(code_attribute.code[j]);
+		j += printCode(code_attribute.code, j, jclass); //printOpcode retorna quantidade de Bytes lidos depois do opcode
 		printf("\n");
 	}
 
@@ -474,4 +475,40 @@ void printNameAndType(uint16_t name_type_index, class_structure *jclass) {
 	printf("%s", jclass->constant_pool[name_index - 1].info.utf8Info.bytes);
 	printf(":");
 	printf("%s", jclass->constant_pool[type_index - 1].info.utf8Info.bytes);
+}
+
+void printClassAndName(uint16_t method_index, class_structure *jclass){
+	printClassName(jclass->constant_pool[method_index - 1].info.refInfo.class_index, jclass);
+	printf(".");
+	uint16_t name_and_type_index  = jclass->constant_pool[method_index - 1].info.refInfo.name_and_type_index;
+	uint16_t name_index = jclass->constant_pool[name_and_type_index - 1].info.nameAndTypeInfo.name_index;
+	printf("%s", jclass->constant_pool[name_index - 1].info.utf8Info.bytes);
+}
+
+int printCode(uint8_t *code, int pc, class_structure *jclass){
+    uint8_t op = code[pc];
+    if(op==GETSTATIC){
+        printOpcode(op);
+		uint16_t ref = build16(code[pc+1],code[pc+2]);
+        printf(" #%d ", ref);
+        printClassAndName(ref, jclass);
+        return 2;
+	}
+	else if(op>=IFEQ && op<=IF_ACMPNE){
+		printOpcode(op);
+		uint16_t offset = build16(code[pc+1],code[pc+2]);
+		printf(" %d (%d)",pc+offset , offset);
+		return 2;
+	}else{
+        printOpcode(op);
+        return 0;
+    }
+
+    return 0;
+}
+
+void printConstantDouble(uint16_t ref, class_structure *jclass){
+	uint32_t hi = jclass->constant_pool[ref-1].info.number64Info.high_bytes;
+	uint32_t low = jclass->constant_pool[ref-1].info.number64Info.low_bytes;
+	printDouble(hi, low);
 }

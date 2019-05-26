@@ -38,3 +38,9 @@ uint32_t beRead32(FILE *fp) {
     buff = reverse32(buff);
     return buff;
 }
+
+
+//Constroi valor de 16 bits a partir de dois de 8 bits
+uint16_t build16(uint8_t hi, uint8_t low){
+    return ((uint16_t)hi << 8) | low;
+}
