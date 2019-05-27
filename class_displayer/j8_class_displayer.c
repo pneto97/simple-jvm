@@ -530,7 +530,6 @@ int printCode(uint8_t *code, int pc, class_structure *jclass) {
         uint32_t default_variable = build32(code[pc + 5], code[pc + 6], code[pc + 7], code[pc + 8]);
         uint32_t low_variable     = build32(code[pc + 9], code[pc + 10], code[pc + 11], code[pc + 12]);
         uint32_t high_variable    = build32(code[pc + 13], code[pc + 14], code[pc + 15], code[pc + 16]);
-        uint32_t offset           = high_variable - low_variable + 1;
 
         uint32_t return_amount = 0xFFFF;
 
@@ -546,7 +545,22 @@ int printCode(uint8_t *code, int pc, class_structure *jclass) {
         printf("\t\tdefault: %d (+%d)\n", pc + padding, padding);
         return (return_amount - 1);
     } else if (op == LOOKUPSWITCH) {
-        //Falta Implementar
+        uint32_t padding          = build32(code[pc + 1], code[pc + 2], code[pc + 3], code[pc + 4]);
+        uint32_t default_variable = build32(code[pc + 5], code[pc + 6], code[pc + 7], code[pc + 8]);
+
+        uint32_t return_amount = 0xFFFF;
+
+        printf(" // %d\n", default_variable);
+        for (int j = 0; j < default_variable*2; j+=2) {
+            int aux_off     = pc + j * 4;
+            int index = build32(code[aux_off + 9], code[aux_off + 10], code[aux_off + 11], code[aux_off + 12]);
+            int jump_amount = build32(code[aux_off + 13], code[aux_off + 14], code[aux_off + 15], code[aux_off + 16]);
+            printf("\t\t%d: %d (+%d)\n", index, jump_amount + pc, jump_amount);
+
+            if (return_amount > jump_amount) return_amount = jump_amount;
+        }
+        printf("\t\tdefault: %d (+%d)\n", pc + padding, padding);
+        return (return_amount - 1);
     } else if (op >= GETSTATIC && op <= INVOKESTATIC) {
         uint16_t ref = build16(code[pc + 1], code[pc + 2]);
         printf(" #%d ", ref);

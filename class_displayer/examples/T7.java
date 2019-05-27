@@ -22,10 +22,6 @@ public class T7
         }
 
         switch(pqpcarai) {
-        case 5 :
-            // System.out.println(4);
-            pqp = 8664;
-            break; // optional
         case 2 :
             // System.out.println(2);
             pqp = 8664;
@@ -36,14 +32,18 @@ public class T7
             // System.out.println(3);
             pqp = 8664;
             break; // optional
-        case 4 :
-            pqp = 0xFFFF;
+        case 5 :
+            // System.out.println(4);
+            pqp = 8664;
             break; // optional
         case 6 :
             paulin = 0.156f;
         case 7 :
             paulin = 0.121316f;
-        case 8 :
+        case 123 :
+            pqp = 0xFFFF;
+            break; // optional
+        case 8236 :
             pqp = 0xFFFF;
         default : // Optional
             // Statements
