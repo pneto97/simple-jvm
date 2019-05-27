@@ -526,9 +526,27 @@ int printCode(uint8_t *code, int pc, class_structure *jclass) {
         printf(" %d ", code[pc + 1]);
         return 1;
     } else if (op == TABLESWITCH) {
-		//Falta Implementar
+        uint32_t padding          = build32(code[pc + 1], code[pc + 2], code[pc + 3], code[pc + 4]);
+        uint32_t default_variable = build32(code[pc + 5], code[pc + 6], code[pc + 7], code[pc + 8]);
+        uint32_t low_variable     = build32(code[pc + 9], code[pc + 10], code[pc + 11], code[pc + 12]);
+        uint32_t high_variable    = build32(code[pc + 13], code[pc + 14], code[pc + 15], code[pc + 16]);
+        uint32_t offset           = high_variable - low_variable + 1;
+
+        uint32_t return_amount = 0xFFFF;
+
+        printf(" %d to %d\n", default_variable, low_variable);
+        printf("\t\t%d: %d (+%d)\n", default_variable, high_variable + pc, high_variable);
+        for (int j = 0; j < low_variable - default_variable; j++) {
+            int aux_off     = pc + j * 4;
+            int jump_amount = build32(code[aux_off + 17], code[aux_off + 18], code[aux_off + 19], code[aux_off + 20]);
+            printf("\t\t%d: %d (+%d)\n", j + default_variable + 1, jump_amount + pc, jump_amount);
+
+            if (return_amount > jump_amount) return_amount = jump_amount;
+        }
+        printf("\t\tdefault: %d (+%d)\n", pc + padding, padding);
+        return (return_amount - 1);
     } else if (op == LOOKUPSWITCH) {
-		//Falta Implementar
+        //Falta Implementar
     } else if (op >= GETSTATIC && op <= INVOKESTATIC) {
         uint16_t ref = build16(code[pc + 1], code[pc + 2]);
         printf(" #%d ", ref);
@@ -559,16 +577,16 @@ int printCode(uint8_t *code, int pc, class_structure *jclass) {
         uint8_t opcode = code[pc + 1];
         //Falta saber se é isso que printa mesmo
         if (opcode == IINC) {
-			printOpcode(opcode);
-			uint16_t index = build16(code[pc + 2], code[pc + 3]);
-			printf("index: #%d ", index);
-			uint16_t constbyte = build16(code[pc + 4], code[pc + 5]);
-			printf("constbyte: #%d ", constbyte);
+            printOpcode(opcode);
+            uint16_t index = build16(code[pc + 2], code[pc + 3]);
+            printf("index: #%d ", index);
+            uint16_t constbyte = build16(code[pc + 4], code[pc + 5]);
+            printf("constbyte: #%d ", constbyte);
             return 5;
         } else {
-			printOpcode(opcode);
-			uint16_t index = build16(code[pc + 2], code[pc + 3]);
-			printf("index: #%d ", index);
+            printOpcode(opcode);
+            uint16_t index = build16(code[pc + 2], code[pc + 3]);
+            printf("index: #%d ", index);
             return 3;
         }
     } else if (op == MULTIANEWARRAY) {
@@ -584,15 +602,6 @@ int printCode(uint8_t *code, int pc, class_structure *jclass) {
         uint32_t offset = build32(code[pc + 1], code[pc + 2], code[pc + 3], code[pc + 4]);
         printf(" %d (%d)", pc + offset, offset);
         return 4;
-    } else if (op == TABLESWITCH) {
-        uint32_t default_variable = build32(code[pc + 5], code[pc + 6], code[pc + 7], code[pc + 8]);
-		uint32_t low_variable = build32(code[pc + 9], code[pc + 10], code[pc + 11], code[pc + 12]);
-		uint32_t high_variable = build32(code[pc + 13], code[pc + 14], code[pc + 15], code[pc + 16]);
-		uint32_t offset = high_variable - low_variable + 1;
-        printf("default: %d ", default_variable);
-		printf("low: %d ", low_variable);
-		printf("high: %d ", high_variable);
-        return (16+offset);
     } else {
         return 0;
     }

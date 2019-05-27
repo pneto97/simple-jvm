@@ -20,5 +20,35 @@ public class T7
         else{
             System.out.println("Goodbye World!");
         }
+
+        switch(pqpcarai) {
+        case 5 :
+            // System.out.println(4);
+            pqp = 8664;
+            break; // optional
+        case 2 :
+            // System.out.println(2);
+            pqp = 8664;
+            break; // optional
+        case 3 :
+            // System.out.println(3);
+            // System.out.println(3);
+            // System.out.println(3);
+            pqp = 8664;
+            break; // optional
+        case 4 :
+            pqp = 0xFFFF;
+            break; // optional
+        case 6 :
+            paulin = 0.156f;
+        case 7 :
+            paulin = 0.121316f;
+        case 8 :
+            pqp = 0xFFFF;
+        default : // Optional
+            // Statements
+        }
+
+        pqp = 8664;
 	}
 }
