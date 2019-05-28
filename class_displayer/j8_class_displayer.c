@@ -121,12 +121,14 @@ void printConstantPool(class_structure *jclass) {
         case CONSTANT_Float:
             printf("bytes: 0x%x\t\t\t\t // ", jclass->constant_pool[i].info.number32Info.bytes);
             printFloat(jclass->constant_pool[i].info.number32Info.bytes);
+            printf("\n");
             break;
         case CONSTANT_Long:
             printf("high bytes: 0x%08x, low bytes: 0x%08x\t // ",
                 jclass->constant_pool[i].info.number64Info.high_bytes,
                 jclass->constant_pool[i].info.number64Info.low_bytes);
             printLong(jclass->constant_pool[i].info.number64Info.high_bytes, jclass->constant_pool[i].info.number64Info.low_bytes);
+            printf("\n");
             i++;
             break;
         case CONSTANT_Double:
@@ -134,6 +136,7 @@ void printConstantPool(class_structure *jclass) {
                 jclass->constant_pool[i].info.number64Info.high_bytes,
                 jclass->constant_pool[i].info.number64Info.low_bytes);
             printDouble(jclass->constant_pool[i].info.number64Info.high_bytes, jclass->constant_pool[i].info.number64Info.low_bytes);
+            printf("\n");
             i++;
             break;
         case CONSTANT_NameAndType:
