@@ -90,7 +90,7 @@ void printInitialParams(class_structure *jclass) {
 //percorre a struct da classe e imprime todos os dados
 void printConstantPool(class_structure *jclass) {
     printf("\n------------------------------\n");
-    printf("          CONSTANT POOL         \n");
+    printf("          CONSTANT POOL          \n");
 
     printf("Constant Pool Count: %d\n", jclass->constant_pool_count);
     char tagType[18];
@@ -492,6 +492,11 @@ void printNameAndType(uint16_t name_type_index, class_structure *jclass) {
     printf("%s", jclass->constant_pool[name_index - 1].info.utf8Info.bytes);
     printf(":");
     printf("%s", jclass->constant_pool[type_index - 1].info.utf8Info.bytes);
+}
+
+void printName(uint16_t name_type_index, class_structure *jclass) {
+    uint16_t name_index = jclass->constant_pool[name_type_index - 1].info.nameAndTypeInfo.name_index;
+    printf("%s", jclass->constant_pool[name_index - 1].info.utf8Info.bytes);
 }
 
 void printClassAndName(uint16_t method_index, class_structure *jclass) {

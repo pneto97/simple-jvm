@@ -62,6 +62,9 @@ void printDouble(uint32_t high, uint32_t low);
 // Função que imprime os Utf8 referentes ao NameAndType
 void printNameAndType(uint16_t name_type_index, class_structure *jclass);
 
+// Função que imprime os Utf8 referentes ao Name
+void printName(uint16_t name_type_index, class_structure *jclass);
+
 //Funcao que imprime as referencias dos metodos
 void printMethodsRef(uint16_t method_index, class_structure *jclass);
 
