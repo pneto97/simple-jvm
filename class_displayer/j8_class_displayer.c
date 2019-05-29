@@ -77,6 +77,9 @@ void printInitialParams(class_structure *jclass) {
     printf("Magic Number: %x\n", jclass->magic);
     printf("Minor Version: %x\n", jclass->minor_version);
     printf("Major Version: %d\n", jclass->major_version);
+    printf("Version: ");
+    printVersion(jclass->major_version, jclass->minor_version);
+    printf("\n");
 }
 
 //percorre a struct da classe e imprime todos os dados
@@ -118,12 +121,14 @@ void printConstantPool(class_structure *jclass) {
         case CONSTANT_Float:
             printf("bytes: 0x%x\t\t\t\t // ", jclass->constant_pool[i].info.number32Info.bytes);
             printFloat(jclass->constant_pool[i].info.number32Info.bytes);
+            printf("\n");
             break;
         case CONSTANT_Long:
             printf("high bytes: 0x%08x, low bytes: 0x%08x\t // ",
                 jclass->constant_pool[i].info.number64Info.high_bytes,
                 jclass->constant_pool[i].info.number64Info.low_bytes);
             printLong(jclass->constant_pool[i].info.number64Info.high_bytes, jclass->constant_pool[i].info.number64Info.low_bytes);
+            printf("\n");
             i++;
             break;
         case CONSTANT_Double:
@@ -131,6 +136,7 @@ void printConstantPool(class_structure *jclass) {
                 jclass->constant_pool[i].info.number64Info.high_bytes,
                 jclass->constant_pool[i].info.number64Info.low_bytes);
             printDouble(jclass->constant_pool[i].info.number64Info.high_bytes, jclass->constant_pool[i].info.number64Info.low_bytes);
+            printf("\n");
             i++;
             break;
         case CONSTANT_NameAndType:
@@ -441,7 +447,7 @@ void printFloat(uint32_t bytes) {
         int e  = ((bytes >> 23) & 0xff);
         int m  = (e == 0) ? (bytes & 0x7fffff) << 1 : (bytes & 0x7fffff) | 0x800000;
         number = s * m * pow(2, e - 150);
-        printf("%f\n", number);
+        printf("%f", number);
     }
 }
 
@@ -463,13 +469,13 @@ void printDouble(uint32_t high, uint32_t low) {
         long m = (e == 0) ? (bytes & 0xfffffffffffffL) << 1 : (bytes & 0xfffffffffffffL) | 0x10000000000000L;
 
         double_number = s * m * pow(2, e - 1075);
-        printf("%lf\n", double_number);
+        printf("%lf", double_number);
     }
 }
 
 void printLong(uint32_t high, uint32_t low) {
     uint64_t long_number = ((uint64_t)high << 32) + low;
-    printf("%llu\n", (long long)long_number);
+    printf("%llu", (long long)long_number);
 }
 
 void printNameAndType(uint16_t name_type_index, class_structure *jclass) {
@@ -520,7 +526,7 @@ int printCode(uint8_t *code, int pc, class_structure *jclass) {
         return 2;
     } else if (op >= IFEQ && op <= JSR) {
         uint16_t offset = build16(code[pc + 1], code[pc + 2]);
-        printf(" %d (%d)", pc + offset, offset);
+        printf(" %d (%d)", (int16_t)(pc + offset), (int16_t)offset);
         return 2;
     } else if (op == RET) {
         printf(" %d ", code[pc + 1]);
@@ -613,11 +619,11 @@ int printCode(uint8_t *code, int pc, class_structure *jclass) {
         return 3;
     } else if (op == IFNULL || op == IFNONNULL) {
         uint16_t offset = build16(code[pc + 1], code[pc + 2]);
-        printf(" %d (%d)", pc + offset, offset);
+        printf(" %d (%d)", (int16_t)(pc + offset), (int16_t) offset);
         return 2;
     } else if (op == GOTO_W || op == JSR_W) {
         uint32_t offset = build32(code[pc + 1], code[pc + 2], code[pc + 3], code[pc + 4]);
-        printf(" %d (%d)", pc + offset, offset);
+        printf(" %d (%d)", (int32_t)(pc + offset), (int32_t) offset);
         return 4;
     } else {
         return 0;
@@ -631,12 +637,12 @@ void printConstantPoolValue(int i, class_structure *jclass) {
     case CONSTANT_String:
         printf("String ");
         printUtf8(jclass->constant_pool[i].info.stringInfo.string_index, jclass);
-        printf("\n");
+        //printf("\n");
         break;
     case CONSTANT_Integer:
         printf("Integer ");
         printf("%d", (int32_t)jclass->constant_pool[i].info.number32Info.bytes);
-        printf("\n");
+        //printf("\n");
         break;
     case CONSTANT_Float:
         printf("Float ");
@@ -645,7 +651,7 @@ void printConstantPoolValue(int i, class_structure *jclass) {
     case CONSTANT_Class:
         printf("Class ");
         printUtf8(jclass->constant_pool[i].info.classInfo.name_index, jclass);
-        printf("\n");
+        //printf("\n");
         break;
     case CONSTANT_MethodType:
         printf("descriptor index: #%d\n",
@@ -698,4 +704,38 @@ void printConstantDouble(uint16_t ref, class_structure *jclass) {
     uint32_t hi  = jclass->constant_pool[ref - 1].info.number64Info.high_bytes;
     uint32_t low = jclass->constant_pool[ref - 1].info.number64Info.low_bytes;
     printDouble(hi, low);
+}
+
+void printVersion(uint16_t major, uint16_t minor){
+    if(major == 45 && minor ==	3)
+        printf("Java 1(.0.2)");
+    else if(major == 45 && minor == 3)
+    	printf("Java 1.1");
+    else{
+        switch(major){
+            case 46:
+                printf("Java 1.2");
+                break;
+            case 47:
+                printf("Java 1.3");
+                break;
+            case 48:
+                printf("Java 1.4");
+                break;
+            case 49:
+                printf("Java 5");
+                break;
+            case 50:
+                printf("Java 6");
+                break;
+            case 51:
+                printf("Java 7");
+                break;
+            case 52:
+                printf("Java 8");
+                break;
+            default:
+                printf("Versão desconhecida");
+        }
+    }
 }

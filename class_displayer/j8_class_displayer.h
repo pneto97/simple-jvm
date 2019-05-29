@@ -70,3 +70,6 @@ int printCode(uint8_t *code, int pc, class_structure *jclass);
 
 //Funcao que imprime os argumentos do ConstantPool
 void printConstantPoolValue(int index,class_structure *jclass);
+
+// imprime a versão do Java
+void printVersion(uint16_t major, uint16_t minor);
