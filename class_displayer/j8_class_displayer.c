@@ -263,7 +263,7 @@ void printMethods(class_structure *jclass) {
 
     for (int i = 0; i < methods_count; i++) {
         printf("\n------------------------------\n");
-        printf("METHOD: %d\n", i + 1);
+        printf("METHOD: %d\n", i);
         // printf("Access Flag: %u\n", jclass->methods[i].access_flags);
         printAccessFlags(jclass->methods[i].access_flags, METHOD);
         printf("Name Index: %u\n", jclass->methods[i].name_index);
@@ -420,7 +420,7 @@ void printCodes(code_attribute code_attribute, class_structure *jclass) {
     //printf("Code Length: %d\n", code_attribute.code_length);
 
     for (int j = 0; j < code_attribute.code_length; j++) {
-        printf("\t%d: (0x%hhx)\t", j, code_attribute.code[j]);
+        printf("\t%d: ", j);
         j += printCode(code_attribute.code, j, jclass); //printOpcode retorna quantidade de Bytes lidos depois do opcode
         printf("\n");
     }
@@ -512,7 +512,7 @@ int printCode(uint8_t *code, int pc, class_structure *jclass) {
     printOpcode(op);
 
     if (op == BIPUSH) {
-        printf(" %d", code[pc + 1]);
+        printf(" %d", (int8_t)code[pc + 1]);
         return 1;
     } else if (op == SIPUSH) {
         uint16_t value = build16(code[pc + 1], code[pc + 2]);

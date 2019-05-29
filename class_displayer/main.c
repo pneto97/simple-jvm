@@ -23,10 +23,18 @@ int main(int argc, char *argv[]) {
         printf("Erro ao abrir o arquivo!\n");
         exit(1);
     }
-
     class_structure *jclass;
 
     jclass = readClassFile(class_file);
+    uint16_t name_index = jclass->constant_pool[jclass->this_class - 1].info.classInfo.name_index;
+    // printf("%s", jclass->constant_pool[name_index - 1].info.utf8Info.bytes);
+    char filename[100];
+    sscanf(argv[1], "%[^.]s", filename);
+    if (!strcmp((char *)jclass->constant_pool[name_index - 1].info.utf8Info.bytes, filename)){
+        printf("Arquivo não encontrado.");
+    }
+    printf("%s", filename);
+    getchar();
     printClassFile(jclass);
     freeClass(jclass);
 
