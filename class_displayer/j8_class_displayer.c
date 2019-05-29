@@ -245,7 +245,9 @@ void printFields(class_structure *jclass) {
         printf("FIELD: %d\n", i + 1);
         // printf("Access Flag: %u\n", jclass->fields[i].access_flags);
         printAccessFlags(jclass->fields[i].access_flags, FIELD);
-        printf("Name Index: %u\n", jclass->fields[i].name_index);
+        printf("Name Index: #%u ", jclass->fields[i].name_index);
+        printUtf8(jclass->fields[i].name_index, jclass);
+        printf("\n");
         printf("Descriptor Index: %u\n", jclass->fields[i].descriptor_index);
         printf("Attribute Count: %u\n", jclass->fields[i].attributes_count);
 
@@ -266,7 +268,9 @@ void printMethods(class_structure *jclass) {
         printf("METHOD: %d\n", i);
         // printf("Access Flag: %u\n", jclass->methods[i].access_flags);
         printAccessFlags(jclass->methods[i].access_flags, METHOD);
-        printf("Name Index: %u\n", jclass->methods[i].name_index);
+        printf("Name Index: #%u ", jclass->methods[i].name_index);
+        printUtf8(jclass->methods[i].name_index, jclass);
+        printf("\n");
         printf("Descriptor Index: %u\n", jclass->methods[i].descriptor_index);
         printf("Attribute Count: %u\n", jclass->methods[i].attributes_count);
 
