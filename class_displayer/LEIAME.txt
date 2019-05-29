@@ -1,0 +1,12 @@
+Para executar o programa é necessário incluir a biblioteca -lm 
+
+Como executar:
+* make
+* ./main algumclassfile.class
+
+# Feito por:
+Paulo Borges        - 15/0143753
+Christian Luis      - 15/0153538
+Lucas Campos Jorge  - 15/0154135
+João Marcelo        - 15/0132085
+Rodrigo Demetrio    - 15/0147384

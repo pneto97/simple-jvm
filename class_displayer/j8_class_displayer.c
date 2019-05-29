@@ -545,21 +545,24 @@ int printCode(uint8_t *code, int pc, class_structure *jclass) {
         printf("\t\tdefault: %d (+%d)\n", pc + padding, padding);
         return (return_amount - 1);
     } else if (op == LOOKUPSWITCH) {
-        uint32_t padding          = build32(code[pc + 1], code[pc + 2], code[pc + 3], code[pc + 4]);
-        uint32_t default_variable = build32(code[pc + 5], code[pc + 6], code[pc + 7], code[pc + 8]);
+        int resto     = 3 - (pc % 4);
+        int pc_offset = resto + pc;
+
+        uint32_t default_variable = build32(code[pc_offset + 1], code[pc_offset + 2], code[pc_offset + 3], code[pc_offset + 4]);
+        uint32_t n_pairs          = build32(code[pc_offset + 5], code[pc_offset + 6], code[pc_offset + 7], code[pc_offset + 8]);
 
         uint32_t return_amount = 0xFFFF;
 
-        printf(" // %d\n", default_variable);
-        for (int j = 0; j < default_variable*2; j+=2) {
-            int aux_off     = pc + j * 4;
-            int index = build32(code[aux_off + 9], code[aux_off + 10], code[aux_off + 11], code[aux_off + 12]);
+        printf(" // %d\n", n_pairs);
+        for (int j = 0; j < n_pairs * 2; j += 2) {
+            int aux_off     = resto + pc + j * 4;
+            int index       = build32(code[aux_off + 9], code[aux_off + 10], code[aux_off + 11], code[aux_off + 12]);
             int jump_amount = build32(code[aux_off + 13], code[aux_off + 14], code[aux_off + 15], code[aux_off + 16]);
             printf("\t\t%d: %d (+%d)\n", index, jump_amount + pc, jump_amount);
 
             if (return_amount > jump_amount) return_amount = jump_amount;
         }
-        printf("\t\tdefault: %d (+%d)\n", pc + padding, padding);
+        printf("\t\tdefault: %d (+%d)\n", pc + default_variable, default_variable);
         return (return_amount - 1);
     } else if (op >= GETSTATIC && op <= INVOKESTATIC) {
         uint16_t ref = build16(code[pc + 1], code[pc + 2]);

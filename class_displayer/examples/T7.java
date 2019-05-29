@@ -6,6 +6,7 @@ public class T7
 		System.out.println("Hello World!");
 
         int pqpcarai = 4;
+        double lol = 5;
         ArrayList<String> arraiodopaulin = new ArrayList<String>();
         int[] jaabre = {1, 2};
         int[][][] x = new int[6][3][] ;
