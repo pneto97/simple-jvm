@@ -56,16 +56,6 @@ void cpTagToString(uint8_t tag, char *tagType) {
 void printClassFile(class_structure *jclass) {
     printInitialParams(jclass); //magic, minor e major version
     printConstantPool(jclass); // Constant pool
-    printAccessFlags(jclass->access_flags, CLASS); // access flag
-    printf("This Class: "); // This Class
-    printClassName(jclass->this_class, jclass);
-    printf("\n");
-    printf("Super Class: "); // Super class
-    if (jclass->super_class != 0)
-        printClassName(jclass->super_class, jclass);
-    else
-        printf("Object");
-    printf("\n");
     printInterfaces(jclass); // Interfaces
     printFields(jclass); // Fields
     printMethods(jclass); // Methods
@@ -80,10 +70,28 @@ void printInitialParams(class_structure *jclass) {
     printf("Version: ");
     printVersion(jclass->major_version, jclass->minor_version);
     printf("\n");
+    printf("Constant Pool Count: %d\n", jclass->constant_pool_count);
+    printAccessFlags(jclass->access_flags, CLASS); // access flag
+    printf("This Class: "); // This Class
+    printClassName(jclass->this_class, jclass);
+    printf("\n");
+    printf("Super Class: "); // Super class
+    if (jclass->super_class != 0)
+        printClassName(jclass->super_class, jclass);
+    else
+        printf("Object");
+    printf("\n");
+    printf("Interfaces Count: %d\n", jclass->interfaces_count);
+    printf("Fields Count: %d\n", jclass->fields_count);
+    printf("Methods Count: %d\n", jclass->methods_count);
+
 }
 
 //percorre a struct da classe e imprime todos os dados
 void printConstantPool(class_structure *jclass) {
+    printf("\n------------------------------\n");
+    printf("          CONSTANT POOL         \n");
+
     printf("Constant Pool Count: %d\n", jclass->constant_pool_count);
     char tagType[18];
     printf("Mostrando o conteúdo do constant pool:\n");
@@ -109,12 +117,12 @@ void printConstantPool(class_structure *jclass) {
             printf("\n");
             break;
         case CONSTANT_String:
-            printf("string index: #%d\t\t\t\t //  ", jclass->constant_pool[i].info.stringInfo.string_index);
+            printf("string index: #%d\t\t\t\t // ", jclass->constant_pool[i].info.stringInfo.string_index);
             printUtf8(jclass->constant_pool[i].info.stringInfo.string_index, jclass);
             printf("\n");
             break;
         case CONSTANT_Integer:
-            printf("bytes: #%x \t\t\t\t // ", jclass->constant_pool[i].info.number32Info.bytes);
+            printf("bytes: #%x \t\t\t\t\t // ", jclass->constant_pool[i].info.number32Info.bytes);
             printf("%d", (int32_t)jclass->constant_pool[i].info.number32Info.bytes);
             printf("\n");
             break;
@@ -532,23 +540,24 @@ int printCode(uint8_t *code, int pc, class_structure *jclass) {
         printf(" %d ", code[pc + 1]);
         return 1;
     } else if (op == TABLESWITCH) {
-        uint32_t padding          = build32(code[pc + 1], code[pc + 2], code[pc + 3], code[pc + 4]);
-        uint32_t default_variable = build32(code[pc + 5], code[pc + 6], code[pc + 7], code[pc + 8]);
-        uint32_t low_variable     = build32(code[pc + 9], code[pc + 10], code[pc + 11], code[pc + 12]);
-        uint32_t high_variable    = build32(code[pc + 13], code[pc + 14], code[pc + 15], code[pc + 16]);
+        int resto     = 3 - (pc % 4);
+        int pc_offset = resto + pc;
+
+        uint32_t default_variable = build32(code[pc_offset + 1], code[pc_offset + 2], code[pc_offset + 3], code[pc_offset + 4]);
+        uint32_t low_variable     = build32(code[pc_offset + 5], code[pc_offset + 6], code[pc_offset + 7], code[pc_offset + 8]);
+        uint32_t high_variable    = build32(code[pc_offset + 9], code[pc_offset + 10], code[pc_offset + 11], code[pc_offset + 12]);
 
         uint32_t return_amount = 0xFFFF;
 
-        printf(" %d to %d\n", default_variable, low_variable);
-        printf("\t\t%d: %d (+%d)\n", default_variable, high_variable + pc, high_variable);
-        for (int j = 0; j < low_variable - default_variable; j++) {
-            int aux_off     = pc + j * 4;
-            int jump_amount = build32(code[aux_off + 17], code[aux_off + 18], code[aux_off + 19], code[aux_off + 20]);
-            printf("\t\t%d: %d (+%d)\n", j + default_variable + 1, jump_amount + pc, jump_amount);
+        printf(" %d to %d\n", low_variable, high_variable);
+        for (int j = 0; j < high_variable - low_variable + 1; j++) {
+            int aux_off     = resto + pc + j * 4;
+            int jump_amount = build32(code[aux_off + 13], code[aux_off + 14], code[aux_off + 15], code[aux_off + 16]);
+            printf("\t\t%d: %d (+%d)\n", j + low_variable, jump_amount + pc, jump_amount);
 
             if (return_amount > jump_amount) return_amount = jump_amount;
         }
-        printf("\t\tdefault: %d (+%d)\n", pc + padding, padding);
+        printf("\t\tdefault: %d (+%d)", pc + default_variable, default_variable);
         return (return_amount - 1);
     } else if (op == LOOKUPSWITCH) {
         int resto     = 3 - (pc % 4);
@@ -637,12 +646,10 @@ void printConstantPoolValue(int i, class_structure *jclass) {
     case CONSTANT_String:
         printf("String ");
         printUtf8(jclass->constant_pool[i].info.stringInfo.string_index, jclass);
-        //printf("\n");
         break;
     case CONSTANT_Integer:
         printf("Integer ");
         printf("%d", (int32_t)jclass->constant_pool[i].info.number32Info.bytes);
-        //printf("\n");
         break;
     case CONSTANT_Float:
         printf("Float ");
@@ -651,7 +658,6 @@ void printConstantPoolValue(int i, class_structure *jclass) {
     case CONSTANT_Class:
         printf("Class ");
         printUtf8(jclass->constant_pool[i].info.classInfo.name_index, jclass);
-        //printf("\n");
         break;
     case CONSTANT_MethodType:
         printf("descriptor index: #%d\n",
@@ -670,33 +676,13 @@ void printConstantPoolValue(int i, class_structure *jclass) {
         printf("Double ");
         printDouble(jclass->constant_pool[i].info.number64Info.high_bytes, jclass->constant_pool[i].info.number64Info.low_bytes);
         break;
-    // case CONSTANT_Fieldref:
-    // case CONSTANT_Methodref:
+    case CONSTANT_Fieldref:
+    case CONSTANT_Methodref:
     case CONSTANT_InterfaceMethodref:
-        // printf("class index: #%d, ", jclass->constant_pool[i].info.refInfo.class_index);
-        // printf("name and type index: #%d\t // ", jclass->constant_pool[i].info.refInfo.name_and_type_index);
         printClassName(jclass->constant_pool[i].info.refInfo.class_index, jclass);
         printf(".");
         printNameAndType(jclass->constant_pool[i].info.refInfo.name_and_type_index, jclass);
         break;
-        // case CONSTANT_NameAndType:
-        //     printf("name index: #%d, descriptor_index: #%d\t\t // ",
-        //         jclass->constant_pool[i].info.nameAndTypeInfo.name_index,
-        //         jclass->constant_pool[i].info.nameAndTypeInfo.descriptor_index);
-        //     printNameAndType(i + 1, jclass);
-        //     printf("\n");
-        //     break;
-        // case CONSTANT_Utf8:
-        //     printf("length: #%d, bytes: \"%s\"\n",
-        //         jclass->constant_pool[i].info.utf8Info.length,
-        //         jclass->constant_pool[i].info.utf8Info.bytes);
-        //     break;
-
-        // case CONSTANT_InvokeDynamic:
-        //     printf("bootstrap method attr index: #%d, name and type index: #%d\n",
-        //         jclass->constant_pool[i].info.invokeDynamicInfo.bootstrap_method_attr_index,
-        //         jclass->constant_pool[i].info.invokeDynamicInfo.name_and_type_index);
-        //     break;
     }
 }
 

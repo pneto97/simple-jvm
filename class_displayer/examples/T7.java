@@ -33,18 +33,18 @@ public class T7
             // System.out.println(3);
             pqp = 8664;
             break; // optional
-        case 5 :
+        case 4 :
             // System.out.println(4);
             pqp = 8664;
             break; // optional
-        case 6 :
+        case 5 :
             paulin = 0.156f;
-        case 7 :
+        case 6 :
             paulin = 0.121316f;
-        case 123 :
+        case 7 :
             pqp = 0xFFFF;
             break; // optional
-        case 8236 :
+        case 8 :
             pqp = 0xFFFF;
         default : // Optional
             // Statements
