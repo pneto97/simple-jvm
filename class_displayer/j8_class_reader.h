@@ -38,5 +38,8 @@ void freeAttributes(attribute_info *attr_info, uint16_t attribute_count, class_s
 //função que chama todos os outros readers
 class_structure *readClassFile(FILE *class_file);
 
+//Formata o argv e retorna apenas o nome do arquivo
+char* getFilename(char *sentence);
+
 // checa se é um class file
 int isClassFile(class_structure *jclass);

@@ -26,15 +26,18 @@ int main(int argc, char *argv[]) {
     class_structure *jclass;
 
     jclass = readClassFile(class_file);
-    uint16_t name_index = jclass->constant_pool[jclass->this_class - 1].info.classInfo.name_index;
-    // printf("%s", jclass->constant_pool[name_index - 1].info.utf8Info.bytes);
-    char filename[100];
-    sscanf(argv[1], "%[^.]s", filename);
-    if (!strcmp((char *)jclass->constant_pool[name_index - 1].info.utf8Info.bytes, filename)){
-        printf("Arquivo não encontrado.");
+
+    uint16_t name_index_pos = jclass->constant_pool[jclass->this_class - 1].info.classInfo.name_index;
+    char *name_index = (char *)jclass->constant_pool[name_index_pos - 1].info.utf8Info.bytes;
+    char *formatted_filename;
+
+    formatted_filename = getFilename(argv[1]);
+
+    if (strcmp(name_index, formatted_filename) != 0) {
+        printf("Falha de consistencia.\n");
+        exit(-1);
     }
-    printf("%s", filename);
-    getchar();
+
     printClassFile(jclass);
     freeClass(jclass);
 

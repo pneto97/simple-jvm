@@ -27,6 +27,24 @@ class_structure *readClassFile(FILE *class_file) {
     return jclass;
 }
 
+char *getFilename(char *sentence) {
+    char *buffer;
+    char *result    = sentence;
+    char split_by[] = "/\\";
+
+    buffer = strtok(sentence, split_by);
+
+    while (buffer != NULL) {
+        result = buffer;
+        buffer = strtok(NULL, split_by);
+    }
+
+    //Remove tudo apos o '.', ou seja, o .class
+    sscanf(result, "%[^.]s", result);
+
+    return result;
+}
+
 int isClassFile(class_structure *jclass) {
     int i = (jclass->magic == 0xCAFEBABE) ? 1 : 0;
     return i;
@@ -77,87 +95,87 @@ void readConstantPool(FILE *class_file, class_structure *jclass) {
 
         switch (jclass->constant_pool[i].tag) {
 
-            case CONSTANT_Class:
+        case CONSTANT_Class:
 
-                jclass->constant_pool[i].info.classInfo.name_index = beRead16(class_file);
+            jclass->constant_pool[i].info.classInfo.name_index = beRead16(class_file);
 
-                break;
-            //Os 3 proximos utilizam os mesmos campos
-            case CONSTANT_Fieldref:
-            case CONSTANT_Methodref:
-            case CONSTANT_InterfaceMethodref:
+            break;
+        //Os 3 proximos utilizam os mesmos campos
+        case CONSTANT_Fieldref:
+        case CONSTANT_Methodref:
+        case CONSTANT_InterfaceMethodref:
 
-                jclass->constant_pool[i].info.refInfo.class_index         = beRead16(class_file);
-                jclass->constant_pool[i].info.refInfo.name_and_type_index = beRead16(class_file);
-                break;
+            jclass->constant_pool[i].info.refInfo.class_index         = beRead16(class_file);
+            jclass->constant_pool[i].info.refInfo.name_and_type_index = beRead16(class_file);
+            break;
 
-            case CONSTANT_String:
+        case CONSTANT_String:
 
-                jclass->constant_pool[i].info.stringInfo.string_index = beRead16(class_file);
+            jclass->constant_pool[i].info.stringInfo.string_index = beRead16(class_file);
 
-                break;
-            //ambos 32 bits
-            case CONSTANT_Integer:
-            case CONSTANT_Float:
-                jclass->constant_pool[i].info.number32Info.bytes = beRead32(class_file);
-                break;
+            break;
+        //ambos 32 bits
+        case CONSTANT_Integer:
+        case CONSTANT_Float:
+            jclass->constant_pool[i].info.number32Info.bytes = beRead32(class_file);
+            break;
 
-            //ambos 64 bits
-            case CONSTANT_Long:
-            case CONSTANT_Double:
+        //ambos 64 bits
+        case CONSTANT_Long:
+        case CONSTANT_Double:
 
-                jclass->constant_pool[i].info.number64Info.high_bytes = beRead32(class_file);
-                jclass->constant_pool[i].info.number64Info.low_bytes  = beRead32(class_file);
-                i++; //64 bits usa duas posicoes na tabela do constant pool
-                break;
+            jclass->constant_pool[i].info.number64Info.high_bytes = beRead32(class_file);
+            jclass->constant_pool[i].info.number64Info.low_bytes  = beRead32(class_file);
+            i++; //64 bits usa duas posicoes na tabela do constant pool
+            break;
 
-            case CONSTANT_NameAndType:
+        case CONSTANT_NameAndType:
 
-                jclass->constant_pool[i].info.nameAndTypeInfo.name_index       = beRead16(class_file);
-                jclass->constant_pool[i].info.nameAndTypeInfo.descriptor_index = beRead16(class_file);
-                break;
-            case CONSTANT_Utf8:
+            jclass->constant_pool[i].info.nameAndTypeInfo.name_index       = beRead16(class_file);
+            jclass->constant_pool[i].info.nameAndTypeInfo.descriptor_index = beRead16(class_file);
+            break;
+        case CONSTANT_Utf8:
 
-                //pega o tamanho da string
-                jclass->constant_pool[i].info.utf8Info.length = beRead16(class_file);
+            //pega o tamanho da string
+            jclass->constant_pool[i].info.utf8Info.length = beRead16(class_file);
 
-                //aloca espaço para esse tamanho
-                jclass->constant_pool[i].info.utf8Info.bytes = (uint8_t *)malloc(
-                    (jclass->constant_pool[i].info.utf8Info.length + 1) * sizeof(uint8_t));
+            //aloca espaço para esse tamanho
+            jclass->constant_pool[i].info.utf8Info.bytes = (uint8_t *)malloc(
+                (jclass->constant_pool[i].info.utf8Info.length + 1) * sizeof(uint8_t));
 
-                if (jclass->constant_pool[i].info.utf8Info.bytes == NULL) {
-                    printf("Erro na alocacao!\n");
-                    exit(2);
-                }
+            if (jclass->constant_pool[i].info.utf8Info.bytes == NULL) {
+                printf("Erro na alocacao!\n");
+                exit(2);
+            }
 
-                //le a string do arquivo para o espaço alocado
-                fread(jclass->constant_pool[i].info.utf8Info.bytes,
-                    sizeof(uint8_t),
-                    jclass->constant_pool[i].info.utf8Info.length,
-                    class_file);
+            //le a string do arquivo para o espaço alocado
+            fread(jclass->constant_pool[i].info.utf8Info.bytes,
+                sizeof(uint8_t),
+                jclass->constant_pool[i].info.utf8Info.length,
+                class_file);
 
-                jclass->constant_pool[i].info.utf8Info.bytes[jclass->constant_pool[i].info.utf8Info.length] = '\0';
+            jclass->constant_pool[i].info.utf8Info.bytes[jclass->constant_pool[i].info.utf8Info.length] = '\0';
 
-                break;
-            case CONSTANT_MethodHandle:
+            break;
+        case CONSTANT_MethodHandle:
 
-                jclass->constant_pool[i].info.methodHandleInfo.reference_kind  = beRead8(class_file);
-                jclass->constant_pool[i].info.methodHandleInfo.reference_index = beRead16(class_file);
-                break;
-            case CONSTANT_MethodType:
+            jclass->constant_pool[i].info.methodHandleInfo.reference_kind  = beRead8(class_file);
+            jclass->constant_pool[i].info.methodHandleInfo.reference_index = beRead16(class_file);
+            break;
+        case CONSTANT_MethodType:
 
-                jclass->constant_pool[i].info.methodTypeInfo.descriptor_index = beRead16(class_file);
+            jclass->constant_pool[i].info.methodTypeInfo.descriptor_index = beRead16(class_file);
 
-                break;
-            case CONSTANT_InvokeDynamic:
+            break;
+        case CONSTANT_InvokeDynamic:
 
-                jclass->constant_pool[i].info.invokeDynamicInfo.bootstrap_method_attr_index = beRead16(class_file);
-                jclass->constant_pool[i].info.invokeDynamicInfo.name_and_type_index         = beRead16(class_file);
+            jclass->constant_pool[i].info.invokeDynamicInfo.bootstrap_method_attr_index = beRead16(class_file);
+            jclass->constant_pool[i].info.invokeDynamicInfo.name_and_type_index         = beRead16(class_file);
 
-                break;
-            defaut:
-                printf("TAG do constant pool inexistente!\n");
-                exit(1);
+            break;
+        defaut:
+            printf("TAG do constant pool inexistente!\n");
+            exit(1);
         }
     }
 }
@@ -240,8 +258,7 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
 
         } else if (!strcmp(attribute_type, "ConstantValue")) {
 
-            attr_info[i].info.constant_value_attribute.constantvalue_index
-                = beRead16(class_file);
+            attr_info[i].info.constant_value_attribute.constantvalue_index = beRead16(class_file);
         } else if (!strcmp(attribute_type, "Synthetic")) {
             // O synthetic não lê nada!
             continue;
@@ -275,8 +292,7 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             //alocação para a tabela de exceções
             if (attr_info[i].info.exceptions_attribute.number_of_exceptions != 0) {
                 attr_info[i].info.exceptions_attribute.excepetions_table = (uint16_t *)malloc(
-                    (attr_info[i].info.exceptions_attribute.number_of_exceptions)
-                    * sizeof(uint16_t));
+                    (attr_info[i].info.exceptions_attribute.number_of_exceptions) * sizeof(uint16_t));
                 if (attr_info[i].info.exceptions_attribute.excepetions_table == NULL) {
                     printf("Erro na alocacao!\n");
                     exit(2);
@@ -294,8 +310,7 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             fseek(class_file, attr_info[i].attribute_length, SEEK_CUR);
         } else if (!strcmp(attribute_type, "BootstrapMethods")) {
 
-            attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods
-                = beRead16(class_file);
+            attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods = beRead16(class_file);
             if (attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods != 0) {
                 attr_info[i].info.bootstrapMethods_attributes.bootstrap_methods = (bootstrap_methods *)malloc(
                     (attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods) * sizeof(bootstrap_methods));
@@ -331,15 +346,13 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
 
         } else if (!strcmp(attribute_type, "Signature")) {
 
-            attr_info[i].info.signature_attribute.signature_index
-                = beRead16(class_file);
+            attr_info[i].info.signature_attribute.signature_index = beRead16(class_file);
 
         } else if (!strcmp(attribute_type, "LineNumberTable")) {
             attr_info[i].info.lineNumberTable_attribute.line_number_table_length = beRead16(class_file);
             if (attr_info[i].info.lineNumberTable_attribute.line_number_table_length != 0) {
                 attr_info[i].info.lineNumberTable_attribute.line_number_table = (line_number_table *)malloc(
-                    (attr_info[i].info.lineNumberTable_attribute.line_number_table_length)
-                    * sizeof(line_number_table));
+                    (attr_info[i].info.lineNumberTable_attribute.line_number_table_length) * sizeof(line_number_table));
                 if (attr_info[i].info.lineNumberTable_attribute.line_number_table == NULL) {
                     printf("Erro na alocacao!\n");
                     exit(2);
@@ -354,8 +367,7 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
 
         } else if (!strcmp(attribute_type, "SourceFile")) {
 
-            attr_info[i].info.sourceFile_attribute.sourcefile_index
-                = beRead16(class_file);
+            attr_info[i].info.sourceFile_attribute.sourcefile_index = beRead16(class_file);
 
             uint16_t sourcefile_index = attr_info[i].info.sourceFile_attribute.sourcefile_index;
 
@@ -366,8 +378,7 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             if (attr_info[i].info.innerClasses_attribute.number_of_classes != 0) {
 
                 attr_info[i].info.innerClasses_attribute.classes = (classes *)malloc(
-                    (attr_info[i].info.innerClasses_attribute.number_of_classes)
-                    * sizeof(classes));
+                    (attr_info[i].info.innerClasses_attribute.number_of_classes) * sizeof(classes));
                 if (attr_info[i].info.innerClasses_attribute.classes == NULL) {
                     printf("Erro na alocacao!\n");
                     exit(2);
