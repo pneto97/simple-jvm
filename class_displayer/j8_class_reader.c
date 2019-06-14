@@ -319,8 +319,6 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
             }
 
             fseek(class_file, attr_info[i].attribute_length, SEEK_CUR);
-        } else if (!strcmp(attribute_type, "StackMapTable")) {
-            fseek(class_file, attr_info[i].attribute_length, SEEK_CUR);
         } else if (!strcmp(attribute_type, "BootstrapMethods")) {
 
             attr_info[i].info.bootstrapMethods_attributes.num_bootstrap_methods = beRead16(class_file);

@@ -354,8 +354,6 @@ void printAttributes(attribute_info *attr_info, uint16_t attribute_count, class_
                 printf("excepetions_table[%d]: %d\n", j + 1, attr_info[i].info.exceptions_attribute.excepetions_table[j]);
             }
 
-        } else if (!strcmp(attribute_type, "StackMapTable")) {
-            printf("\tSem implementação\n");
         } else if (!strcmp(attribute_type, "BootstrapMethods")) {
 
             printf("Bootstrap Methods\n");
@@ -411,7 +409,7 @@ void printAttributes(attribute_info *attr_info, uint16_t attribute_count, class_
                 printAccessFlags(attr_info[i].info.innerClasses_attribute.classes[j].inner_class_access_flags, CLASS);
             }
         } else {
-            printf("\tDesconhecido!\n");
+            printf("\tSem implementação\n");
         }
 
         //Free na string auxiliar (serve apenas para realizar a comparacao dos tipos de atributo)
@@ -421,7 +419,7 @@ void printAttributes(attribute_info *attr_info, uint16_t attribute_count, class_
 
 void printCodes(code_attribute code_attribute, class_structure *jclass) {
     printf("Code:\n");
-    printf("   stack=%d, locals=%d, args_size=\n", code_attribute.max_stack, code_attribute.max_locals);
+    printf("   Minor Version=%d, Maximum local variables=%d, Code Length=%d\n", code_attribute.max_stack, code_attribute.max_locals, code_attribute.code_length);
     //printf("Max locals: %d\n", code_attribute.max_locals);
     //printf("Code Length: %d\n", code_attribute.code_length);
 
