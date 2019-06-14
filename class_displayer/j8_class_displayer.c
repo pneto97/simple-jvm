@@ -84,7 +84,6 @@ void printInitialParams(class_structure *jclass) {
     printf("Interfaces Count: %d\n", jclass->interfaces_count);
     printf("Fields Count: %d\n", jclass->fields_count);
     printf("Methods Count: %d\n", jclass->methods_count);
-
 }
 
 //percorre a struct da classe e imprime todos os dados
@@ -378,11 +377,14 @@ void printAttributes(attribute_info *attr_info, uint16_t attribute_count, class_
             printf("\tSignature Index: %d\n", attr_info[i].info.signature_attribute.signature_index);
 
         } else if (!strcmp(attribute_type, "LineNumberTable")) {
-            printf("line_number_table_length: %d\n", attr_info[i].info.lineNumberTable_attribute.line_number_table_length);
+            int length             = attr_info[i].info.lineNumberTable_attribute.line_number_table_length;
+            line_number_table *lnt = attr_info[i].info.lineNumberTable_attribute.line_number_table;
 
-            printf("Line \t: \tStart Program Counter\n");
-            for (int j = 0; j < attr_info[i].info.lineNumberTable_attribute.line_number_table_length; j++) {
-                printf("%d \t: \t%d\n", attr_info[i].info.lineNumberTable_attribute.line_number_table[j].line_number, attr_info[i].info.lineNumberTable_attribute.line_number_table[j].start_pc);
+            printf("line_number_table_length: %d\n", length);
+            printf("Nr\tStart\tLine Number\n");
+
+            for (int j = 0; j < length; j++) {
+                printf("%d\t%d\t%d\n", j, lnt[j].start_pc, lnt[j].line_number);
             }
 
         } else if (!strcmp(attribute_type, "SourceFile")) {
@@ -504,6 +506,13 @@ void printName(uint16_t name_type_index, class_structure *jclass) {
 }
 
 void printClassAndName(uint16_t method_index, class_structure *jclass) {
+    printClassName(jclass->constant_pool[method_index - 1].info.refInfo.class_index, jclass);
+    printf(".");
+    uint16_t name_and_type_index = jclass->constant_pool[method_index - 1].info.refInfo.name_and_type_index;
+    printName(name_and_type_index, jclass);
+}
+
+void printClassAndNameType(uint16_t method_index, class_structure *jclass) {
     printClassName(jclass->constant_pool[method_index - 1].info.refInfo.class_index, jclass);
     printf(".");
     uint16_t name_and_type_index = jclass->constant_pool[method_index - 1].info.refInfo.name_and_type_index;
@@ -632,16 +641,17 @@ int printCode(uint8_t *code, int pc, class_structure *jclass) {
         }
     } else if (op == MULTIANEWARRAY) {
         uint16_t ref = build16(code[pc + 1], code[pc + 2]);
-        printf(" #%d, dimensions %d // ", ref, code[pc + 3]);
+        printf(" #%d ", ref);
         printConstantPoolValue(ref - 1, jclass);
+        printf(" dim %d", code[pc + 3]);
         return 3;
     } else if (op == IFNULL || op == IFNONNULL) {
         uint16_t offset = build16(code[pc + 1], code[pc + 2]);
-        printf(" %d (%d)", (int16_t)(pc + offset), (int16_t) offset);
+        printf(" %d (%d)", (int16_t)(pc + offset), (int16_t)offset);
         return 2;
     } else if (op == GOTO_W || op == JSR_W) {
         uint32_t offset = build32(code[pc + 1], code[pc + 2], code[pc + 3], code[pc + 4]);
-        printf(" %d (%d)", (int32_t)(pc + offset), (int32_t) offset);
+        printf(" %d (%d)", (int32_t)(pc + offset), (int32_t)offset);
         return 4;
     } else {
         return 0;
@@ -653,19 +663,19 @@ int printCode(uint8_t *code, int pc, class_structure *jclass) {
 void printConstantPoolValue(int i, class_structure *jclass) {
     switch (jclass->constant_pool[i].tag) {
     case CONSTANT_String:
-        printf("String ");
+        // printf("String ");
         printUtf8(jclass->constant_pool[i].info.stringInfo.string_index, jclass);
         break;
     case CONSTANT_Integer:
-        printf("Integer ");
+        // printf("Integer ");
         printf("%d", (int32_t)jclass->constant_pool[i].info.number32Info.bytes);
         break;
     case CONSTANT_Float:
-        printf("Float ");
+        // printf("Float ");
         printFloat(jclass->constant_pool[i].info.number32Info.bytes);
         break;
     case CONSTANT_Class:
-        printf("Class ");
+        // printf("Class ");
         printUtf8(jclass->constant_pool[i].info.classInfo.name_index, jclass);
         break;
     case CONSTANT_MethodType:
@@ -678,11 +688,11 @@ void printConstantPoolValue(int i, class_structure *jclass) {
             jclass->constant_pool[i].info.methodHandleInfo.reference_index);
         break;
     case CONSTANT_Long:
-        printf("Long ");
+        // printf("Long ");
         printLong(jclass->constant_pool[i].info.number64Info.high_bytes, jclass->constant_pool[i].info.number64Info.low_bytes);
         break;
     case CONSTANT_Double:
-        printf("Double ");
+        // printf("Double ");
         printDouble(jclass->constant_pool[i].info.number64Info.high_bytes, jclass->constant_pool[i].info.number64Info.low_bytes);
         break;
     case CONSTANT_Fieldref:
@@ -701,36 +711,36 @@ void printConstantDouble(uint16_t ref, class_structure *jclass) {
     printDouble(hi, low);
 }
 
-void printVersion(uint16_t major, uint16_t minor){
-    if(major == 45 && minor ==	3)
+void printVersion(uint16_t major, uint16_t minor) {
+    if (major == 45 && minor == 3)
         printf("Java 1(.0.2)");
-    else if(major == 45 && minor == 3)
-    	printf("Java 1.1");
-    else{
-        switch(major){
-            case 46:
-                printf("Java 1.2");
-                break;
-            case 47:
-                printf("Java 1.3");
-                break;
-            case 48:
-                printf("Java 1.4");
-                break;
-            case 49:
-                printf("Java 5");
-                break;
-            case 50:
-                printf("Java 6");
-                break;
-            case 51:
-                printf("Java 7");
-                break;
-            case 52:
-                printf("Java 8");
-                break;
-            default:
-                printf("Versão desconhecida");
+    else if (major == 45 && minor == 3)
+        printf("Java 1.1");
+    else {
+        switch (major) {
+        case 46:
+            printf("Java 1.2");
+            break;
+        case 47:
+            printf("Java 1.3");
+            break;
+        case 48:
+            printf("Java 1.4");
+            break;
+        case 49:
+            printf("Java 5");
+            break;
+        case 50:
+            printf("Java 6");
+            break;
+        case 51:
+            printf("Java 7");
+            break;
+        case 52:
+            printf("Java 8");
+            break;
+        default:
+            printf("Versão desconhecida");
         }
     }
 }

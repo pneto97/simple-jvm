@@ -24,19 +24,9 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
     class_structure *jclass;
-
+    
     jclass = readClassFile(class_file);
-
-    uint16_t name_index_pos = jclass->constant_pool[jclass->this_class - 1].info.classInfo.name_index;
-    char *name_index = (char *)jclass->constant_pool[name_index_pos - 1].info.utf8Info.bytes;
-    char *formatted_filename;
-
-    formatted_filename = getFilename(argv[1]);
-
-    if (strcmp(name_index, formatted_filename) != 0) {
-        printf("Falha de consistencia.\n");
-        exit(-1);
-    }
+    checkConsistency(jclass, argv[1]);
 
     printClassFile(jclass);
     freeClass(jclass);

@@ -76,3 +76,9 @@ void printConstantPoolValue(int index,class_structure *jclass);
 
 // imprime a versão do Java
 void printVersion(uint16_t major, uint16_t minor);
+
+// Printa classe, nome e tipo
+void printClassAndNameType(uint16_t method_index, class_structure *jclass);
+
+// Printa classe, nome
+void printClassAndName(uint16_t method_index, class_structure *jclass);
