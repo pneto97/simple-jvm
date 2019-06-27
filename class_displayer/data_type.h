@@ -1,5 +1,5 @@
 
-enum primitive_data_type { 
+typedef enum data_type { 
     BYTE,
     SHORT,
     INT,
@@ -8,16 +8,14 @@ enum primitive_data_type {
     FLOAT,
     DOUBLE,
     RETURN_ADDR, 
-};
-
-enum reference_data_type { 
     CLASS,
     ARRAY,
     INTERFACE,
     NULL,
-};
+} data_type;
 
-typedef union {
-    primitive_data_type tag;
-    reference_data_type tag;
-} types;
+typedef enum cat_type { 
+    UNIQUE,
+    FIRST,
+    SECOND,
+} cat_type;
