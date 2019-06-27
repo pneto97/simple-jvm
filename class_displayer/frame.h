@@ -1,5 +1,11 @@
 #include "j8_class_structure.h"
 #include "data_type.h"
+/**
+ * @file
+ * @brief Arquivos com as estruturas de frames da JVM
+ * 
+ */
+
 
 typedef struct local_variables {
     //data_type *var_type;
@@ -34,7 +40,11 @@ typedef struct jvm_stack
     int frame_size;
 } jvm_stack;
 
-
+/**
+ * @brief Realiza o pop na pilha da JVM
+ * 
+ * @param stack Ponteiro para a pliha da JVM
+ */
 void pop_jvm_stack(jvm_stack *stack);
 void push_jvm_stack(jvm_stack *stack, frame *new_frame);
 void pop_op_stack(operand_stack *stack);
