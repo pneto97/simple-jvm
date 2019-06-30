@@ -1,8 +1,8 @@
 //j8_class_structure.h
 //Estruturas de dados necessárias para armazenar os dados do .class
 
-#include "j8_attribute.h"
-#include "j8_constant_pool.h"
+#include "attribute.h"
+#include "constant_pool.h"
 #include <stdint.h>
 
 //um item do constant pool, possui a tag que informa o tipo de dado e mais alguns bytes que dependem da tag

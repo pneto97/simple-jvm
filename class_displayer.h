@@ -10,11 +10,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef H_J8_CLASS_STRUCTURE
-#define H_J8_CLASS_STRUCTURE
-#include "j8_class_structure.h"
+#ifndef H_CLASS_STRUCTURE
+#define H_CLASS_STRUCTURE
+#include "class_structure.h"
 #endif
-#include "j8_access_flags.h"
+#include "access_flags.h"
 
 /**
  * @brief Converte o numero da tag do constant pool para uma string com o nome correspondente

@@ -4,13 +4,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef H_J8_CLASS_STRUCTURE
-#define H_J8_CLASS_STRUCTURE
-#include "j8_class_structure.h"
+#ifndef H_CLASS_STRUCTURE
+#define H_CLASS_STRUCTURE
+#include "class_structure.h"
 #endif
 
-#include "j8_class_displayer.h"
-#include "j8_class_reader.h"
+#include "class_displayer.h"
+#include "class_reader.h"
 
 int main(int argc, char *argv[]) {
     FILE *class_file = NULL;

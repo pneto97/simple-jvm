@@ -1,6 +1,6 @@
-//j8_class_displayer.c
-#include "j8_class_displayer.h"
-#include "j8_primitive_types.h"
+//class_displayer.c
+#include "class_displayer.h"
+#include "primitive_types.h"
 #include "opcode.h"
 #include "read_utils.h"
 #include <math.h>

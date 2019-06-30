@@ -1,11 +1,11 @@
-//j8_class_reader.h
+//class_reader.h
 //Funções usadas para leitura do .class, a ideia é que tudo relacionado a leitura dos campos fique aqui e saia da main
 
 #include <stdio.h>
 
-#ifndef H_J8_CLASS_STRUCTURE
-#define H_J8_CLASS_STRUCTURE
-#include "j8_class_structure.h"
+#ifndef H_CLASS_STRUCTURE
+#define H_CLASS_STRUCTURE
+#include "class_structure.h"
 #endif
 
 // leitura do magic number, minor e major version
