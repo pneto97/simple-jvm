@@ -12,6 +12,8 @@
 #include "class_displayer.h"
 #include "class_reader.h"
 
+using namespace std;
+
 int main(int argc, char *argv[]) {
     FILE *class_file = NULL;
     class_structure *jclass = NULL;

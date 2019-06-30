@@ -1,5 +1,5 @@
-CC = gcc -std=c99 -g
-SRC_FILES = main.c read_utils.c class_reader.c class_displayer.c primitive_types.c opcode.c frame.c
+CC = g++ -std=c++11
+SRC_FILES = main.cpp read_utils.cpp class_reader.cpp class_displayer.cpp primitive_types.cpp opcode.cpp frame.cpp
 EXEC = main
 LIB = -lm
 
