@@ -1,4 +1,3 @@
-
 typedef enum data_type { 
     BYTE,
     SHORT,

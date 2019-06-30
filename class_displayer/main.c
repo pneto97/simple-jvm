@@ -13,23 +13,49 @@
 #include "j8_class_reader.h"
 
 int main(int argc, char *argv[]) {
-    if (argc != 2) {
+    FILE *class_file = NULL;
+    class_structure *jclass = NULL;
+
+    printf("%d",argc);
+    if (argc != 3) {
         printf("Especifique um arquivo .class!\n");
         exit(1);
     }
 
-    FILE *class_file = fopen(argv[1], "rb");
-    if (class_file == NULL) {
-        printf("Erro ao abrir o arquivo!\n");
-        exit(1);
-    }
-    class_structure *jclass;
-    
-    jclass = readClassFile(class_file);
-    checkConsistency(jclass, argv[1]);
+    switch (argv[1][0])
+    {
+        case 'l':
 
-    printClassFile(jclass);
-    freeClass(jclass);
+            class_file = fopen(argv[2], "rb");
+            if (class_file == NULL) {
+                printf("Erro ao abrir o arquivo!\n");
+                exit(1);
+            }
+            
+            jclass = readClassFile(class_file);
+            checkConsistency(jclass, argv[2]);
+
+            printClassFile(jclass);
+            freeClass(jclass);
+            break;
+
+        case 'r':
+
+            class_file = fopen(argv[2], "rb");
+            if (class_file == NULL) {
+                printf("Erro ao abrir o arquivo %s!\n", argv[2]);
+                exit(1);
+            }
+
+            jclass = readClassFile(class_file);
+            checkConsistency(jclass, argv[2]);
+
+            printClassFile(jclass);
+            freeClass(jclass);
+
+        default:
+            break;
+    }
 
     fclose(class_file);
 
