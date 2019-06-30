@@ -1,4 +1,4 @@
-#include "j8_primitive_types.h"
+#include "primitive_types.h"
 #include <stdio.h>
 
 void printPrimitiveType(int8_t atype) {

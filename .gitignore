@@ -87,7 +87,7 @@ dkms.conf
 hs_err_pid*
 
 # Doxygen files
-class_displayer/html/
+html/
 
 # Ignore Mac DS_Store files
 **/.DS_Store

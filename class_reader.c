@@ -1,6 +1,6 @@
 //j8_class_reader.c
 
-#include "j8_class_reader.h"
+#include "class_reader.h"
 #include "read_utils.h"
 #include <stdint.h>
 #include <stdlib.h>

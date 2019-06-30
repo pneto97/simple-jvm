@@ -1,4 +1,4 @@
-#include "j8_class_structure.h"
+#include "class_structure.h"
 #include "data_type.h"
 /**
  * @file frame.h

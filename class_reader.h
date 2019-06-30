@@ -3,9 +3,9 @@
 
 #include <stdio.h>
 
-#ifndef H_J8_CLASS_STRUCTURE
-#define H_J8_CLASS_STRUCTURE
-#include "j8_class_structure.h"
+#ifndef H_CLASS_STRUCTURE
+#define H_CLASS_STRUCTURE
+#include "class_structure.h"
 #endif
 
 // leitura do magic number, minor e major version

@@ -1,5 +1,5 @@
 CC = gcc -std=c99 -g
-SRC_FILES = main.c read_utils.c j8_class_reader.c j8_class_displayer.c j8_primitive_types.c opcode.c frame.c
+SRC_FILES = main.c read_utils.c class_reader.c class_displayer.c primitive_types.c opcode.c frame.c
 EXEC = main
 LIB = -lm
 
