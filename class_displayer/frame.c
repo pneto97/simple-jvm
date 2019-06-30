@@ -1,5 +1,6 @@
 #include "frame.h"
 #include <stdlib.h>
+
 void pop_jvm_stack(jvm_stack *stack) {
     frame *aux = stack->top;
     stack->top = stack->top->next;
