@@ -24,6 +24,7 @@ class_structure *readClassFile(FILE *class_file) {
     readFields(class_file, jclass); // Fields
     readMethods(class_file, jclass); // Methods
     readClassAttributes(class_file, jclass); // Class Attributes
+
     return jclass;
 }
 

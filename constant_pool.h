@@ -1,5 +1,7 @@
 //constant_pool.h
 //estruturas de dados necessarias para o constant pool
+#ifndef CONSTANT_POOL_H
+#define CONSTANT_POOL_H
 #include <stdint.h>
 
 //Constant POOL TAGS
@@ -73,3 +75,5 @@ typedef struct invoke_dynamic_info {
 	uint16_t bootstrap_method_attr_index;
 	uint16_t name_and_type_index;
 } InvokeDynamicInfo;
+
+#endif

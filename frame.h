@@ -1,10 +1,13 @@
-#include "class_structure.h"
-#include "data_type.h"
 /**
  * @file frame.h
  * @brief Arquivos com as estruturas de frames da JVM e pilha de operandos
  * 
  */
+
+#ifndef FRAME_H
+#define FRAME_H
+#include "class_structure.h"
+#include "data_type.h"
 
 typedef struct local_variable {
     data_type *type;
@@ -29,6 +32,7 @@ typedef struct frame {
     cp_info *constant_pool;
     operand_stack *op_stack;
     uint32_t pc;
+    code_attribute *code;
 
     struct frame *next;
 } frame;
@@ -38,6 +42,17 @@ typedef struct jvm_stack
     frame *top;
     int frame_size;
 } jvm_stack;
+
+typedef struct class_instance{
+    uint8_t *name;
+    class_structure *class;
+    struct class_instance *next;
+} class_instance;
+
+typedef struct method_area{
+    class_instance *first;
+    class_instance *last;
+} method_area;
 
 /**
  * @brief Realiza o pop na pilha da JVM
@@ -75,3 +90,29 @@ void push_op_stack(operand_stack *stack, operand *new_operand);
  * @param frame_trash Frame a ser excluído
  */
 void free_frame(frame *frame_trash);
+
+/**
+ * @brief Cria uma instância de uma class
+ * 
+ * @param jclass Ponteiro para a estrutura da classe
+ * @return class_instance* Retorna ponteiro para a instância da classe
+ */
+class_instance * createClassInstance(class_structure *jclass);
+
+/**
+ * @brief Insere na Área de Métodos Global uma estrutura de classe
+ * 
+ * @param iclass Instância de uma classe
+ * @return class_instance* Retorna ponteiro para a instância da classe
+ */
+class_instance * insertClassStructure(class_structure *iclass);
+
+uint16_t findMain(class_instance *iclass);
+
+code_attribute findCode(class_instance *iclass, uint16_t method_index);
+
+frame * createFrame(code_attribute *code, cp_info *cp);
+
+void execute();
+
+#endif

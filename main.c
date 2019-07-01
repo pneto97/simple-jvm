@@ -1,22 +1,20 @@
 //main.c
-#include "read_utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#ifndef H_CLASS_STRUCTURE
-#define H_CLASS_STRUCTURE
 #include "class_structure.h"
-#endif
-
 #include "class_displayer.h"
 #include "class_reader.h"
+#include "read_utils.h"
+#include "global.h"
 
 int main(int argc, char *argv[]) {
     FILE *class_file = NULL;
     class_structure *jclass = NULL;
+    
+    initMethodArea();
+    initJVMStack();
 
-    printf("%d",argc);
     if (argc != 3) {
         printf("Especifique um arquivo .class!\n");
         exit(1);
@@ -37,6 +35,7 @@ int main(int argc, char *argv[]) {
 
             printClassFile(jclass);
             freeClass(jclass);
+            fclose(class_file);
             break;
 
         case 'r':
@@ -50,14 +49,20 @@ int main(int argc, char *argv[]) {
             jclass = readClassFile(class_file);
             checkConsistency(jclass, argv[2]);
 
-            printClassFile(jclass);
+            class_instance *iclass = insertClassStructure(jclass);
+            uint16_t method = findMain(iclass);
+            code_attribute code = findCode(iclass, method);
+
+            frame *fr = createFrame(&code, jclass->constant_pool);
+
+            execute();
+
             freeClass(jclass);
+            fclose(class_file);
 
         default:
             break;
     }
-
-    fclose(class_file);
 
     return 0;
 }

@@ -1,6 +1,7 @@
 //j8_class_structure.h
 //Estruturas de dados necessárias para armazenar os dados do .class
-
+#ifndef CLASS_STRUCTURE_H
+#define CLASS_STRUCTURE_H
 #include "attribute.h"
 #include "constant_pool.h"
 #include <stdint.h>
@@ -59,3 +60,5 @@ typedef struct class_structure {
 	uint16_t attributes_count;
 	attribute_info *attribute;
 } class_structure;
+
+#endif

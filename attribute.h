@@ -1,6 +1,7 @@
 //attribute.h
 //estruturas de dados necessarias para o attribute
-
+#ifndef ATTRIBUTE_H
+#define ATTRIBUTE_H
 #include <stdint.h>
 
 //Exception_table
@@ -114,3 +115,5 @@ typedef struct attribute {
 		localVariableTable_attribute localVariableTable_attribute;
 	} info;
 } attribute_info;
+
+#endif
