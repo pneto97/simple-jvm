@@ -17,4 +17,14 @@ void initMethodArea();
  */
 void initJVMStack();
 
+/**
+ * @brief Libera a pilha de frames
+ */
+void freeJVMStack();
+
+/**
+ * @brief Libera a Área de métodos
+ */
+void freeMethodArea();
+
 #endif

@@ -58,11 +58,17 @@ int main(int argc, char *argv[]) {
             execute();
 
             freeClass(jclass);
+
+            free(iclass);
+            free_frame(fr);
             fclose(class_file);
 
         default:
             break;
     }
+
+    freeJVMStack();
+    freeMethodArea();
 
     return 0;
 }

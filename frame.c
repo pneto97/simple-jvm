@@ -33,11 +33,13 @@ void push_op_stack(operand_stack *stack, operand *new_operand) {
     //stack->++;
 }
 
-void free_frame(frame *trash){
-    return;
-}
+// void free_frame(frame *trash){
+//     return;
+// }
 
 class_instance * createClassInstance(class_structure *jclass){
+    
+    //valgrind acusa erro aqui
     uint16_t name_index_pos = jclass->constant_pool[jclass->this_class - 1].info.classInfo.name_index;
     uint8_t *name = (uint8_t *)jclass->constant_pool[name_index_pos - 1].info.utf8Info.bytes;
 
@@ -107,6 +109,19 @@ frame * createFrame(code_attribute *code, cp_info *cp){
     push_jvm_stack(GLOBAL_jvm_stack, fr);
 
     return fr;
+}
+
+void free_frame(frame* f){
+
+    if(f != NULL){
+        if(f->local_vars != NULL)
+            free(f->local_vars);
+
+        if(f->op_stack != NULL)
+            free(f->op_stack);
+        
+        free(f);
+    }
 }
 
 void execute(){
