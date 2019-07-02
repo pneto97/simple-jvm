@@ -178,15 +178,14 @@ class_instance * createClassInstance(class_structure *jclass);
  * @param iclass Instância de uma classe
  * @return class_instance* Retorna ponteiro para a instância da classe
  */
-class_loaded * loadClass(class_structure *jclass);
 
 class_loaded * findClassLoaded(uint8_t *name);
 
-data_type getFieldType(int field_index, class_structure *jclass);
+void getFieldType(field *field, int field_index, class_structure *jclass);
 
-class_loaded * createClassLoaded(char *path, char *name);
+class_loaded * loadClass(char *path, char *name);
 
-uint8_t * getFieldName();
+void getFieldName(field *field, int field_index, class_structure *jclass);
 
 uint16_t findMain(class_loaded *lclass);
 

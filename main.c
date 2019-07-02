@@ -11,7 +11,7 @@
 int main(int argc, char *argv[]) {
     FILE *class_file = NULL;
     class_structure *jclass = NULL;
-    
+    class_loaded *lclass;
     initMethodArea();
     initJVMStack();
 
@@ -40,27 +40,20 @@ int main(int argc, char *argv[]) {
 
         case 'r':
 
-            class_file = fopen(argv[2], "rb");
-            if (class_file == NULL) {
-                printf("Erro ao abrir o arquivo %s!\n", argv[2]);
-                exit(1);
-            }
 
-            jclass = readClassFile(class_file);
-            checkConsistency(jclass, argv[2]);
-
-            class_loaded *lclass = loadClass(jclass);
+            
+            lclass = loadClass(argv[3],argv[2]);
             uint16_t method = findMain(lclass);
             code_attribute code = findCode(lclass, method);
 
-            frame *fr = createFrame(&code, jclass->constant_pool);
+            frame *fr = createFrame(&code, lclass->class_str->constant_pool);
 
             execute();
 
-            freeClass(jclass);
+            //freeClass(jclass);
 
-            free(lclass);
-            free_frame(fr);
+            //free(lclass);
+            //free_frame(fr);
             fclose(class_file);
 
         default:

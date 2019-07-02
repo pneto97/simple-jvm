@@ -60,23 +60,23 @@ class_loaded * findClassLoaded(uint8_t *name){
     return NULL;
 }
 
-data_type getFieldType(int field_index, class_structure *jclass){
+void getFieldType(field *field, int field_index, class_structure *jclass){
     uint16_t descriptor_index = jclass->fields[field_index].descriptor_index;
     uint8_t  *utf8 = jclass->constant_pool[descriptor_index - 1].info.utf8Info.bytes;
     uint8_t *class_name = NULL;
     switch((char) utf8[0]){
         case 'B':
-            return BYTE_TYPE;
+            field->type = BYTE_TYPE;
         case 'C':
-            return CHAR_TYPE;
+            field->type = CHAR_TYPE;
         case 'D':
-            return DOUBLE_TYPE;
+            field->type = DOUBLE_TYPE;
         case 'F':
-            return FLOAT_TYPE;
+            field->type = FLOAT_TYPE;
         case 'I':
-            return INT_TYPE;
+            field->type = INT_TYPE;
         case 'J':
-            return LONG_TYPE;
+            field->type = LONG_TYPE;
         case 'L':
             class_name = (uint8_t *)calloc(strlen((char *)utf8) - 1 ,sizeof(uint8_t));
             if(class_name == NULL){
@@ -89,28 +89,34 @@ data_type getFieldType(int field_index, class_structure *jclass){
                     j++;
                 }
             }
-            return CLASS_TYPE;
+            field->class_name = class_name;
+            field->type = CLASS_TYPE;
+            return;
         case 'S':
-            return SHORT_TYPE;
+            field->type = SHORT_TYPE;
         case 'Z':
-            return BOOLEAN_TYPE;
+            field->type = BOOLEAN_TYPE;
         case '[':
-            return ARRAY_TYPE;
+            field->type = ARRAY_TYPE;
         default:
-            return 0;
+            field->type = 0;
     }
+
+    field->class_name = NULL;
+
 }
 
-class_loaded * createClassLoaded(char *path, char *name){
+class_loaded * loadClass(char *path, char *name){
 
-    char *complete_path = (char *)calloc((strlen(path)+strlen(name) + 1), sizeof(char)); 
+    char *complete_path = (char *)calloc((strlen(path)+strlen(name) + 7), sizeof(char)); 
     class_structure *jclass;
     FILE *class_file;
-    class_loaded *lclass = (class_loaded *)malloc(sizeof(class_loaded));
+    class_loaded *lclass = NULL;
 
     // Concatenando strings
     strcat(complete_path, path);
     strcat(complete_path, name);
+    strcat(complete_path, ".class");
 
     // Buscar o arquivo
     class_file = fopen(complete_path, "rb");
@@ -123,9 +129,9 @@ class_loaded * createClassLoaded(char *path, char *name){
     jclass = readClassFile(class_file);
     checkConsistency(jclass, complete_path);
 
-    // Cria o class_loader
-    class_loaded *iclass = (class_loaded *) malloc(sizeof(class_loaded));
-    if(iclass == NULL){
+    // Cria o class_loaded
+    lclass = (class_loaded *) malloc(sizeof(class_loaded));
+    if(lclass == NULL){
         printf("Erro na alocação de memória");
         exit(1);
     }
@@ -150,30 +156,36 @@ class_loaded * createClassLoaded(char *path, char *name){
             exit(1);
         }
         if(jclass->fields->access_flags & ACC_STATIC){
-            fields[j].type = getFieldType(i, jclass);
-            fields[j].name = getFieldName(i, jclass);
+            getFieldType(&fields[j],i, jclass);
+            getFieldName(&fields[j],i, jclass);
         }
         j++;
     }
 
+    if(GLOBAL_method_area->last != NULL){
+        GLOBAL_method_area->last->next = lclass;
+    }
+
+    GLOBAL_method_area->last = lclass;
+    lclass->next = NULL;
+
     return NULL;
 }
 
-uint8_t * getFieldName(){
-    return 0;
+void  getFieldName(field *field, int field_index, class_structure *jclass){
+    uint16_t name_index = jclass->fields[field_index].name_index;
+    uint8_t  *utf8 = jclass->constant_pool[name_index - 1].info.utf8Info.bytes;
+    uint8_t *name = (uint8_t *)calloc((strlen((char *)utf8) + 1), sizeof(uint8_t));
+    strcpy((char *)name, (char *)utf8);
+    field->name = name;
 }
 
-class_loaded * loadClass(class_structure *jclass){
-    // class_instance *lclass = createClassLoaded(jclass);
-    // if(GLOBAL_method_area->last != NULL){
-    //     GLOBAL_method_area->last->next = iclass;
-    // }
-    // GLOBAL_method_area->last = iclass;
-    // iclass->next = NULL;
-
-    // return lclass;
-
-    return NULL;
+uint8_t * getClassName(class_structure *jclass){
+    uint16_t name_index = jclass->this_class;
+    uint8_t  *utf8 = jclass->constant_pool[name_index - 1].info.utf8Info.bytes;
+    uint8_t *name = (uint8_t *)calloc((strlen((char *)utf8) + 1), sizeof(uint8_t));
+    strcpy((char *)name, (char *)utf8);
+    return name;
 }
 
 uint16_t findMain(class_loaded *lclass){
