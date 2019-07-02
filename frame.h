@@ -32,7 +32,6 @@ typedef struct frame {
     cp_info *constant_pool;
     operand_stack *op_stack;
     uint32_t pc;
-    code_attribute *code;
 
     struct frame *next;
 } frame;
@@ -43,16 +42,90 @@ typedef struct jvm_stack
     int frame_size;
 } jvm_stack;
 
+typedef uint32_t var_cat1;
+
+typedef struct var_cat2{
+    uint32_t high;
+    uint32_t low;
+}var_cat2;
+
+typedef union data{
+    var_cat1 datac1;
+    var_cat2 datac2;
+} data;
+
+typedef struct field{
+    uint8_t *name;
+    uint8_t *class_name;
+    data_type type;
+    data data;
+} field;
+
+typedef struct class_loaded{
+    uint8_t *name;
+    class_structure *class_str;
+    field *fields; // fields estáticos
+
+    struct class_loaded *next;
+}class_loaded;
+
 typedef struct class_instance{
     uint8_t *name;
-    class_structure *class;
-    struct class_instance *next;
+    class_loaded *class; 
+    field *fields;  // fields da instância
 } class_instance;
 
 typedef struct method_area{
-    class_instance *first;
-    class_instance *last;
+    class_loaded *first;
+    class_loaded *last;
 } method_area;
+
+typedef union object{
+    class_instance *class_inst;
+    // interface_instance;
+    // array array;
+    // null;
+} object;
+
+typedef struct object_handler{
+    class_loaded *class;
+    class_instance *class_instance;
+} objectref;
+
+typedef struct array{
+    uint16_t **data;
+    int arraysize;
+} array;
+
+// typedef struct heap{
+//     // LIsta/vetor/pilha de object
+// }
+
+// typedef struct interface_instance{
+//     data;
+//     fields;
+//     class_structure *class;
+// }
+
+// MethodArea -> Classes
+
+//classLoader(nome){
+    // SE classe não existe nas Classes carregadas
+        // busca o arquivo, cria class_structure
+        // Instaciar os fields estáticos da classe 
+        // retorna endereço da nova classe carregada
+    // retorna endereço da nova classe carregada
+//}
+
+//newClassInstance(){
+    // IF not ifClassLoaded()
+        // class = classLoader()
+ 
+    // class_inst = createClassInstance(class) <- Instacia os fields da classe na heap
+    // 
+
+    // Retornar class_inst
+//}
 
 /**
  * @brief Realiza o pop na pilha da JVM
@@ -105,11 +178,19 @@ class_instance * createClassInstance(class_structure *jclass);
  * @param iclass Instância de uma classe
  * @return class_instance* Retorna ponteiro para a instância da classe
  */
-class_instance * insertClassStructure(class_structure *iclass);
+class_loaded * loadClass(class_structure *jclass);
 
-uint16_t findMain(class_instance *iclass);
+class_loaded * findClassLoaded(uint8_t *name);
 
-code_attribute findCode(class_instance *iclass, uint16_t method_index);
+data_type getFieldType(int field_index, class_structure *jclass);
+
+class_loaded * createClassLoaded(char *path, char *name);
+
+uint8_t * getFieldName();
+
+uint16_t findMain(class_loaded *lclass);
+
+code_attribute findCode(class_loaded *lclass, uint16_t method_index);
 
 frame * createFrame(code_attribute *code, cp_info *cp);
 

@@ -49,9 +49,9 @@ int main(int argc, char *argv[]) {
             jclass = readClassFile(class_file);
             checkConsistency(jclass, argv[2]);
 
-            class_instance *iclass = insertClassStructure(jclass);
-            uint16_t method = findMain(iclass);
-            code_attribute code = findCode(iclass, method);
+            class_loaded *lclass = loadClass(jclass);
+            uint16_t method = findMain(lclass);
+            code_attribute code = findCode(lclass, method);
 
             frame *fr = createFrame(&code, jclass->constant_pool);
 
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
 
             freeClass(jclass);
 
-            free(iclass);
+            free(lclass);
             free_frame(fr);
             fclose(class_file);
 

@@ -2,6 +2,7 @@ import java.util.ArrayList;
 
 public class T7
 {
+    private static int car = 4;
 	public static void main(String[] args) {
 		System.out.println("Hello World!");
 

@@ -7,6 +7,7 @@ typedef enum data_type {
     INT_TYPE,
     LONG_TYPE,
     CHAR_TYPE,
+    BOOLEAN_TYPE,
     FLOAT_TYPE,
     DOUBLE_TYPE,
     RETURN_ADDR_TYPE, 
