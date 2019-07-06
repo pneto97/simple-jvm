@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <stdint.h>
+#include "frame.h"
+#include "global.h"
 
 void Nop         (void){
     printf("NOP\n");
@@ -18,20 +21,53 @@ void Fconst_1    (void){}
 void Fconst_2    (void){}
 void Dconst_0    (void){}
 void Dconst_1    (void){}
-void Bipush      (void){}
+
+void Bipush (void){
+    int8_t byte;
+    int32_t extended;
+    operand op_variable;
+
+    extended = (int32_t)byte;
+    op_variable.data = (uint32_t)extended;
+    op_variable.cat = UNIQUE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
+
+}
+
 void Sipush      (void){}
 void Ldc         (void){}
 void Ldc_w       (void){}
 void Ldc2_w      (void){}
-void Iload  (void){}
+void Iload  (void){
+    uint8_t index = GLOBAL_code->code[GLOBAL_jvm_stack->top->pc++];
+    operand value = GLOBAL_jvm_stack->top->local_vars[index];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);
+}
 void Lload  (void){}
 void Fload  (void){}
 void Dload  (void){}
 void Aload  (void){}
-void Iload_0(void){}
-void Iload_1(void){}
-void Iload_2(void){}
-void Iload_3(void){}
+void Iload_0(void){
+    uint8_t index = 0;
+    operand value = GLOBAL_jvm_stack->top->local_vars[index];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);
+}
+void Iload_1(void){
+    uint8_t index = 1;
+    operand value = GLOBAL_jvm_stack->top->local_vars[index];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);
+}
+void Iload_2(void){
+    uint8_t index = 2;
+    operand value = GLOBAL_jvm_stack->top->local_vars[index];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);
+}
+void Iload_3(void){
+    uint8_t index = 3;
+    operand value = GLOBAL_jvm_stack->top->local_vars[index];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);
+}
 void Lload_0(void){}
 void Lload_1(void){}
 void Lload_2(void){}
@@ -56,15 +92,38 @@ void Aaload (void){}
 void Baload (void){}
 void Caload (void){}
 void Saload (void){}
-void Istore   (void){}
+
+void Istore (void){
+    uint8_t index = GLOBAL_code->code[GLOBAL_jvm_stack->top->pc++];
+    operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = value;
+}
 void Lstore   (void){}
 void Fstore   (void){}
 void Dstore   (void){}
 void Astore   (void){}
-void Istore_0 (void){}
-void Istore_1 (void){}
-void Istore_2 (void){}
-void Istore_3 (void){}
+
+void Istore_0 (void){
+    uint8_t index = 0;
+    operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = value;
+}
+
+void Istore_1 (void){
+    uint8_t index = 1;
+    operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = value;
+}
+void Istore_2 (void){
+    uint8_t index = 2;
+    operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = value;
+}
+void Istore_3 (void){
+    uint8_t index = 3;
+    operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = value;
+}
 void Lstore_0 (void){}
 void Lstore_1 (void){}
 void Lstore_2 (void){}
@@ -98,7 +157,17 @@ void Dup2     (void){}
 void Dup2_x1  (void){}
 void Dup2_x2  (void){}
 void Swap     (void){}
-void Iadd   (void){} 
+void Iadd   (void){
+    operand op;
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    int32_t result = (int32_t)value1.data + (int32_t)value2.data;
+    op.data = result;
+    op.cat = UNIQUE;
+    op.type = INT_TYPE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack,op);
+} 
 void Ladd   (void){} 
 void Fadd   (void){} 
 void Dadd   (void){} 

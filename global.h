@@ -7,6 +7,9 @@ method_area *GLOBAL_method_area;
 // Pilha da JVM
 jvm_stack *GLOBAL_jvm_stack;
 
+//code Global
+code_attribute *GLOBAL_code;
+
 /**
  * @brief Inicializa a Área de Métodos Global
  */

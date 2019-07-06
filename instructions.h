@@ -2,6 +2,7 @@
 #define INSTRUCTIONS_H
 #include <stdio.h>
 
+
 void Nop         ();
 void Aconst_null ();
 void Iconst_m1   ();
@@ -126,8 +127,8 @@ void Ishl   ();
 void Lshl   (); 
 void Ishr   (); 
 void Lshr   (); 
-void Iushr   ();
-void Lushr   ();
+void Iushr  ();
+void Lushr  ();
 void Iand   (); 
 void Land   (); 
 void Ior    (); 

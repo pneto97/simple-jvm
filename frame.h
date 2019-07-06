@@ -9,26 +9,28 @@
 #include "class_structure.h"
 #include "data_type.h"
 
-typedef struct local_variable {
-    data_type *type;
-    uint32_t data;
-} local_variable;
-
 typedef struct operand
 {
     cat_type cat;
     data_type type;
     uint32_t data;
-    struct operand *next;
+
 } operand;
 
+typedef struct operand_item
+{
+    operand op;
+    struct operand_item *next;
+} operand_item;
+
+
 typedef struct operand_stack {
-    operand *top;
+    operand_item *top;
     int size; //nao sabemos se vamos usar
 } operand_stack;
 
 typedef struct frame {
-    local_variable *local_vars;
+    operand *local_vars;
     cp_info *constant_pool;
     operand_stack *op_stack;
     uint32_t pc;
@@ -147,7 +149,7 @@ void push_jvm_stack(jvm_stack *stack, frame *new_frame);
  * 
  * @param stack Referência a pilha de operandos
  */
-void pop_op_stack(operand_stack *stack);
+operand pop_op_stack(operand_stack *stack);
 
 /**
  * @brief Realiza o push da pilha de operandos
@@ -155,7 +157,7 @@ void pop_op_stack(operand_stack *stack);
  * @param stack Refêrencia a pilha de operandos
  * @param new_frame Referência ao operando a ser inserido
  */
-void push_op_stack(operand_stack *stack, operand *new_operand);
+void push_op_stack(operand_stack *stack, operand new_operand);
 
 /**
  * @brief Libera memória de um frame

@@ -22,16 +22,20 @@ void push_jvm_stack(jvm_stack *stack, frame *new_frame) {
     stack->frame_size++;
 }
 
-void pop_op_stack(operand_stack *stack) {
-    operand *aux = stack->top;
+operand pop_op_stack(operand_stack *stack) {
+    operand_item *aux = stack->top;
     stack->top = stack->top->next;
     //stack->--;
+    operand ret = aux->op;
     free(aux);
+    return ret;
 }
 
-void push_op_stack(operand_stack *stack, operand *new_operand) {
-    new_operand->next = stack->top;
-    stack->top      = new_operand;
+void push_op_stack(operand_stack *stack, operand new_operand) {
+    operand_item *op_item = (operand_item *) malloc(sizeof(operand_item));
+    op_item->op = new_operand;
+    op_item->next = stack->top;
+    stack->top  = op_item;
     //stack->++;
 }
 
@@ -234,7 +238,7 @@ frame * createFrame(code_attribute *code, cp_info *cp){
     frame *fr = (frame *)malloc(sizeof(frame));
 
     fr->constant_pool = cp;
-    fr->local_vars = (local_variable *)malloc(code->max_locals*sizeof(local_variable));
+    fr->local_vars = (operand *)malloc(code->max_locals*sizeof(operand));
     fr->op_stack = (operand_stack *)malloc(sizeof(operand_stack));
     fr->pc = 0;
 
