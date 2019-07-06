@@ -7,6 +7,7 @@
 #include "attribute.h"
 #include "class_displayer.h"
 #include "class_reader.h"
+#include "opcode.h"
 
 void pop_jvm_stack(jvm_stack *stack) {
     frame *aux = stack->top;
@@ -64,19 +65,26 @@ void getFieldType(field *field, int field_index, class_structure *jclass){
     uint16_t descriptor_index = jclass->fields[field_index].descriptor_index;
     uint8_t  *utf8 = jclass->constant_pool[descriptor_index - 1].info.utf8Info.bytes;
     uint8_t *class_name = NULL;
+    field->class_name = NULL;
     switch((char) utf8[0]){
         case 'B':
             field->type = BYTE_TYPE;
+            break;
         case 'C':
             field->type = CHAR_TYPE;
+            break;
         case 'D':
             field->type = DOUBLE_TYPE;
+            break;
         case 'F':
             field->type = FLOAT_TYPE;
+            break;
         case 'I':
             field->type = INT_TYPE;
+            break;
         case 'J':
             field->type = LONG_TYPE;
+            break;
         case 'L':
             class_name = (uint8_t *)calloc(strlen((char *)utf8) - 1 ,sizeof(uint8_t));
             if(class_name == NULL){
@@ -91,18 +99,20 @@ void getFieldType(field *field, int field_index, class_structure *jclass){
             }
             field->class_name = class_name;
             field->type = CLASS_TYPE;
-            return;
+            break;
         case 'S':
             field->type = SHORT_TYPE;
+            break;
         case 'Z':
             field->type = BOOLEAN_TYPE;
+            break;
         case '[':
             field->type = ARRAY_TYPE;
+            break;
         default:
             field->type = 0;
+            break;
     }
-
-    field->class_name = NULL;
 
 }
 
@@ -158,18 +168,19 @@ class_loaded * loadClass(char *path, char *name){
         if(jclass->fields->access_flags & ACC_STATIC){
             getFieldType(&fields[j],i, jclass);
             getFieldName(&fields[j],i, jclass);
+            j++;
         }
-        j++;
     }
 
     if(GLOBAL_method_area->last != NULL){
         GLOBAL_method_area->last->next = lclass;
     }
-
-    GLOBAL_method_area->last = lclass;
+    else{
+        GLOBAL_method_area->last = lclass;
+    }
     lclass->next = NULL;
 
-    return NULL;
+    return lclass;
 }
 
 void  getFieldName(field *field, int field_index, class_structure *jclass){
@@ -188,7 +199,7 @@ uint8_t * getClassName(class_structure *jclass){
     return name;
 }
 
-uint16_t findMain(class_loaded *lclass){
+method_info * findMain(class_loaded *lclass){
 
     class_structure* jclass = lclass->class_str;
     for(uint16_t i=0; i< jclass->methods_count; i++){
@@ -196,23 +207,23 @@ uint16_t findMain(class_loaded *lclass){
         char *name = (char *) jclass->constant_pool[name_index-1].info.utf8Info.bytes;
 
         if(!strcmp(name, "main"))
-            return i;
+            return &jclass->methods[i];
     }
     printf("Main não encontrada\n");
     exit(2);
 }
 
-code_attribute findCode(class_loaded *lclass, uint16_t method_index){
+code_attribute* findCode(class_loaded *lclass, method_info *method){
     class_structure* jclass = lclass->class_str;
-    attribute_info *attr = jclass->methods[method_index].attributes;
-    uint16_t attr_count = jclass->methods[method_index].attributes_count;
+    attribute_info *attr = method->attributes;
+    uint16_t attr_count = method->attributes_count;
 
     for(uint16_t i=0; i< jclass->attributes_count; i++){
         uint16_t name_index = attr[i].attribute_name_index;
         char *name = (char *) jclass->constant_pool[name_index-1].info.utf8Info.bytes;
 
         if(!strcmp(name, "Code")){
-            return attr[i].info.code_attribute;
+            return &attr[i].info.code_attribute;
         }
     }
     printf("Code não encontrado\n");
@@ -245,11 +256,14 @@ void free_frame(frame* f){
     }
 }
 
-void execute(){
+void execute(code_attribute *code){
     frame *fr = GLOBAL_jvm_stack->top;
     
-    // for(uint16_t i = 0; i< code->code_length; i++){
-    //     //instruction(code.code[i]);
-    //     printf("%d -> %x\n", i,code->code[i]);
-    // }
+    
+    for(uint16_t i = 0; i< code->code_length; i++){
+        //instruction(code.code[i]);
+        printOpcode(code->code[i]);
+        printf("\n");
+        // printf("%d -> %x\n", i,code->code[i]);
+    }
 }

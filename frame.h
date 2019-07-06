@@ -187,12 +187,12 @@ class_loaded * loadClass(char *path, char *name);
 
 void getFieldName(field *field, int field_index, class_structure *jclass);
 
-uint16_t findMain(class_loaded *lclass);
+method_info * findMain(class_loaded *lclass);
 
-code_attribute findCode(class_loaded *lclass, uint16_t method_index);
+code_attribute * findCode(class_loaded *lclass, method_info  *method);
 
 frame * createFrame(code_attribute *code, cp_info *cp);
 
-void execute();
+void execute(code_attribute *code);
 
 #endif
