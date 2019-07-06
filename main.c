@@ -7,6 +7,7 @@
 #include "class_reader.h"
 #include "read_utils.h"
 #include "global.h"
+#include "instructions.h"
 
 int main(int argc, char *argv[]) {
     FILE *class_file = NULL;
@@ -16,7 +17,7 @@ int main(int argc, char *argv[]) {
     char ponto_class_path[100],ponto_class_name[100];
     initMethodArea();
     initJVMStack();
-
+    //(*inst_vector[0x00])(); como chamar a funcao da array
     
     if (argc == 1){
         printf("Digite l para leitura ou r para rodar\n");
