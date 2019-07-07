@@ -8,6 +8,7 @@
 #include "class_displayer.h"
 #include "class_reader.h"
 #include "opcode.h"
+#include "instructions.h"
 
 void pop_jvm_stack(jvm_stack *stack) {
     frame *aux = stack->top;
@@ -70,6 +71,7 @@ void getFieldType(field *field, int field_index, class_structure *jclass){
     uint8_t  *utf8 = jclass->constant_pool[descriptor_index - 1].info.utf8Info.bytes;
     uint8_t *class_name = NULL;
     field->class_name = NULL;
+    printf("utf8 - %c\n", utf8[0]);
     switch((char) utf8[0]){
         case 'B':
             field->type = BYTE_TYPE;
@@ -100,6 +102,7 @@ void getFieldType(field *field, int field_index, class_structure *jclass){
                     class_name[j] = utf8[i];    // LClass;\0 -> retira o L e o ;
                     j++;
                 }
+                
             }
             field->class_name = class_name;
             field->type = CLASS_TYPE;
@@ -117,7 +120,7 @@ void getFieldType(field *field, int field_index, class_structure *jclass){
             field->type = 0;
             break;
     }
-
+    printf("class name - %s\n", field->class_name);
 }
 
 class_loaded * loadClass(char *path, char *name){
@@ -156,11 +159,12 @@ class_loaded * loadClass(char *path, char *name){
 
     int static_field_count = 0;
     int field_count = jclass->fields_count;
-
+    // printf("fields count: %d\n",field_count );
     // Obtendo quantidade de fields
     for (int i = 0; i < field_count; i++)
         if(jclass->fields->access_flags & ACC_STATIC)
             static_field_count++;
+            
 
     for (int i = 0,j = 0; i < field_count; i++)
     {
@@ -170,6 +174,7 @@ class_loaded * loadClass(char *path, char *name){
             exit(1);
         }
         if(jclass->fields->access_flags & ACC_STATIC){
+            // printf("Entrou no if do getFieldNAme\n");
             getFieldType(&fields[j],i, jclass);
             getFieldName(&fields[j],i, jclass);
             j++;
@@ -263,11 +268,18 @@ void free_frame(frame* f){
 void execute(code_attribute *code){
     frame *fr = GLOBAL_jvm_stack->top;
     
-    
-    for(uint16_t i = 0; i< code->code_length; i++){
-        //instruction(code.code[i]);
-        printOpcode(code->code[i]);
-        printf("\n");
-        // printf("%d -> %x\n", i,code->code[i]);
+    // inst_vector[0xb2](code);
+
+    while (GLOBAL_jvm_stack->top->pc < code->code_length){
+        // printf("pc: %d\n",GLOBAL_jvm_stack->top->pc);
+        // printOpcode(code->code[GLOBAL_jvm_stack->top->pc]);
+        // printf("\n");
+        inst_vector[code->code[GLOBAL_jvm_stack->top->pc]](code);
+        // printf("\n");
+        GLOBAL_jvm_stack->top->pc++;
+
     }
+
+
+    // pop frame
 }

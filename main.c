@@ -7,7 +7,6 @@
 #include "class_reader.h"
 #include "read_utils.h"
 #include "global.h"
-#include "instructions.h"
 
 int main(int argc, char *argv[]) {
     FILE *class_file = NULL;
@@ -69,8 +68,9 @@ int main(int argc, char *argv[]) {
 
             frame *fr = createFrame(code, lclass->class_str->constant_pool);
 
+            // Para debugar, descomente a linha de baixo
             execute(code);
-
+            
             //freeClass(jclass);
 
             //free(lclass);
