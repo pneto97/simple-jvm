@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DEBUG 1
+#define DEBUG 0
 
 void pop_jvm_stack(jvm_stack *stack) {
     frame *aux = stack->top;

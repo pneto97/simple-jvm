@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <string.h>
 #define DEBUG 1
-#define VERBOSE 1
 
 void Nop(code_attribute *code) {
     if (DEBUG) printf("NOP\n");
@@ -727,6 +726,9 @@ void Invokevirtual(code_attribute *code) {
     char *name       = getUtf8Name(index);
     char *type       = getUtf8Type(index);
 
+    operand op2;
+    uint64_t longao;
+
     printf("CLASS NAME:  %s\n", class_name);
     printf("METHOD NAME: %s\n", name);
     printf("TYPE:        %s\n", type);
@@ -736,62 +738,66 @@ void Invokevirtual(code_attribute *code) {
                 (!strcmp(name, "println") || !strcmp(name, "print"));
 
     // printf("Print? : %d \n", isPrint);
-    // if (isPrint) {
+    if (isPrint) {
 
-    //     if (method_deor != "()V") {
-    //         Operand *op = this_frame->operand_stack.top();
-    //         this_frame->operand_stack.pop();
-
-    //         switch (op->tag) {
-    //         case CONSTANT_String:
-    //             std::cout << *(op->type_string);
-    //             break;
-    //         case CONSTANT_Integer:
-
-    //             std::cout << (int32_t)op->type_int;
-    //             break;
-    //         case CONSTANT_Float:
-    //             float converted_operand;
-    //             memcpy(&converted_operand, &op->type_float, sizeof(float));
-
-    //             std::cout << (float)converted_operand;
-    //             break;
-    //         case CONSTANT_Byte:
-    //             std::cout << (int)op->type_byte;
-    //             break;
-    //         case CONSTANT_Char:
-    //             std::cout << (char)op->type_char;
-    //             break;
-    //         case CONSTANT_Short:
-    //             std::cout << (short)op->type_short;
-    //             break;
-    //         case CONSTANT_Boolean:
-    //             std::cout << (bool)op->type_bool;
-    //             break;
-    //         case CONSTANT_Long:
-    //             std::cout << (long)op->type_long;
-    //             break;
-    //         case CONSTANT_Empty:
-    //             printf("null");
-    //             break;
-    //         case CONSTANT_Double: {
-    //             double converted_operand;
-    //             memcpy(&converted_operand, &op->type_double, sizeof(double));
-    //             std::cout << (double)converted_operand;
-    //             break;
-    //         }
-    //         case CONSTANT_Class: {
+        if (strcmp(type,"()V")) {
+            operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+            switch (op.type) {
+            // case CONSTANT_String:
+            //     std::cout << *(op->type_string);
+            //     break;
+            case RETURN_ADDR_TYPE: 
+            case ARRAY_TYPE:
+            case INTERFACE_TYPE:
+                printf("====FALTA IMPLEMENTAR====");
+                break;
+            case INT_TYPE:
+                printf("%d", (int32_t)op.data);
+                break;
+            case FLOAT_TYPE:
+                printf("%f", (float)op.data);
+                break;
+            case BYTE_TYPE:
+                printf("%x", (uint8_t)op.data);
+                break;
+            case CHAR_TYPE:
+                printf("%c", (char)op.data);
+                break;
+            case SHORT_TYPE:
+                printf("%d", (int16_t)op.data);
+                break;
+            case BOOLEAN_TYPE:
+                op.data == 0 ? printf("false") : printf("true");
+                break;
+            case LONG_TYPE:
+                op2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+                longao =  (((uint64_t) op.data << 32) | (uint64_t)op2.data); 
+                printf("%ld", longao);
+                break;
+            case NULL_TYPE:
+                printf("NULL");
+                break;
+            case DOUBLE_TYPE: {
+                op2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+                longao =  (((uint64_t) op.data << 32) | (uint64_t)op2.data);
+                printf("%lf", (double) longao);
+                break;
+            }
+            case CLASS_TYPE: {
     //             Instance *class_instance  = op->class_instance;
     //             ClassLoader *class_loader = class_instance->classe;
     //             std::string class_name    = cpAttrAux.getUTF8(class_loader->getConstPool(), class_loader->getThisClass());
     //             std::cout << class_name << "@" << class_instance;
-    //             break;
-    //         }
-    //         }
+                break;
+            }
+            default:
+                printf("====BUG====");
+                break;    
+            }
 
-    //         if (method_name == "println") std::cout << std::endl;
-    //     }
-    // } else if (class_name == "java/lang/StringBuilder" && method_name == "append") {
+            if (!strcmp(name,"println")) printf("\n");
+        }
+    } else if (!strcmp(class_name, "java/lang/StringBuilder") && !strcmp(name,"append")) {
     //     MethodsArea maux;
     //     Operand *op = this_frame->operand_stack.top();
     //     this_frame->operand_stack.pop();
@@ -847,7 +853,7 @@ void Invokevirtual(code_attribute *code) {
     //     strLen->type_int = strOp->type_string->size();
 
     //     this_frame->operand_stack.push(strLen);
-    // } else {
+    } else {
 
     //     int argsCount  = 0;
     //     uint16_t count = 1;
@@ -896,7 +902,7 @@ void Invokevirtual(code_attribute *code) {
     //     }
     //     Interpreter auxInter;
     //     auxInter.frame_stack.push(newFrame);
-    // }
+    }
 }
 void Invokespecial(code_attribute *code) {
     if (DEBUG) printf("INVOKESPECIAL\n");
