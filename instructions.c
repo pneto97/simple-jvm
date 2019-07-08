@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
 #define DEBUG 1
 
 void Nop(code_attribute *code) {
@@ -14,9 +13,6 @@ void Aconst_null(code_attribute *code) {
     if (DEBUG) printf("ACONST_NULL\n");
 
     operand op_variable;
-    op_variable.data = 0;
-    op_variable.type = NULL_TYPE;
-    op_variable.cat = UNIQUE;
     //*op_variable.data = NULL; Verificar se será um tipo de objeto (corretude)
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
 }
