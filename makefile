@@ -1,4 +1,4 @@
-CC = gcc -std=c99 -g
+CC = gcc -std=c99 -g -Wall
 SRC_FILES = main.c read_utils.c class_reader.c class_displayer.c primitive_types.c opcode.c frame.c global.c instructions.c instruction_helpers.c
 EXEC = main
 LIB = -lm

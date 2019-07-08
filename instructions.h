@@ -2,10 +2,6 @@
 #define INSTRUCTIONS_H
 #include <stdio.h>
 
-
-
-
-
 void Nop         (code_attribute *);
 void Aconst_null (code_attribute *);
 void Iconst_m1   (code_attribute *);

@@ -187,7 +187,7 @@ void readConstantPool(FILE *class_file, class_structure *jclass) {
             jclass->constant_pool[i].info.invokeDynamicInfo.name_and_type_index         = beRead16(class_file);
 
             break;
-        defaut:
+        default:
             printf("TAG do constant pool inexistente!\n");
             exit(1);
         }
@@ -381,8 +381,6 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
 
             attr_info[i].info.sourceFile_attribute.sourcefile_index = beRead16(class_file);
 
-            uint16_t sourcefile_index = attr_info[i].info.sourceFile_attribute.sourcefile_index;
-
         } else if (!strcmp(attribute_type, "InnerClasses")) {
 
             attr_info[i].info.innerClasses_attribute.number_of_classes = beRead16(class_file);
@@ -416,8 +414,6 @@ void readAttributes(FILE *class_file, attribute_info *attr_info, uint16_t attrib
 
 void readInterfaces(FILE *class_file, class_structure *jclass) {
     jclass->interfaces_count = beRead16(class_file);
-
-    uint8_t interfaces_count = jclass->interfaces_count;
 
     //aloca o vetor de indices de constantes
     jclass->interfaces = (uint16_t *)malloc(
