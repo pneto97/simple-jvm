@@ -25,30 +25,30 @@ void Ldc_w       (code_attribute *);
 void Ldc2_w      (code_attribute *);
 // Paulo
 void Iload  (code_attribute *); //Feito
-void Lload  (code_attribute *);
-void Fload  (code_attribute *);
-void Dload  (code_attribute *);
-void Aload  (code_attribute *);
+void Lload  (code_attribute *); //Feito
+void Fload  (code_attribute *); //Feito
+void Dload  (code_attribute *); //Feito
+void Aload  (code_attribute *); //Feito
 void Iload_0(code_attribute *); //Feito
 void Iload_1(code_attribute *); //Feito
 void Iload_2(code_attribute *); //Feito
 void Iload_3(code_attribute *); //Feito
-void Lload_0(code_attribute *);
-void Lload_1(code_attribute *);
-void Lload_2(code_attribute *);
-void Lload_3(code_attribute *);
-void Fload_0(code_attribute *);
-void Fload_1(code_attribute *);
-void Fload_2(code_attribute *);
-void Fload_3(code_attribute *);
-void Dload_0(code_attribute *);
-void Dload_1(code_attribute *);
-void Dload_2(code_attribute *);
-void Dload_3(code_attribute *);
-void Aload_0(code_attribute *);
-void Aload_1(code_attribute *);
-void Aload_2(code_attribute *);
-void Aload_3(code_attribute *);
+void Lload_0(code_attribute *); //Feito
+void Lload_1(code_attribute *); //Feito
+void Lload_2(code_attribute *); //Feito
+void Lload_3(code_attribute *); //Feito
+void Fload_0(code_attribute *); //Feito
+void Fload_1(code_attribute *); //Feito
+void Fload_2(code_attribute *); //Feito
+void Fload_3(code_attribute *); //Feito
+void Dload_0(code_attribute *); //Feito
+void Dload_1(code_attribute *); //Feito
+void Dload_2(code_attribute *); //Feito
+void Dload_3(code_attribute *); //Feito
+void Aload_0(code_attribute *); //Feito
+void Aload_1(code_attribute *); //Feito
+void Aload_2(code_attribute *); //Feito
+void Aload_3(code_attribute *); //Feito
 
 void Iaload (code_attribute *);
 void Laload (code_attribute *);
