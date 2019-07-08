@@ -69,19 +69,19 @@ void Istore_2 (code_attribute *); //Feito
 void Istore_3 (code_attribute *); //Feito
 
 // Jomas
-void Lstore_0 (code_attribute *);
-void Lstore_1 (code_attribute *);
-void Lstore_2 (code_attribute *);
-void Lstore_3 (code_attribute *);
-void Fstore_0 (code_attribute *);
-void Fstore_1 (code_attribute *);
-void Fstore_2 (code_attribute *);
-void Fstore_3 (code_attribute *);
-void Dstore_0 (code_attribute *);
-void Dstore_1 (code_attribute *);
-void Dstore_2 (code_attribute *);
-void Dstore_3 (code_attribute *);
-void Astore_0 (code_attribute *);
+void Lstore_0 (code_attribute *);   //feito
+void Lstore_1 (code_attribute *);   //feito
+void Lstore_2 (code_attribute *);   //feito
+void Lstore_3 (code_attribute *);   //feito
+void Fstore_0 (code_attribute *);   //feito
+void Fstore_1 (code_attribute *);   //feito
+void Fstore_2 (code_attribute *);   //feito
+void Fstore_3 (code_attribute *);   //feito
+void Dstore_0 (code_attribute *);   //feito
+void Dstore_1 (code_attribute *);   //feito
+void Dstore_2 (code_attribute *);   //feito
+void Dstore_3 (code_attribute *);   //feito
+void Astore_0 (code_attribute *);   
 void Astore_1 (code_attribute *);
 void Astore_2 (code_attribute *);
 void Astore_3 (code_attribute *);

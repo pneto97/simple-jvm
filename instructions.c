@@ -327,39 +327,92 @@ void Istore_3(code_attribute *code) {
 }
 void Lstore_0(code_attribute *code) {
     if (DEBUG) printf("LSTORE_0\n");
+    uint8_t index                                = 0;
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand low                                  = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = low;
 }
 void Lstore_1(code_attribute *code) {
     if (DEBUG) printf("LSTORE_1\n");
+    uint8_t index                                = 1;
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand low                                  = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = low;
 }
 void Lstore_2(code_attribute *code) {
     if (DEBUG) printf("LSTORE_2\n");
+    uint8_t index                                = 2;
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand low                                  = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = low;
 }
 void Lstore_3(code_attribute *code) {
     if (DEBUG) printf("LSTORE_3\n");
+    uint8_t index                                = 3;
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand low                                  = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = low;
 }
 void Fstore_0(code_attribute *code) {
     if (DEBUG) printf("FSTORE_0\n");
+    uint8_t index                                = 0;
+    operand value                                = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = value;
+
 }
 void Fstore_1(code_attribute *code) {
     if (DEBUG) printf("FSTORE_1\n");
+    uint8_t index                                = 1;
+    operand value                                = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = value;
 }
 void Fstore_2(code_attribute *code) {
     if (DEBUG) printf("FSTORE_2\n");
+    uint8_t index                                = 2;
+    operand value                                = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = value;
 }
 void Fstore_3(code_attribute *code) {
     if (DEBUG) printf("FSTORE_3\n");
+    uint8_t index                                = 3;
+    operand value                                = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = value;
 }
 void Dstore_0(code_attribute *code) {
     if (DEBUG) printf("DSTORE_0\n");
+    uint8_t index                                = 0;
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand low                                  = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = low;
 }
 void Dstore_1(code_attribute *code) {
     if (DEBUG) printf("DSTORE_1\n");
+    uint8_t index                                = 1;
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand low                                  = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = low;
 }
 void Dstore_2(code_attribute *code) {
     if (DEBUG) printf("DSTORE_2\n");
+    uint8_t index                                = 2;
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand low                                  = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = low;
 }
 void Dstore_3(code_attribute *code) {
     if (DEBUG) printf("DSTORE_3\n");
+    uint8_t index                                = 3;
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand low                                  = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = low;
 }
 void Astore_0(code_attribute *code) {
     if (DEBUG) printf("ASTORE_0\n");
