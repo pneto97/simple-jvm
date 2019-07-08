@@ -943,6 +943,8 @@ void Fcmpl(code_attribute *code) {
     uint32_t result;
     float fvalue1, fvalue2;
 
+    if (DEBUG) printf("Print depois do if\n");
+
     operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
@@ -955,7 +957,6 @@ void Fcmpl(code_attribute *code) {
         result = -1;
     else
         result = 0;
-
     operand op;
     op.data = result;
     op.cat = UNIQUE;
