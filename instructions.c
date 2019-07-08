@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #define DEBUG 1
 
 void Nop(code_attribute *code) {
@@ -13,6 +14,9 @@ void Aconst_null(code_attribute *code) {
     if (DEBUG) printf("ACONST_NULL\n");
 
     operand op_variable;
+    op_variable.data = 0;
+    op_variable.type = NULL_TYPE;
+    op_variable.cat = UNIQUE;
     //*op_variable.data = NULL; Verificar se será um tipo de objeto (corretude)
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
 }
@@ -439,39 +443,92 @@ void Istore_3(code_attribute *code) {
 }
 void Lstore_0(code_attribute *code) {
     if (DEBUG) printf("LSTORE_0\n");
+    uint8_t index                                = 0;
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand low                                  = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = low;
 }
 void Lstore_1(code_attribute *code) {
     if (DEBUG) printf("LSTORE_1\n");
+    uint8_t index                                = 1;
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand low                                  = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = low;
 }
 void Lstore_2(code_attribute *code) {
     if (DEBUG) printf("LSTORE_2\n");
+    uint8_t index                                = 2;
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand low                                  = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = low;
 }
 void Lstore_3(code_attribute *code) {
     if (DEBUG) printf("LSTORE_3\n");
+    uint8_t index                                = 3;
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand low                                  = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = low;
 }
 void Fstore_0(code_attribute *code) {
     if (DEBUG) printf("FSTORE_0\n");
+    uint8_t index                                = 0;
+    operand value                                = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = value;
+
 }
 void Fstore_1(code_attribute *code) {
     if (DEBUG) printf("FSTORE_1\n");
+    uint8_t index                                = 1;
+    operand value                                = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = value;
 }
 void Fstore_2(code_attribute *code) {
     if (DEBUG) printf("FSTORE_2\n");
+    uint8_t index                                = 2;
+    operand value                                = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = value;
 }
 void Fstore_3(code_attribute *code) {
     if (DEBUG) printf("FSTORE_3\n");
+    uint8_t index                                = 3;
+    operand value                                = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = value;
 }
 void Dstore_0(code_attribute *code) {
     if (DEBUG) printf("DSTORE_0\n");
+    uint8_t index                                = 0;
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand low                                  = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = low;
 }
 void Dstore_1(code_attribute *code) {
     if (DEBUG) printf("DSTORE_1\n");
+    uint8_t index                                = 1;
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand low                                  = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = low;
 }
 void Dstore_2(code_attribute *code) {
     if (DEBUG) printf("DSTORE_2\n");
+    uint8_t index                                = 2;
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand low                                  = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = low;
 }
 void Dstore_3(code_attribute *code) {
     if (DEBUG) printf("DSTORE_3\n");
+    uint8_t index                                = 3;
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand low                                  = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = low;
 }
 void Astore_0(code_attribute *code) {
     if (DEBUG) printf("ASTORE_0\n");
@@ -511,30 +568,89 @@ void Sastore(code_attribute *code) {
 }
 void Pop(code_attribute *code) {
     if (DEBUG) printf("POP\n");
+
+    pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 }
 void Pop2(code_attribute *code) {
     if (DEBUG) printf("POP2\n");
+
+    pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 }
 void Dup(code_attribute *code) {
     if (DEBUG) printf("DUP\n");
+
+    operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Dup_x1(code_attribute *code) {
     if (DEBUG) printf("DUP_X1\n");
+
+    operand op1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op1);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op2);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op1);
 }
 void Dup_x2(code_attribute *code) {
     if (DEBUG) printf("DUP_X2\n");
+
+    operand op1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op3 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op1);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op3);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op2);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op1);
 }
 void Dup2(code_attribute *code) {
     if (DEBUG) printf("DUP2\n");
+
+    operand op1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op2);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op1);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op2);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op1);
 }
 void Dup2_x1(code_attribute *code) {
     if (DEBUG) printf("DUP2_X1\n");
+
+    operand op1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op3 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op2);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op1);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op3);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op2);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op1);
 }
 void Dup2_x2(code_attribute *code) {
     if (DEBUG) printf("DUP2_X2\n");
+
+    operand op1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op3 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op4 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op2);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op1);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op4);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op3);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op2);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op1);
 }
 void Swap(code_attribute *code) {
     if (DEBUG) printf("SWAP\n");
+
+    operand op1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op1);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op2);
 }
 void Iadd(code_attribute *code) {
     if (DEBUG) printf("IADD\n");
@@ -756,60 +872,320 @@ void I2s(code_attribute *code) {
 }
 void Lcmp(code_attribute *code) {
     if (DEBUG) printf("LCMP\n");
+
+    int32_t result;
+
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    int64_t long1 = (((int64_t)value1_hi.data << 32) + (int64_t)value1_lo.data);
+    int64_t long2 = (((int64_t)value2_hi.data << 32) + (int64_t)value2_lo.data);
+
+    if(long1 > long2)
+        result = 1;
+    else if(long1 < long2)
+        result = -1;
+    else
+        result = 0;
+    
+    operand op;
+    op.data = result;
+    op.cat = UNIQUE;
+    op.type = INT_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Fcmpl(code_attribute *code) {
     if (DEBUG) printf("FCMPL\n");
+    uint32_t result;
+    float fvalue1, fvalue2;
+
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    fvalue1 = makeFloat(value1.data);
+    fvalue2 = makeFloat(value2.data);
+
+    if(fvalue1 < fvalue2)
+        result = 1;
+    else if(fvalue1 > fvalue2)
+        result = -1;
+    else
+        result = 0;
+
+    operand op;
+    op.data = result;
+    op.cat = UNIQUE;
+    op.type = INT_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Fcmpg(code_attribute *code) {
     if (DEBUG) printf("FCMPG\n");
+    uint32_t result;
+    float fvalue1, fvalue2;
+
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    fvalue1 = makeFloat(value1.data);
+    fvalue2 = makeFloat(value2.data);
+
+    if(fvalue1 > fvalue2)
+        result = 1;
+    else if(fvalue1 < fvalue2)
+        result = -1;
+    else
+        result = 0;
+
+    operand op;
+    op.data = result;
+    op.cat = UNIQUE;
+    op.type = INT_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Dcmpl(code_attribute *code) {
     if (DEBUG) printf("DCMPL\n");
+
+    uint32_t result;
+    double dvalue1, dvalue2;
+
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    dvalue1 = makeDouble(value1_hi.data, value1_lo.data);
+    dvalue2 = makeDouble(value2_hi.data, value2_lo.data);
+
+    if(isnan(dvalue1) || isnan(dvalue2))
+        result = -1;
+    else if(dvalue1 < dvalue2)
+        result = 1;
+    else if(dvalue1 > dvalue2)
+        result = -1;
+    else
+        result = 0;
+
+    operand op;
+    op.data = result;
+    op.cat = UNIQUE;
+    op.type = INT_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Dcmpg(code_attribute *code) {
     if (DEBUG) printf("DCMPG\n");
+
+    uint32_t result;
+    double dvalue1, dvalue2;
+
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    dvalue1 = makeDouble(value1_hi.data, value1_lo.data);
+    dvalue2 = makeDouble(value2_hi.data, value2_lo.data);
+
+    if(isnan(dvalue1) || isnan(dvalue2))
+        result = 1;
+    else if(dvalue1 > dvalue2)
+        result = 1;
+    else if(dvalue1 < dvalue2)
+        result = -1;
+    else
+        result = 0;
+
+    operand op;
+    op.data = result;
+    op.cat = UNIQUE;
+    op.type = INT_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Ifeq(code_attribute *code) {
     if (DEBUG) printf("IFEQ\n");
+    uint16_t offset;
+    operand value                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t) value.data == 0) {
+    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset                    = (branchbyte1 << 8) | branchbyte2; 
+    }
+    else offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset;
+
 }
 void Ifne(code_attribute *code) {
     if (DEBUG) printf("IFNE\n");
+    uint16_t offset;
+    operand value                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t) value.data != 0) {
+    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset                    = (branchbyte1 << 8) | branchbyte2; 
+    }
+    else offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void Iflt(code_attribute *code) {
     if (DEBUG) printf("IFLT\n");
+    uint16_t offset;
+    operand value                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t) value.data < 0) {
+    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset                    = (branchbyte1 << 8) | branchbyte2; 
+    }
+    else offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void Ifge(code_attribute *code) {
     if (DEBUG) printf("IFGE\n");
+    uint16_t offset;
+    operand value                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t) value.data >= 0) {
+    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset                    = (branchbyte1 << 8) | branchbyte2; 
+    }
+    else offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void Ifgt(code_attribute *code) {
     if (DEBUG) printf("IFGT\n");
+    uint16_t offset;
+    operand value                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t) value.data > 0) {
+    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset                    = (branchbyte1 << 8) | branchbyte2; 
+    }
+    else offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void Ifle(code_attribute *code) {
     if (DEBUG) printf("IFLE\n");
+    uint16_t offset;
+    operand value                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t) value.data <= 0) {
+    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset                    = (branchbyte1 << 8) | branchbyte2; 
+    }
+    else offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void If_icmpeq(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPEQ\n");
+    uint16_t offset;
+    operand value1                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t) value1.data == (int32_t) value2.data) {
+    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset                    = (branchbyte1 << 8) | branchbyte2; 
+    }
+    else offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void If_icmpne(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPNE\n");
+    uint16_t offset;
+    operand value1                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t) value1.data != (int32_t) value2.data) {
+    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset                    = (branchbyte1 << 8) | branchbyte2; 
+    }
+    else offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void If_icmplt(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPLT\n");
+    uint16_t offset;
+    operand value1                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t) value1.data < (int32_t) value2.data) {
+    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset                    = (branchbyte1 << 8) | branchbyte2; 
+    }
+    else offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void If_icmpge(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPGE\n");
+    uint16_t offset;
+    operand value1                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t) value1.data >= (int32_t) value2.data) {
+    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset                    = (branchbyte1 << 8) | branchbyte2; 
+    }
+    else offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void If_icmpgt(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPGT\n");
+    uint16_t offset;
+    operand value1                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t) value1.data > (int32_t) value2.data) {
+    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset                    = (branchbyte1 << 8) | branchbyte2; 
+    }
+    else offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void If_icmple(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPLE\n");
+    uint16_t offset;
+    operand value1                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t) value1.data <= (int32_t) value2.data) {
+    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset                    = (branchbyte1 << 8) | branchbyte2; 
+    }
+    else offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void If_acmpeq(code_attribute *code) {
     if (DEBUG) printf("IF_ACMPEQ\n");
+    uint16_t offset;
+    operand value1                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if (value1.data == value2.data) {
+    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset                    = (branchbyte1 << 8) | branchbyte2; 
+    }
+    else offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void If_acmpne(code_attribute *code) {
     if (DEBUG) printf("IF_ACMPNE\n");
+    uint16_t offset;
+    operand value1                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if (value1.data != value2.data) {
+    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset                    = (branchbyte1 << 8) | branchbyte2; 
+    }
+    else offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void GoTo(code_attribute *code) {
     if (DEBUG) printf("GOTO\n");
@@ -934,7 +1310,7 @@ void Invokevirtual(code_attribute *code) {
             case LONG_TYPE:
                 op2    = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
                 longao = (((uint64_t)op.data << 32) | (uint64_t)op2.data);
-                printf("%ld", longao);
+                printf("%lld", longao);
                 break;
             case NULL_TYPE:
                 printf("NULL");
