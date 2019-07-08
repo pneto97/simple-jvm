@@ -95,15 +95,15 @@ void Castore  (code_attribute *);
 void Sastore  (code_attribute *);
 
 // Lucao
-void Pop      (code_attribute *);
-void Pop2     (code_attribute *);
-void Dup      (code_attribute *);
-void Dup_x1   (code_attribute *);
-void Dup_x2   (code_attribute *);
-void Dup2     (code_attribute *);
-void Dup2_x1  (code_attribute *);
-void Dup2_x2  (code_attribute *);
-void Swap     (code_attribute *);
+void Pop      (code_attribute *); //Feito
+void Pop2     (code_attribute *); //Feito
+void Dup      (code_attribute *); //Feito
+void Dup_x1   (code_attribute *); //Feito
+void Dup_x2   (code_attribute *); //Feito
+void Dup2     (code_attribute *); //Feito
+void Dup2_x1  (code_attribute *); //Feito
+void Dup2_x2  (code_attribute *); //Feito
+void Swap     (code_attribute *); //Feito
 
 void Iadd   (code_attribute *); //Feito
 void Ladd   (code_attribute *); //Verificar 
@@ -162,11 +162,11 @@ void I2c (code_attribute *);
 void I2s (code_attribute *);
 
 // Lucao
-void Lcmp     (code_attribute *);
-void Fcmpl    (code_attribute *);
-void Fcmpg    (code_attribute *);
-void Dcmpl    (code_attribute *);
-void Dcmpg    (code_attribute *);
+void Lcmp     (code_attribute *); // Feito
+void Fcmpl    (code_attribute *); // Feito
+void Fcmpg    (code_attribute *); // Feito
+void Dcmpl    (code_attribute *); // Feito
+void Dcmpg    (code_attribute *); // Feito
 
 // Demetrio
 void Ifeq     (code_attribute *); //Verificar 
