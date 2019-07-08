@@ -69,19 +69,19 @@ void Istore_2 (code_attribute *); //Feito
 void Istore_3 (code_attribute *); //Feito
 
 // Jomas
-void Lstore_0 (code_attribute *);
-void Lstore_1 (code_attribute *);
-void Lstore_2 (code_attribute *);
-void Lstore_3 (code_attribute *);
-void Fstore_0 (code_attribute *);
-void Fstore_1 (code_attribute *);
-void Fstore_2 (code_attribute *);
-void Fstore_3 (code_attribute *);
-void Dstore_0 (code_attribute *);
-void Dstore_1 (code_attribute *);
-void Dstore_2 (code_attribute *);
-void Dstore_3 (code_attribute *);
-void Astore_0 (code_attribute *);
+void Lstore_0 (code_attribute *);   //feito
+void Lstore_1 (code_attribute *);   //feito
+void Lstore_2 (code_attribute *);   //feito
+void Lstore_3 (code_attribute *);   //feito
+void Fstore_0 (code_attribute *);   //feito
+void Fstore_1 (code_attribute *);   //feito
+void Fstore_2 (code_attribute *);   //feito
+void Fstore_3 (code_attribute *);   //feito
+void Dstore_0 (code_attribute *);   //feito
+void Dstore_1 (code_attribute *);   //feito
+void Dstore_2 (code_attribute *);   //feito
+void Dstore_3 (code_attribute *);   //feito
+void Astore_0 (code_attribute *);   
 void Astore_1 (code_attribute *);
 void Astore_2 (code_attribute *);
 void Astore_3 (code_attribute *);
@@ -169,20 +169,20 @@ void Dcmpl    (code_attribute *); // Feito
 void Dcmpg    (code_attribute *); // Feito
 
 // Demetrio
-void Ifeq     (code_attribute *);
-void Ifne     (code_attribute *);
-void Iflt     (code_attribute *);
-void Ifge     (code_attribute *);
-void Ifgt     (code_attribute *);
-void Ifle     (code_attribute *);
-void If_icmpeq(code_attribute *);
-void If_icmpne(code_attribute *);
-void If_icmplt(code_attribute *);
-void If_icmpge(code_attribute *);
-void If_icmpgt(code_attribute *);
-void If_icmple(code_attribute *);
-void If_acmpeq(code_attribute *);
-void If_acmpne(code_attribute *);
+void Ifeq     (code_attribute *); //Feito
+void Ifne     (code_attribute *); //Feito
+void Iflt     (code_attribute *); //Feito
+void Ifge     (code_attribute *); //Feito
+void Ifgt     (code_attribute *); //Feito
+void Ifle     (code_attribute *); //Feito
+void If_icmpeq(code_attribute *); //Feito
+void If_icmpne(code_attribute *); //Feito
+void If_icmplt(code_attribute *); //Feito
+void If_icmpge(code_attribute *); //Feito
+void If_icmpgt(code_attribute *); //Feito
+void If_icmple(code_attribute *); //Feito
+void If_acmpeq(code_attribute *); //Verificar
+void If_acmpne(code_attribute *); //Verificar
 
 void GoTo        (code_attribute *);
 void Jsr         (code_attribute *);
