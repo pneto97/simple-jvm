@@ -31,10 +31,10 @@ typedef struct operand_stack {
 
 typedef struct frame {
     operand *local_vars;
+    int local_vars_size;
     cp_info *constant_pool;
     operand_stack *op_stack;
     uint32_t pc;
-
     struct frame *next;
 } frame;
 
@@ -196,5 +196,9 @@ code_attribute * findCode(class_loaded *lclass, method_info  *method);
 frame * createFrame(code_attribute *code, cp_info *cp);
 
 void execute(code_attribute *code);
+
+void PrintLocalVar();
+
+void PrintOpStack();
 
 #endif

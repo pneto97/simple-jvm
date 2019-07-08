@@ -3,9 +3,10 @@ import java.util.ArrayList;
 public class T8
 {
 	public static void main() {
-        int a;
-        a = 2;
-        a = a + 1;
+        double a,b;
+        a = 1;
+        b = 2;
+        a = b + a;
 	}
 }
 // Joga 5 na pilha (1)

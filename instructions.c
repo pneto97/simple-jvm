@@ -4,57 +4,193 @@
 #include "global.h"
 #include "instruction_helpers.h"
 #define DEBUG  1
+#define VERBOUSE 1
 void Nop         (code_attribute * code){
-    if (DEBUG) printf("ACONST_NULL\n");
+    if (DEBUG) printf("NOP\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
 }
 void Aconst_null (code_attribute * code){
-    if (DEBUG) printf("ICONST_M1\n");
+    if (DEBUG) printf("Aconst_null\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
+    operand op_variable;
+    //*op_variable.data = NULL; Verificar se será um tipo de objeto (corretude)
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
 }
 void Iconst_m1   (code_attribute * code){
-    if (DEBUG) printf("ICONST_0\n");
+    if (DEBUG) printf("ICONST_m1\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
+    operand op_variable;
+    op_variable.data = -1;
+    op_variable.type = INT_TYPE;
+    op_variable.cat = UNIQUE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
 }
 void Iconst_0    (code_attribute * code){
-    if (DEBUG) printf("ICONST_1\n");
+    if (DEBUG) printf("ICONST_0\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
+    operand op_variable;
+    op_variable.data = 0;
+    op_variable.type = INT_TYPE;
+    op_variable.cat = UNIQUE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
 }
 void Iconst_1    (code_attribute * code){
-    if (DEBUG) printf("ICONST_2\n");
+    if (DEBUG) printf("ICONST_1\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
+    operand op_variable;
+    op_variable.data = 1;
+    op_variable.type = INT_TYPE;
+    op_variable.cat = UNIQUE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
 }
 void Iconst_2    (code_attribute * code){
-    if (DEBUG) printf("ICONST_3\n");
+    if (DEBUG) printf("ICONST_2\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
+    operand op_variable;
+    op_variable.data = 2;
+    op_variable.type = INT_TYPE;
+    op_variable.cat = UNIQUE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
 }
 void Iconst_3    (code_attribute * code){
-    if (DEBUG) printf("ICONST_4\n");
+    if (DEBUG) printf("ICONST_3\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
+    operand op_variable;
+    op_variable.data = 3;
+    op_variable.type = INT_TYPE;
+    op_variable.cat = UNIQUE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
 }
 void Iconst_4    (code_attribute * code){
-    if (DEBUG) printf("ICONST_5\n");
+    if (DEBUG) printf("ICONST_4\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
+    operand op_variable;
+    op_variable.data = 4;
+    op_variable.type = INT_TYPE;
+    op_variable.cat = UNIQUE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
 }
 void Iconst_5    (code_attribute * code){
-    if (DEBUG) printf("LCONST_0\n");
+    if (DEBUG) printf("ICONST_5\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
+    operand op_variable;
+    op_variable.data = 5;
+    op_variable.type = INT_TYPE;
+    op_variable.cat = UNIQUE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
 }
+
 void Lconst_0    (code_attribute * code){
-    if (DEBUG) printf("LCONST_1\n");
+    if (DEBUG) printf("LCONST_0\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
+    operand hi,low;    
+    hi.data = 0x0;
+    hi.type = LONG_TYPE;
+    hi.cat = FIRST;
+    low.data = 0x0;
+    low.type = LONG_TYPE;
+    low.cat = SECOND;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, low);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, hi);
 }
+
 void Lconst_1    (code_attribute * code){
-    if (DEBUG) printf("FCONST_0\n");
+    if (DEBUG) printf("LCONST_1\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
 }
 void Fconst_0    (code_attribute * code){
-    if (DEBUG) printf("FCONST_1\n");
+    if (DEBUG) printf("FCONST_0\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
+    operand op_variable;
+    float var = 0;
+    op_variable.data = var;
+    op_variable.type = FLOAT_TYPE;
+    op_variable.cat = UNIQUE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
 }
 void Fconst_1    (code_attribute * code){
-    if (DEBUG) printf("FCONST_2\n");
+    if (DEBUG) printf("FCONST_1\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
+    operand op_variable;
+    float var = 1;
+    op_variable.data = var;
+    op_variable.type = FLOAT_TYPE;
+    op_variable.cat = UNIQUE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
 }
 void Fconst_2    (code_attribute * code){
-    if (DEBUG) printf("DCONST_0\n");
+    if (DEBUG) printf("FCONST_2\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
+    operand op_variable;
+    float var = 2;
+    op_variable.data = var;
+    op_variable.type = FLOAT_TYPE;
+    op_variable.cat = UNIQUE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
 }
 void Dconst_0    (code_attribute * code){
-    if (DEBUG) printf("DCONST_1\n");
+    if (DEBUG) printf("DCONST_0\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
 }
 void Dconst_1    (code_attribute * code){
     if (DEBUG) printf("DCONST_1\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
 }
 
 void Bipush (code_attribute * code){
     if (DEBUG) printf("BIPUSH\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
     int8_t byte;
     int32_t extended;
     operand op_variable;
@@ -69,18 +205,38 @@ void Bipush (code_attribute * code){
 
 void Sipush      (code_attribute * code){
     if (DEBUG) printf("SIPUSH\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
 }
 void Ldc         (code_attribute * code){
     if (DEBUG) printf("LDC\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
 }
 void Ldc_w       (code_attribute * code){
     if (DEBUG) printf("LDC_W\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
 }
 void Ldc2_w      (code_attribute * code){
     if (DEBUG) printf("LDC2_W\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
 }
 void Iload  (code_attribute * code){
     if (DEBUG) printf("ILOAD\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
     GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
     uint8_t index = code->code[GLOBAL_jvm_stack->top->pc];
     operand value = GLOBAL_jvm_stack->top->local_vars[index];
@@ -88,30 +244,58 @@ void Iload  (code_attribute * code){
 }
 void Lload  (code_attribute * code){
     if (DEBUG) printf("LLOAD  \n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
 }
 void Fload  (code_attribute * code){
     if (DEBUG) printf("FLOAD  \n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
 }
 void Dload  (code_attribute * code){
     if (DEBUG) printf("DLOAD  \n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
 }
 void Aload  (code_attribute * code){
     if (DEBUG) printf("ALOAD  \n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
 }
 void Iload_0(code_attribute * code){
     if (DEBUG) printf("ILOAD_0\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
     uint8_t index = 0;
     operand value = GLOBAL_jvm_stack->top->local_vars[index];
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);
 }
 void Iload_1(code_attribute * code){
     if (DEBUG) printf("ILOAD_1\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
     uint8_t index = 1;
     operand value = GLOBAL_jvm_stack->top->local_vars[index];
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);
 }
 void Iload_2(code_attribute * code){
     if (DEBUG) printf("ILOAD_2\n");
+    if (VERBOUSE){
+        PrintLocalVar();
+        PrintOpStack();
+    };
     uint8_t index = 2;
     operand value = GLOBAL_jvm_stack->top->local_vars[index];
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);

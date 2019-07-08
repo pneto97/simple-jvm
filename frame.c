@@ -243,6 +243,7 @@ frame * createFrame(code_attribute *code, cp_info *cp){
     frame *fr = (frame *)malloc(sizeof(frame));
 
     fr->constant_pool = cp;
+    fr->local_vars_size = code->max_locals;
     fr->local_vars = (operand *)malloc(code->max_locals*sizeof(operand));
     fr->op_stack = (operand_stack *)malloc(sizeof(operand_stack));
     fr->pc = 0;
@@ -282,4 +283,22 @@ void execute(code_attribute *code){
 
 
     // pop frame
+}
+
+void PrintLocalVar(){
+    frame *fr = GLOBAL_jvm_stack->top;
+    for(int i=0; i < fr->local_vars_size; i++){
+        printf("[%d]->%x | ",i, fr->local_vars->data);
+        fr = fr->next;
+    }
+}
+
+void PrintOpStack(){
+    frame *fr =GLOBAL_jvm_stack->top;
+    int i = 0;
+    while(fr!=NULL){
+        printf("[%d]->%x | ",i, fr->op_stack->top->op.data);
+        fr = fr->next;
+        i++;
+    }
 }
