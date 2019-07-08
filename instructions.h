@@ -2,36 +2,37 @@
 #define INSTRUCTIONS_H
 #include <stdio.h>
 
-void Nop         (code_attribute *);
-void Aconst_null (code_attribute *);
-void Iconst_m1   (code_attribute *);
-void Iconst_0    (code_attribute *);
-void Iconst_1    (code_attribute *);
-void Iconst_2    (code_attribute *);
-void Iconst_3    (code_attribute *);
-void Iconst_4    (code_attribute *);
-void Iconst_5    (code_attribute *);
-void Lconst_0    (code_attribute *);
-void Lconst_1    (code_attribute *);
-void Fconst_0    (code_attribute *);
-void Fconst_1    (code_attribute *);
-void Fconst_2    (code_attribute *);
-void Dconst_0    (code_attribute *);
-void Dconst_1    (code_attribute *);
-void Bipush      (code_attribute *);
+void Nop         (code_attribute *); //Feito
+void Aconst_null (code_attribute *); //Verificar
+void Iconst_m1   (code_attribute *); //Feito
+void Iconst_0    (code_attribute *); //Feito
+void Iconst_1    (code_attribute *); //Feito
+void Iconst_2    (code_attribute *); //Feito
+void Iconst_3    (code_attribute *); //Feito
+void Iconst_4    (code_attribute *); //Feito
+void Iconst_5    (code_attribute *); //Feito
+void Lconst_0    (code_attribute *); //Verificar
+void Lconst_1    (code_attribute *); //Verificar
+void Fconst_0    (code_attribute *); //Verificar
+void Fconst_1    (code_attribute *); //Verificar
+void Fconst_2    (code_attribute *); //Verificar
+void Dconst_0    (code_attribute *); //Verificar
+void Dconst_1    (code_attribute *); //Verificar
+void Bipush      (code_attribute *); //Feito
 void Sipush      (code_attribute *);
 void Ldc         (code_attribute *);
 void Ldc_w       (code_attribute *);
 void Ldc2_w      (code_attribute *);
-void Iload  (code_attribute *);
+// Paulo
+void Iload  (code_attribute *); //Feito
 void Lload  (code_attribute *);
 void Fload  (code_attribute *);
 void Dload  (code_attribute *);
 void Aload  (code_attribute *);
-void Iload_0(code_attribute *);
-void Iload_1(code_attribute *);
-void Iload_2(code_attribute *);
-void Iload_3(code_attribute *);
+void Iload_0(code_attribute *); //Feito
+void Iload_1(code_attribute *); //Feito
+void Iload_2(code_attribute *); //Feito
+void Iload_3(code_attribute *); //Feito
 void Lload_0(code_attribute *);
 void Lload_1(code_attribute *);
 void Lload_2(code_attribute *);
@@ -48,6 +49,7 @@ void Aload_0(code_attribute *);
 void Aload_1(code_attribute *);
 void Aload_2(code_attribute *);
 void Aload_3(code_attribute *);
+
 void Iaload (code_attribute *);
 void Laload (code_attribute *);
 void Faload (code_attribute *);
@@ -56,15 +58,17 @@ void Aaload (code_attribute *);
 void Baload (code_attribute *);
 void Caload (code_attribute *);
 void Saload (code_attribute *);
-void Istore   (code_attribute *);
+void Istore   (code_attribute *); //Feito
 void Lstore   (code_attribute *);
 void Fstore   (code_attribute *);
 void Dstore   (code_attribute *);
 void Astore   (code_attribute *);
-void Istore_0 (code_attribute *);
-void Istore_1 (code_attribute *);
-void Istore_2 (code_attribute *);
-void Istore_3 (code_attribute *);
+void Istore_0 (code_attribute *); //Feito
+void Istore_1 (code_attribute *); //Feito
+void Istore_2 (code_attribute *); //Feito
+void Istore_3 (code_attribute *); //Feito
+
+// Jomas
 void Lstore_0 (code_attribute *);
 void Lstore_1 (code_attribute *);
 void Lstore_2 (code_attribute *);
@@ -89,6 +93,8 @@ void Aastore  (code_attribute *);
 void Bastore  (code_attribute *);
 void Castore  (code_attribute *);
 void Sastore  (code_attribute *);
+
+// Lucao
 void Pop      (code_attribute *);
 void Pop2     (code_attribute *);
 void Dup      (code_attribute *);
@@ -98,11 +104,12 @@ void Dup2     (code_attribute *);
 void Dup2_x1  (code_attribute *);
 void Dup2_x2  (code_attribute *);
 void Swap     (code_attribute *);
-void Iadd   (code_attribute *); 
-void Ladd   (code_attribute *); 
+
+void Iadd   (code_attribute *); //Feito
+void Ladd   (code_attribute *); //Verificar 
 void Fadd   (code_attribute *); 
-void Dadd   (code_attribute *); 
-void Isub   (code_attribute *); 
+void Dadd   (code_attribute *); //Verificar 
+void Isub   (code_attribute *); //Feito
 void Lsub   (code_attribute *); 
 void Fsub   (code_attribute *); 
 void Dsub   (code_attribute *); 
@@ -117,7 +124,9 @@ void Ddiv   (code_attribute *);
 void Irem   (code_attribute *); 
 void Lrem   (code_attribute *); 
 void Frem   (code_attribute *); 
-void Drem   (code_attribute *); 
+void Drem   (code_attribute *);
+
+// Chris 
 void Ineg   (code_attribute *); 
 void Lneg   (code_attribute *); 
 void Fneg   (code_attribute *); 
@@ -135,6 +144,7 @@ void Lor    (code_attribute *);
 void Ixor   (code_attribute *); 
 void Lxor   (code_attribute *); 
 void Iinc   (code_attribute *);
+
 void I2l (code_attribute *);
 void I2f (code_attribute *);
 void I2d (code_attribute *);
@@ -150,11 +160,15 @@ void D2f (code_attribute *);
 void I2b (code_attribute *);
 void I2c (code_attribute *);
 void I2s (code_attribute *);
+
+// Lucao
 void Lcmp     (code_attribute *);
 void Fcmpl    (code_attribute *);
 void Fcmpg    (code_attribute *);
 void Dcmpl    (code_attribute *);
 void Dcmpg    (code_attribute *);
+
+// Demetrio
 void Ifeq     (code_attribute *);
 void Ifne     (code_attribute *);
 void Iflt     (code_attribute *);
@@ -169,6 +183,7 @@ void If_icmpgt(code_attribute *);
 void If_icmple(code_attribute *);
 void If_acmpeq(code_attribute *);
 void If_acmpne(code_attribute *);
+
 void GoTo        (code_attribute *);
 void Jsr         (code_attribute *);
 void Ret         (code_attribute *);
@@ -180,11 +195,11 @@ void Freturn     (code_attribute *);
 void Dreturn     (code_attribute *);
 void Areturn     (code_attribute *);
 void Return      (code_attribute *);
-void Getstatic      (code_attribute *);
+void Getstatic      (code_attribute *); //Incompleto
 void Putstatic      (code_attribute *);
 void Getfield       (code_attribute *);
 void Putfield       (code_attribute *);
-void Invokevirtual  (code_attribute *);
+void Invokevirtual  (code_attribute *); //Incompleto
 void Invokespecial  (code_attribute *);
 void Invokestatic   (code_attribute *);
 void Invokeinterface(code_attribute *);
