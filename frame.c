@@ -37,7 +37,7 @@ operand pop_op_stack(operand_stack *stack) {
 void push_op_stack(operand_stack *stack, operand new_operand) {
     operand_item *op_item = (operand_item *)malloc(sizeof(operand_item));
     op_item->op           = new_operand;
-    op_item->next         = stack->top;
+    op_item->next         = NULL;
     stack->top            = op_item;
     //stack->++;
 }
@@ -242,6 +242,7 @@ frame *createFrame(code_attribute *code, cp_info *cp) {
     fr->local_vars_size = code->max_locals;
     fr->local_vars      = (operand *)calloc(code->max_locals, sizeof(operand));
     fr->op_stack        = (operand_stack *)malloc(sizeof(operand_stack));
+    fr->op_stack->top   = NULL;
     fr->pc              = 0;
 
     push_jvm_stack(GLOBAL_jvm_stack, fr);
