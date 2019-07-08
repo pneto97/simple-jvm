@@ -565,6 +565,15 @@ void Dsub(code_attribute *code) {
 }
 void Imul(code_attribute *code) {
     if (DEBUG) printf("IMUL\n");
+    operand op;
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    int32_t result = (int32_t)value1.data * (int32_t)value2.data;
+    op.data        = result;
+    op.cat         = UNIQUE;
+    op.type        = INT_TYPE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Lmul(code_attribute *code) {
     if (DEBUG) printf("LMUL\n");
@@ -577,6 +586,22 @@ void Dmul(code_attribute *code) {
 }
 void Idiv(code_attribute *code) {
     if (DEBUG) printf("IDIV\n");
+    operand op;
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    int32_t result;
+    if ((value1.data== 0x8000000) && (value2.data == 0xFFFFFFFF)) result = value1.data;
+    else if (value2.data == 0) {
+        printf("ArithmeticException\n");
+        exit(3);
+    }
+    else {
+        result = (int32_t)value1.data / (int32_t)value2.data;
+        op.data        = result;
+        op.cat         = UNIQUE;
+        op.type        = INT_TYPE;
+        push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
+    }
 }
 void Ldiv(code_attribute *code) {
     if (DEBUG) printf("LDIV\n");
@@ -589,6 +614,20 @@ void Ddiv(code_attribute *code) {
 }
 void Irem(code_attribute *code) {
     if (DEBUG) printf("IREM\n");
+    operand op;
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if (value2.data == 0) {
+        printf("ArithmeticException\n");
+        exit(3);
+    }
+    else {
+        int32_t result = (int32_t) value1.data % (int32_t) value2.data;
+        op.data        = result;
+        op.cat         = UNIQUE;
+        op.type        = INT_TYPE;
+        push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
+    }
 }
 void Lrem(code_attribute *code) {
     if (DEBUG) printf("LREM\n");
