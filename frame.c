@@ -300,11 +300,9 @@ void PrintOpStack() {
 
     printf("OPERAND STACK: \n");
     while (op_item != NULL) {
-        printf("Ola\n");
         printf("[%d]->%x | ", i, op_item->op.data);
         op_item = op_item->next;
         i++;
-        printf("Ola2\n");
     }
     printf("\n");
 }
