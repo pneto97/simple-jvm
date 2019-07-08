@@ -25,30 +25,30 @@ void Ldc_w       (code_attribute *);
 void Ldc2_w      (code_attribute *);
 // Paulo
 void Iload  (code_attribute *); //Feito
-void Lload  (code_attribute *);
-void Fload  (code_attribute *);
-void Dload  (code_attribute *);
-void Aload  (code_attribute *);
+void Lload  (code_attribute *); //Feito
+void Fload  (code_attribute *); //Feito
+void Dload  (code_attribute *); //Feito
+void Aload  (code_attribute *); //Feito
 void Iload_0(code_attribute *); //Feito
 void Iload_1(code_attribute *); //Feito
 void Iload_2(code_attribute *); //Feito
 void Iload_3(code_attribute *); //Feito
-void Lload_0(code_attribute *);
-void Lload_1(code_attribute *);
-void Lload_2(code_attribute *);
-void Lload_3(code_attribute *);
-void Fload_0(code_attribute *);
-void Fload_1(code_attribute *);
-void Fload_2(code_attribute *);
-void Fload_3(code_attribute *);
-void Dload_0(code_attribute *);
-void Dload_1(code_attribute *);
-void Dload_2(code_attribute *);
-void Dload_3(code_attribute *);
-void Aload_0(code_attribute *);
-void Aload_1(code_attribute *);
-void Aload_2(code_attribute *);
-void Aload_3(code_attribute *);
+void Lload_0(code_attribute *); //Feito
+void Lload_1(code_attribute *); //Feito
+void Lload_2(code_attribute *); //Feito
+void Lload_3(code_attribute *); //Feito
+void Fload_0(code_attribute *); //Feito
+void Fload_1(code_attribute *); //Feito
+void Fload_2(code_attribute *); //Feito
+void Fload_3(code_attribute *); //Feito
+void Dload_0(code_attribute *); //Feito
+void Dload_1(code_attribute *); //Feito
+void Dload_2(code_attribute *); //Feito
+void Dload_3(code_attribute *); //Feito
+void Aload_0(code_attribute *); //Feito
+void Aload_1(code_attribute *); //Feito
+void Aload_2(code_attribute *); //Feito
+void Aload_3(code_attribute *); //Feito
 
 void Iaload (code_attribute *);
 void Laload (code_attribute *);
@@ -95,15 +95,15 @@ void Castore  (code_attribute *);
 void Sastore  (code_attribute *);
 
 // Lucao
-void Pop      (code_attribute *);
-void Pop2     (code_attribute *);
-void Dup      (code_attribute *);
-void Dup_x1   (code_attribute *);
-void Dup_x2   (code_attribute *);
-void Dup2     (code_attribute *);
-void Dup2_x1  (code_attribute *);
-void Dup2_x2  (code_attribute *);
-void Swap     (code_attribute *);
+void Pop      (code_attribute *); //Feito
+void Pop2     (code_attribute *); //Feito
+void Dup      (code_attribute *); //Feito
+void Dup_x1   (code_attribute *); //Feito
+void Dup_x2   (code_attribute *); //Feito
+void Dup2     (code_attribute *); //Feito
+void Dup2_x1  (code_attribute *); //Feito
+void Dup2_x2  (code_attribute *); //Feito
+void Swap     (code_attribute *); //Feito
 
 void Iadd   (code_attribute *); //Feito
 void Ladd   (code_attribute *); //Verificar 
@@ -113,15 +113,15 @@ void Isub   (code_attribute *); //Feito
 void Lsub   (code_attribute *); 
 void Fsub   (code_attribute *); 
 void Dsub   (code_attribute *); 
-void Imul   (code_attribute *); 
+void Imul   (code_attribute *); //Feito
 void Lmul   (code_attribute *); 
 void Fmul   (code_attribute *); 
 void Dmul   (code_attribute *); 
-void Idiv   (code_attribute *); 
+void Idiv   (code_attribute *); //Feito
 void Ldiv   (code_attribute *); 
 void Fdiv   (code_attribute *); 
 void Ddiv   (code_attribute *); 
-void Irem   (code_attribute *); 
+void Irem   (code_attribute *); //Feito
 void Lrem   (code_attribute *); 
 void Frem   (code_attribute *); 
 void Drem   (code_attribute *);
@@ -162,14 +162,14 @@ void I2c (code_attribute *);
 void I2s (code_attribute *);
 
 // Lucao
-void Lcmp     (code_attribute *);
-void Fcmpl    (code_attribute *);
-void Fcmpg    (code_attribute *);
-void Dcmpl    (code_attribute *);
-void Dcmpg    (code_attribute *);
+void Lcmp     (code_attribute *); // Feito
+void Fcmpl    (code_attribute *); // Feito
+void Fcmpg    (code_attribute *); // Feito
+void Dcmpl    (code_attribute *); // Feito
+void Dcmpg    (code_attribute *); // Feito
 
 // Demetrio
-void Ifeq     (code_attribute *); //Feito
+void Ifeq     (code_attribute *); //Feito 
 void Ifne     (code_attribute *); //Feito
 void Iflt     (code_attribute *); //Feito
 void Ifge     (code_attribute *); //Feito
@@ -181,8 +181,8 @@ void If_icmplt(code_attribute *); //Feito
 void If_icmpge(code_attribute *); //Feito
 void If_icmpgt(code_attribute *); //Feito
 void If_icmple(code_attribute *); //Feito
-void If_acmpeq(code_attribute *); //Verificar
-void If_acmpne(code_attribute *); //Verificar
+void If_acmpeq(code_attribute *); //Feito
+void If_acmpne(code_attribute *); //Feito
 
 void GoTo        (code_attribute *);
 void Jsr         (code_attribute *);
