@@ -113,15 +113,15 @@ void Isub   (code_attribute *); //Feito
 void Lsub   (code_attribute *); 
 void Fsub   (code_attribute *); 
 void Dsub   (code_attribute *); 
-void Imul   (code_attribute *); 
+void Imul   (code_attribute *); //Feito
 void Lmul   (code_attribute *); 
 void Fmul   (code_attribute *); 
 void Dmul   (code_attribute *); 
-void Idiv   (code_attribute *); 
+void Idiv   (code_attribute *); //Feito
 void Ldiv   (code_attribute *); 
 void Fdiv   (code_attribute *); 
 void Ddiv   (code_attribute *); 
-void Irem   (code_attribute *); 
+void Irem   (code_attribute *); //Feito
 void Lrem   (code_attribute *); 
 void Frem   (code_attribute *); 
 void Drem   (code_attribute *);
@@ -169,20 +169,20 @@ void Dcmpl    (code_attribute *); // Feito
 void Dcmpg    (code_attribute *); // Feito
 
 // Demetrio
-void Ifeq     (code_attribute *); //Verificar 
-void Ifne     (code_attribute *); //Verificar
-void Iflt     (code_attribute *); //Verificar
-void Ifge     (code_attribute *); //Verificar
-void Ifgt     (code_attribute *); //Verificar
-void Ifle     (code_attribute *); //Verificar
-void If_icmpeq(code_attribute *); //Verificar
-void If_icmpne(code_attribute *); //Verificar
-void If_icmplt(code_attribute *); //Verificar
-void If_icmpge(code_attribute *); //Verificar
-void If_icmpgt(code_attribute *); //Verificar
-void If_icmple(code_attribute *); //Verificar
-void If_acmpeq(code_attribute *); //Verificar
-void If_acmpne(code_attribute *); //Verificar
+void Ifeq     (code_attribute *); //Feito 
+void Ifne     (code_attribute *); //Feito
+void Iflt     (code_attribute *); //Feito
+void Ifge     (code_attribute *); //Feito
+void Ifgt     (code_attribute *); //Feito
+void Ifle     (code_attribute *); //Feito
+void If_icmpeq(code_attribute *); //Feito
+void If_icmpne(code_attribute *); //Feito
+void If_icmplt(code_attribute *); //Feito
+void If_icmpge(code_attribute *); //Feito
+void If_icmpgt(code_attribute *); //Feito
+void If_icmple(code_attribute *); //Feito
+void If_acmpeq(code_attribute *); //Feito
+void If_acmpne(code_attribute *); //Feito
 
 void GoTo        (code_attribute *);
 void Jsr         (code_attribute *);

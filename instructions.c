@@ -2,6 +2,7 @@
 #include "global.h"
 #include "instruction_helpers.h"
 #include <stdint.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #define DEBUG 1
