@@ -174,15 +174,47 @@ void Iload(code_attribute *code) {
 }
 void Lload(code_attribute *code) {
     if (DEBUG) printf("LLOAD  \n");
+
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index_hi             = code->code[(GLOBAL_jvm_stack->top->pc)++];
+    operand value_hi           = GLOBAL_jvm_stack->top->local_vars[index_hi];
+
+    uint8_t index_lo            = code->code[GLOBAL_jvm_stack->top->pc];
+    operand value_lo           = GLOBAL_jvm_stack->top->local_vars[index_lo];
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_hi);
+
 }
 void Fload(code_attribute *code) {
     if (DEBUG) printf("FLOAD  \n");
+
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index             = code->code[GLOBAL_jvm_stack->top->pc];
+    operand value             = GLOBAL_jvm_stack->top->local_vars[index];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);
 }
 void Dload(code_attribute *code) {
     if (DEBUG) printf("DLOAD  \n");
+
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index_hi             = code->code[(GLOBAL_jvm_stack->top->pc)++];
+    operand value_hi           = GLOBAL_jvm_stack->top->local_vars[index_hi];
+
+    uint8_t index_lo            = code->code[GLOBAL_jvm_stack->top->pc];
+    operand value_lo           = GLOBAL_jvm_stack->top->local_vars[index_lo];
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_hi);
+
 }
 void Aload(code_attribute *code) {
     if (DEBUG) printf("ALOAD  \n");
+
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index             = code->code[GLOBAL_jvm_stack->top->pc];
+    operand value             = GLOBAL_jvm_stack->top->local_vars[index];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);
 }
 void Iload_0(code_attribute *code) {
     if (DEBUG) printf("ILOAD_0\n");
@@ -213,51 +245,131 @@ void Iload_3(code_attribute *code) {
 }
 void Lload_0(code_attribute *code) {
     if (DEBUG) printf("LLOAD_0\n");
+
+    uint8_t index_hi = 0;
+    uint8_t index_lo = 1;
+    operand value_hi = GLOBAL_jvm_stack->top->local_vars[index_hi];
+    operand value_lo = GLOBAL_jvm_stack->top->local_vars[index_lo];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_hi);
 }
 void Lload_1(code_attribute *code) {
     if (DEBUG) printf("LLOAD_1\n");
+
+    uint8_t index_hi = 1;
+    uint8_t index_lo = 2;
+    operand value_hi = GLOBAL_jvm_stack->top->local_vars[index_hi];
+    operand value_lo = GLOBAL_jvm_stack->top->local_vars[index_lo];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_hi);
 }
 void Lload_2(code_attribute *code) {
     if (DEBUG) printf("LLOAD_2\n");
+
+    uint8_t index_hi = 2;
+    uint8_t index_lo = 3;
+    operand value_hi = GLOBAL_jvm_stack->top->local_vars[index_hi];
+    operand value_lo = GLOBAL_jvm_stack->top->local_vars[index_lo];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_hi);
 }
 void Lload_3(code_attribute *code) {
     if (DEBUG) printf("LLOAD_3\n");
+
+    uint8_t index_hi = 3;
+    uint8_t index_lo = 4;
+    operand value_hi = GLOBAL_jvm_stack->top->local_vars[index_hi];
+    operand value_lo = GLOBAL_jvm_stack->top->local_vars[index_lo];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_hi);
 }
 void Fload_0(code_attribute *code) {
     if (DEBUG) printf("FLOAD_0\n");
+    uint8_t index = 0;
+    operand value = GLOBAL_jvm_stack->top->local_vars[index];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);
 }
 void Fload_1(code_attribute *code) {
     if (DEBUG) printf("FLOAD_1\n");
+    uint8_t index = 1;
+    operand value = GLOBAL_jvm_stack->top->local_vars[index];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);
 }
 void Fload_2(code_attribute *code) {
     if (DEBUG) printf("FLOAD_2\n");
+    uint8_t index = 2;
+    operand value = GLOBAL_jvm_stack->top->local_vars[index];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);
 }
 void Fload_3(code_attribute *code) {
     if (DEBUG) printf("FLOAD_3\n");
+    uint8_t index = 3;
+    operand value = GLOBAL_jvm_stack->top->local_vars[index];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);
 }
 void Dload_0(code_attribute *code) {
     if (DEBUG) printf("DLOAD_0\n");
+
+    uint8_t index_hi = 0;
+    uint8_t index_lo = 1;
+    operand value_hi = GLOBAL_jvm_stack->top->local_vars[index_hi];
+    operand value_lo = GLOBAL_jvm_stack->top->local_vars[index_lo];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_hi);
 }
 void Dload_1(code_attribute *code) {
     if (DEBUG) printf("DLOAD_1\n");
+
+    uint8_t index_hi = 1;
+    uint8_t index_lo = 2;
+    operand value_hi = GLOBAL_jvm_stack->top->local_vars[index_hi];
+    operand value_lo = GLOBAL_jvm_stack->top->local_vars[index_lo];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_hi);
 }
 void Dload_2(code_attribute *code) {
     if (DEBUG) printf("DLOAD_2\n");
+
+    uint8_t index_hi = 2;
+    uint8_t index_lo = 3;
+    operand value_hi = GLOBAL_jvm_stack->top->local_vars[index_hi];
+    operand value_lo = GLOBAL_jvm_stack->top->local_vars[index_lo];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_hi);
 }
 void Dload_3(code_attribute *code) {
     if (DEBUG) printf("DLOAD_3\n");
+
+    uint8_t index_hi = 3;
+    uint8_t index_lo = 4;
+    operand value_hi = GLOBAL_jvm_stack->top->local_vars[index_hi];
+    operand value_lo = GLOBAL_jvm_stack->top->local_vars[index_lo];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_hi);
 }
 void Aload_0(code_attribute *code) {
     if (DEBUG) printf("ALOAD_0\n");
+    uint8_t index = 0;
+    operand value = GLOBAL_jvm_stack->top->local_vars[index];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);
 }
 void Aload_1(code_attribute *code) {
     if (DEBUG) printf("ALOAD_1\n");
+    uint8_t index = 1;
+    operand value = GLOBAL_jvm_stack->top->local_vars[index];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);
 }
 void Aload_2(code_attribute *code) {
     if (DEBUG) printf("ALOAD_2\n");
+    uint8_t index = 2;
+    operand value = GLOBAL_jvm_stack->top->local_vars[index];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);
 }
 void Aload_3(code_attribute *code) {
     if (DEBUG) printf("ALOAD_3\n");
+    uint8_t index = 3;
+    operand value = GLOBAL_jvm_stack->top->local_vars[index];
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value);
 }
 void Iaload(code_attribute *code) {
     if (DEBUG) printf("IALOAD \n");
