@@ -667,7 +667,7 @@ void Ifeq(code_attribute *code) {
     offset                    = (branchbyte1 << 8) | branchbyte2; 
     }
     else offset = 3;
-    GLOBAL_jvm_stack->top->pc + offset;
+    GLOBAL_jvm_stack->top->pc += offset;
 
 }
 void Ifne(code_attribute *code) {
@@ -680,7 +680,7 @@ void Ifne(code_attribute *code) {
     offset                    = (branchbyte1 << 8) | branchbyte2; 
     }
     else offset = 3;
-    GLOBAL_jvm_stack->top->pc + offset;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void Iflt(code_attribute *code) {
     if (DEBUG) printf("IFLT\n");
@@ -692,7 +692,7 @@ void Iflt(code_attribute *code) {
     offset                    = (branchbyte1 << 8) | branchbyte2; 
     }
     else offset = 3;
-    GLOBAL_jvm_stack->top->pc + offset;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void Ifge(code_attribute *code) {
     if (DEBUG) printf("IFGE\n");
@@ -704,7 +704,7 @@ void Ifge(code_attribute *code) {
     offset                    = (branchbyte1 << 8) | branchbyte2; 
     }
     else offset = 3;
-    GLOBAL_jvm_stack->top->pc + offset;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void Ifgt(code_attribute *code) {
     if (DEBUG) printf("IFGT\n");
@@ -716,7 +716,7 @@ void Ifgt(code_attribute *code) {
     offset                    = (branchbyte1 << 8) | branchbyte2; 
     }
     else offset = 3;
-    GLOBAL_jvm_stack->top->pc + offset;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void Ifle(code_attribute *code) {
     if (DEBUG) printf("IFLE\n");
@@ -728,7 +728,7 @@ void Ifle(code_attribute *code) {
     offset                    = (branchbyte1 << 8) | branchbyte2; 
     }
     else offset = 3;
-    GLOBAL_jvm_stack->top->pc + offset;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void If_icmpeq(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPEQ\n");
@@ -741,7 +741,7 @@ void If_icmpeq(code_attribute *code) {
     offset                    = (branchbyte1 << 8) | branchbyte2; 
     }
     else offset = 3;
-    GLOBAL_jvm_stack->top->pc + offset;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void If_icmpne(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPNE\n");
@@ -754,7 +754,7 @@ void If_icmpne(code_attribute *code) {
     offset                    = (branchbyte1 << 8) | branchbyte2; 
     }
     else offset = 3;
-    GLOBAL_jvm_stack->top->pc + offset;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void If_icmplt(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPLT\n");
@@ -767,7 +767,7 @@ void If_icmplt(code_attribute *code) {
     offset                    = (branchbyte1 << 8) | branchbyte2; 
     }
     else offset = 3;
-    GLOBAL_jvm_stack->top->pc + offset;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void If_icmpge(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPGE\n");
@@ -780,7 +780,7 @@ void If_icmpge(code_attribute *code) {
     offset                    = (branchbyte1 << 8) | branchbyte2; 
     }
     else offset = 3;
-    GLOBAL_jvm_stack->top->pc + offset;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void If_icmpgt(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPGT\n");
@@ -793,7 +793,7 @@ void If_icmpgt(code_attribute *code) {
     offset                    = (branchbyte1 << 8) | branchbyte2; 
     }
     else offset = 3;
-    GLOBAL_jvm_stack->top->pc + offset;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void If_icmple(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPLE\n");
@@ -806,7 +806,7 @@ void If_icmple(code_attribute *code) {
     offset                    = (branchbyte1 << 8) | branchbyte2; 
     }
     else offset = 3;
-    GLOBAL_jvm_stack->top->pc + offset;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void If_acmpeq(code_attribute *code) {
     if (DEBUG) printf("IF_ACMPEQ\n");
@@ -819,7 +819,7 @@ void If_acmpeq(code_attribute *code) {
     offset                    = (branchbyte1 << 8) | branchbyte2; 
     }
     else offset = 3;
-    GLOBAL_jvm_stack->top->pc + offset;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void If_acmpne(code_attribute *code) {
     if (DEBUG) printf("IF_ACMPNE\n");
@@ -832,7 +832,7 @@ void If_acmpne(code_attribute *code) {
     offset                    = (branchbyte1 << 8) | branchbyte2; 
     }
     else offset = 3;
-    GLOBAL_jvm_stack->top->pc + offset;
+    GLOBAL_jvm_stack->top->pc += offset;
 }
 void GoTo(code_attribute *code) {
     if (DEBUG) printf("GOTO\n");
