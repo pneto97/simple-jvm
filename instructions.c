@@ -10,14 +10,14 @@ void Nop(code_attribute *code) {
     if (DEBUG) printf("NOP\n");
 }
 void Aconst_null(code_attribute *code) {
-    if (DEBUG) printf("Aconst_null\n");
+    if (DEBUG) printf("ACONST_NULL\n");
 
     operand op_variable;
     //*op_variable.data = NULL; Verificar se será um tipo de objeto (corretude)
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
 }
 void Iconst_m1(code_attribute *code) {
-    if (DEBUG) printf("ICONST_m1\n");
+    if (DEBUG) printf("ICONST_M1\n");
 
     operand op_variable;
     op_variable.data = -1;
@@ -436,9 +436,59 @@ void Iadd(code_attribute *code) {
     op.type        = INT_TYPE;
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
-void Ladd(code_attribute *code) {}
-void Fadd(code_attribute *code) {}
-void Dadd(code_attribute *code) {}
+void Ladd(code_attribute *code) {
+    if (DEBUG) printf("LADD\n");
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    int64_t longao1 = (((int64_t)value1_hi.data << 32) + (int64_t)value1_lo.data);
+    int64_t longao2 = (((int64_t)value2_hi.data << 32) + (int64_t)value2_lo.data);
+    int64_t result  = longao1 + longao2;
+
+    operand op_hi, op_lo;
+    op_hi.data = (uint32_t)(result >> 32) & 0x0000FFFF;
+    op_lo.data = (uint32_t)(result & 0x0000FFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = LONG_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
+
+}
+void Fadd(code_attribute *code) {
+    if (DEBUG) printf("FADD\n");
+}
+void Dadd(code_attribute *code) {
+    if (DEBUG) printf("DADD\n");
+
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint64_t longao1 = (((uint64_t)value1_hi.data << 32) + (uint64_t)value1_lo.data);
+    uint64_t longao2 = (((uint64_t)value2_hi.data << 32) + (uint64_t)value2_lo.data);
+    uint64_t result  = (uint64_t) ((double) longao1 + (double) longao2);
+
+    operand op_hi, op_lo;
+    op_hi.data = (uint32_t)(result >> 32) & 0x0000FFFF;
+    op_lo.data = (uint32_t)(result & 0x0000FFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = LONG_TYPE;
+    
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
+}
 void Isub(code_attribute *code) {
     if (DEBUG) printf("ISUB\n");
     operand op;
@@ -734,19 +784,19 @@ void Invokevirtual(code_attribute *code) {
     printf("TYPE:        %s\n", type);
 
     // /* Inicia-se o procedimento para verificar se o metodo a ser chamado é um print f */
-    int isPrint = !strcmp(class_name, "java/io/PrintStream") &&  
-                (!strcmp(name, "println") || !strcmp(name, "print"));
+    int isPrint = !strcmp(class_name, "java/io/PrintStream") &&
+        (!strcmp(name, "println") || !strcmp(name, "print"));
 
     // printf("Print? : %d \n", isPrint);
     if (isPrint) {
 
-        if (strcmp(type,"()V")) {
+        if (strcmp(type, "()V")) {
             operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
             switch (op.type) {
             // case CONSTANT_String:
             //     std::cout << *(op->type_string);
             //     break;
-            case RETURN_ADDR_TYPE: 
+            case RETURN_ADDR_TYPE:
             case ARRAY_TYPE:
             case INTERFACE_TYPE:
                 printf("====FALTA IMPLEMENTAR====");
@@ -770,138 +820,138 @@ void Invokevirtual(code_attribute *code) {
                 op.data == 0 ? printf("false") : printf("true");
                 break;
             case LONG_TYPE:
-                op2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-                longao =  (((uint64_t) op.data << 32) | (uint64_t)op2.data); 
+                op2    = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+                longao = (((uint64_t)op.data << 32) | (uint64_t)op2.data);
                 printf("%ld", longao);
                 break;
             case NULL_TYPE:
                 printf("NULL");
                 break;
             case DOUBLE_TYPE: {
-                op2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-                longao =  (((uint64_t) op.data << 32) | (uint64_t)op2.data);
-                printf("%lf", (double) longao);
+                op2    = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+                longao = (((uint64_t)op.data << 32) | (uint64_t)op2.data);
+                printf("%lf", (double)longao);
                 break;
             }
             case CLASS_TYPE: {
-    //             Instance *class_instance  = op->class_instance;
-    //             ClassLoader *class_loader = class_instance->classe;
-    //             std::string class_name    = cpAttrAux.getUTF8(class_loader->getConstPool(), class_loader->getThisClass());
-    //             std::cout << class_name << "@" << class_instance;
+                //             Instance *class_instance  = op->class_instance;
+                //             ClassLoader *class_loader = class_instance->classe;
+                //             std::string class_name    = cpAttrAux.getUTF8(class_loader->getConstPool(), class_loader->getThisClass());
+                //             std::cout << class_name << "@" << class_instance;
                 break;
             }
             default:
                 printf("====BUG====");
-                break;    
+                break;
             }
 
-            if (!strcmp(name,"println")) printf("\n");
+            if (!strcmp(name, "println")) printf("\n");
         }
-    } else if (!strcmp(class_name, "java/lang/StringBuilder") && !strcmp(name,"append")) {
-    //     MethodsArea maux;
-    //     Operand *op = this_frame->operand_stack.top();
-    //     this_frame->operand_stack.pop();
-    //     Operand *string_operand = this_frame->operand_stack.top();
-    //     this_frame->operand_stack.pop();
+    } else if (!strcmp(class_name, "java/lang/StringBuilder") && !strcmp(name, "append")) {
+        //     MethodsArea maux;
+        //     Operand *op = this_frame->operand_stack.top();
+        //     this_frame->operand_stack.pop();
+        //     Operand *string_operand = this_frame->operand_stack.top();
+        //     this_frame->operand_stack.pop();
 
-    //     switch (op->tag) {
-    //     case CONSTANT_String:
-    //         *string_operand->type_string += (*op->type_string);
-    //         break;
-    //     case CONSTANT_Integer:
-    //         *string_operand->type_string += (patch::to_string(op->type_int));
-    //         break;
-    //     case CONSTANT_Long:
-    //         *string_operand->type_string += (patch::to_string(op->type_long));
-    //         break;
-    //     case CONSTANT_Float:
-    //         *string_operand->type_string += (patch::to_string(op->type_float));
-    //         break;
-    //     case CONSTANT_Double:
-    //         *string_operand->type_string += (patch::to_string(op->type_double));
-    //         break;
-    //     case CONSTANT_Short:
-    //         *string_operand->type_string += (patch::to_string(op->type_short));
-    //         break;
-    //     case CONSTANT_Char:
-    //         *string_operand->type_string += (patch::to_string(op->type_char));
-    //         break;
-    //     case CONSTANT_Byte:
-    //         *string_operand->type_string += (patch::to_string(op->type_byte));
-    //         break;
-    //     case CONSTANT_Boolean:
-    //         if (op->type_bool == 0)
-    //             *string_operand->type_string += "false";
-    //         else
-    //             *string_operand->type_string += "true";
-    //         break;
-    //     case CONSTANT_Class:
-    //         // @TODO colocar enderec
-    //         *string_operand->type_string += op->class_instance->name + "@";
-    //         break;
-    //     case CONSTANT_Array:
-    //         *string_operand->type_string += "Array[]";
-    //         break;
-    //     }
-    //     this_frame->operand_stack.push(string_operand);
-    // } else if (class_name == "java/lang/String" && method_name == "length") {
-    //     auto strOp = this_frame->operand_stack.top();
-    //     this_frame->operand_stack.pop();
+        //     switch (op->tag) {
+        //     case CONSTANT_String:
+        //         *string_operand->type_string += (*op->type_string);
+        //         break;
+        //     case CONSTANT_Integer:
+        //         *string_operand->type_string += (patch::to_string(op->type_int));
+        //         break;
+        //     case CONSTANT_Long:
+        //         *string_operand->type_string += (patch::to_string(op->type_long));
+        //         break;
+        //     case CONSTANT_Float:
+        //         *string_operand->type_string += (patch::to_string(op->type_float));
+        //         break;
+        //     case CONSTANT_Double:
+        //         *string_operand->type_string += (patch::to_string(op->type_double));
+        //         break;
+        //     case CONSTANT_Short:
+        //         *string_operand->type_string += (patch::to_string(op->type_short));
+        //         break;
+        //     case CONSTANT_Char:
+        //         *string_operand->type_string += (patch::to_string(op->type_char));
+        //         break;
+        //     case CONSTANT_Byte:
+        //         *string_operand->type_string += (patch::to_string(op->type_byte));
+        //         break;
+        //     case CONSTANT_Boolean:
+        //         if (op->type_bool == 0)
+        //             *string_operand->type_string += "false";
+        //         else
+        //             *string_operand->type_string += "true";
+        //         break;
+        //     case CONSTANT_Class:
+        //         // @TODO colocar enderec
+        //         *string_operand->type_string += op->class_instance->name + "@";
+        //         break;
+        //     case CONSTANT_Array:
+        //         *string_operand->type_string += "Array[]";
+        //         break;
+        //     }
+        //     this_frame->operand_stack.push(string_operand);
+        // } else if (class_name == "java/lang/String" && method_name == "length") {
+        //     auto strOp = this_frame->operand_stack.top();
+        //     this_frame->operand_stack.pop();
 
-    //     Operand *strLen  = (Operand *)calloc(1, sizeof(Operand));
-    //     strLen->tag      = CONSTANT_Integer;
-    //     strLen->type_int = strOp->type_string->size();
+        //     Operand *strLen  = (Operand *)calloc(1, sizeof(Operand));
+        //     strLen->tag      = CONSTANT_Integer;
+        //     strLen->type_int = strOp->type_string->size();
 
-    //     this_frame->operand_stack.push(strLen);
+        //     this_frame->operand_stack.push(strLen);
     } else {
 
-    //     int argsCount  = 0;
-    //     uint16_t count = 1;
-    //     while (method_deor.at(count) != ')') {
+        //     int argsCount  = 0;
+        //     uint16_t count = 1;
+        //     while (method_deor.at(count) != ')') {
 
-    //         if (method_deor.at(count) == 'L') {
-    //             while (method_deor.at(++count) != ';')
-    //                 ;
-    //         }
+        //         if (method_deor.at(count) == 'L') {
+        //             while (method_deor.at(++count) != ';')
+        //                 ;
+        //         }
 
-    //         else if (method_deor.at(count) == '[') {
-    //             while (method_deor.at(++count) != '[')
-    //                 ;
+        //         else if (method_deor.at(count) == '[') {
+        //             while (method_deor.at(++count) != '[')
+        //                 ;
 
-    //             if (method_deor[count] == 'L')
-    //                 while (method_deor.at(++count) != ';')
-    //                     ;
-    //         }
-    //         argsCount++;
-    //         count++;
-    //     }
+        //             if (method_deor[count] == 'L')
+        //                 while (method_deor.at(++count) != ';')
+        //                     ;
+        //         }
+        //         argsCount++;
+        //         count++;
+        //     }
 
-    //     std::vector<Operand *> args;
+        //     std::vector<Operand *> args;
 
-    //     for (int i = 0; i < argsCount; ++i) { //verificar esta linha.
+        //     for (int i = 0; i < argsCount; ++i) { //verificar esta linha.
 
-    //         auto arg = this_frame->operand_stack.top();
-    //         this_frame->operand_stack.pop();
+        //         auto arg = this_frame->operand_stack.top();
+        //         this_frame->operand_stack.pop();
 
-    //         args.insert(args.begin(), arg);
-    //         if (arg->tag == CONSTANT_Double || arg->tag == CONSTANT_Long) args.insert(args.begin() + 1, Interpreter::createType("P"));
-    //     }
-    //     auto this_class = this_frame->operand_stack.top();
-    //     this_frame->operand_stack.pop();
+        //         args.insert(args.begin(), arg);
+        //         if (arg->tag == CONSTANT_Double || arg->tag == CONSTANT_Long) args.insert(args.begin() + 1, Interpreter::createType("P"));
+        //     }
+        //     auto this_class = this_frame->operand_stack.top();
+        //     this_frame->operand_stack.pop();
 
-    //     args.insert(args.begin(), this_class);
-    //     auto instance = this_class->class_instance;
+        //     args.insert(args.begin(), this_class);
+        //     auto instance = this_class->class_instance;
 
-    //     MethodsArea auxMeth;
-    //     //fdasfds
-    //     auto methods  = auxMeth.findMethodByNameOrDeor(instance->classe, method_name, method_deor);
-    //     auto newFrame = new Frame(instance->classe->getConstPool(), methods);
+        //     MethodsArea auxMeth;
+        //     //fdasfds
+        //     auto methods  = auxMeth.findMethodByNameOrDeor(instance->classe, method_name, method_deor);
+        //     auto newFrame = new Frame(instance->classe->getConstPool(), methods);
 
-    //     for (unsigned i = 0; i < args.size(); ++i) {
-    //         newFrame->local_variables.at(i) = args.at(i);
-    //     }
-    //     Interpreter auxInter;
-    //     auxInter.frame_stack.push(newFrame);
+        //     for (unsigned i = 0; i < args.size(); ++i) {
+        //         newFrame->local_variables.at(i) = args.at(i);
+        //     }
+        //     Interpreter auxInter;
+        //     auxInter.frame_stack.push(newFrame);
     }
 }
 void Invokespecial(code_attribute *code) {
