@@ -24,3 +24,15 @@ char *getUtf8Type(uint16_t index) {
     // printf("%s\n", descriptor.info.utf8Info.bytes);
     return (char *)descriptor.info.utf8Info.bytes;
 }
+
+double makeDouble(uint32_t high, uint32_t low){
+    uint64_t number;
+
+    number = (((uint64_t) high) << 32) | ((uint64_t) low);
+    
+    return *(double*)&number;
+}
+
+float makeFloat(uint32_t bytes){
+    return *(float*)&bytes;
+}
