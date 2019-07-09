@@ -220,9 +220,6 @@ void Ifnull         (code_attribute *);
 void Ifnonnull      (code_attribute *);
 void Goto_w         (code_attribute *); // Feito
 void Jsr_w          (code_attribute *); // Feito
-void Breakpoint     (code_attribute *); // ??????????
-void Impdep1        (code_attribute *);
-void Impdep2        (code_attribute *);
 
 void (*inst_vector[256])(code_attribute *) = {
 Nop         	/*0x00 */,
@@ -427,12 +424,7 @@ Ifnull  		/*0xc6 */,
 Ifnonnull   	/*0xc7 */,
 Goto_w  		/*0xc8 */,
 Jsr_w   		/*0xc9 */,
-Breakpoint  	/*0xca */,
-[0xcb ... 0xfd] = NULL,
-Impdep1 		/*0xfe */,
-Impdep2 		/*0xff */,
+[0xca ... 0xff] = NULL,
 };
-
-
 
 #endif

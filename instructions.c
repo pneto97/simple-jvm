@@ -2070,12 +2070,3 @@ void Jsr_w(code_attribute *code) {
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
     GLOBAL_jvm_stack->top->pc += offset - 1;
 }
-void Breakpoint(code_attribute *code) {
-    if (DEBUG) printf("BREAKPOINT\n");
-}
-void Impdep1(code_attribute *code) {
-    if (DEBUG) printf("IMPDEP1\n");
-}
-void Impdep2(code_attribute *code) {
-    if (DEBUG) printf("IMPDEP2\n");
-}
