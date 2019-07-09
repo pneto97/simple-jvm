@@ -28,7 +28,6 @@ void push_jvm_stack(jvm_stack *stack, frame *new_frame) {
 operand pop_op_stack(operand_stack *stack) {
     operand_item *aux = stack->top;
     stack->top        = stack->top->next;
-    //stack->--;
     operand ret = aux->op;
     free(aux);
     return ret;
@@ -37,9 +36,8 @@ operand pop_op_stack(operand_stack *stack) {
 void push_op_stack(operand_stack *stack, operand new_operand) {
     operand_item *op_item = (operand_item *)malloc(sizeof(operand_item));
     op_item->op           = new_operand;
-    op_item->next         = NULL;
+    op_item->next         = stack->top;
     stack->top            = op_item;
-    //stack->++;
 }
 
 // void free_frame(frame *trash){
@@ -304,5 +302,5 @@ void PrintOpStack() {
         op_item = op_item->next;
         i++;
     }
-    printf("\n");
+    printf("\n\n");
 }

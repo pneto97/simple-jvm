@@ -36,3 +36,11 @@ double makeDouble(uint32_t high, uint32_t low){
 float makeFloat(uint32_t bytes){
     return *(float*)&bytes;
 }
+
+uint64_t doubleToUint64(double number){
+    return *(uint64_t*)&number;
+}
+
+uint32_t floatToUint32(float bytes){
+    return *(uint32_t*)&bytes;
+}
