@@ -298,12 +298,11 @@ void Fload(code_attribute *code) {
 void Dload(code_attribute *code) {
     if (DEBUG) printf("DLOAD  \n");
 
-    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
-    uint8_t index_hi             = code->code[(GLOBAL_jvm_stack->top->pc)++];
-    operand value_hi           = GLOBAL_jvm_stack->top->local_vars[index_hi];
-
-    uint8_t index_lo            = code->code[GLOBAL_jvm_stack->top->pc];
-    operand value_lo           = GLOBAL_jvm_stack->top->local_vars[index_lo];
+    GLOBAL_jvm_stack->top->pc   = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index_hi            = code->code[GLOBAL_jvm_stack->top->pc];
+    operand value_hi            = GLOBAL_jvm_stack->top->local_vars[index_hi];
+    uint8_t index_lo            = index_hi + 1;
+    operand value_lo            = GLOBAL_jvm_stack->top->local_vars[index_lo];
 
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_lo);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_hi);
@@ -509,9 +508,19 @@ void Lstore(code_attribute *code) {
 }
 void Fstore(code_attribute *code) {
     if (DEBUG) printf("FSTORE\n");
+    GLOBAL_jvm_stack->top->pc                    = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index                                = code->code[GLOBAL_jvm_stack->top->pc];
+    operand value                                = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = value;
 }
 void Dstore(code_attribute *code) {
     if (DEBUG) printf("DSTORE\n");
+    GLOBAL_jvm_stack->top->pc                = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index                            = code->code[GLOBAL_jvm_stack->top->pc];
+    operand hi                               = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand lo                               = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = lo;
 }
 void Astore(code_attribute *code) {
     if (DEBUG) printf("ASTORE\n");
@@ -798,9 +807,9 @@ void Fadd(code_attribute *code) {
 
 
     float result = makeFloat(value1.data) + makeFloat(value2.data);
-    op.data        = result;
+    op.data        = floatToUint32(result);
     op.cat         = UNIQUE;
-    op.type        = INT_TYPE;
+    op.type        = FLOAT_TYPE;
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 
 }
@@ -813,18 +822,16 @@ void Dadd(code_attribute *code) {
     operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-    uint64_t longao1 = (((uint64_t)value1_hi.data << 32) + (uint64_t)value1_lo.data);
-    uint64_t longao2 = (((uint64_t)value2_hi.data << 32) + (uint64_t)value2_lo.data);
-    uint64_t result  = (uint64_t) ((double) longao1 + (double) longao2);
+    uint64_t result  = doubleToUint64(makeDouble(value1_hi.data, value1_lo.data)+(makeDouble(value2_hi.data, value2_lo.data)));
 
     operand op_hi, op_lo;
-    op_hi.data = (uint32_t)(result >> 32) & 0x0000FFFF;
-    op_lo.data = (uint32_t)(result & 0x0000FFFF);
+    op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data = (uint32_t)(result & 0x00000000FFFFFFFF);
 
     op_hi.cat = FIRST;
     op_lo.cat = SECOND;
 
-    op_hi.type = op_lo.type = LONG_TYPE;
+    op_hi.type = op_lo.type = DOUBLE_TYPE;
     
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
@@ -846,9 +853,38 @@ void Lsub(code_attribute *code) {
 }
 void Fsub(code_attribute *code) {
     if (DEBUG) printf("FSUB\n");
+    operand op;
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+
+    float result   = makeFloat(value1.data) - makeFloat(value2.data);
+    op.data        = floatToUint32(result);
+    op.cat         = UNIQUE;
+    op.type        = FLOAT_TYPE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Dsub(code_attribute *code) {
     if (DEBUG) printf("DSUB\n");
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint64_t result  = doubleToUint64(makeDouble(value1_hi.data, value1_lo.data)-(makeDouble(value2_hi.data, value2_lo.data)));
+
+    operand op_hi, op_lo;
+    op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = DOUBLE_TYPE;
+    
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Imul(code_attribute *code) {
     if (DEBUG) printf("IMUL\n");
@@ -867,9 +903,38 @@ void Lmul(code_attribute *code) {
 }
 void Fmul(code_attribute *code) {
     if (DEBUG) printf("FMUL\n");
+    operand op;
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+
+    float result = makeFloat(value1.data) * makeFloat(value2.data);
+    op.data        = floatToUint32(result);
+    op.cat         = UNIQUE;
+    op.type        = FLOAT_TYPE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Dmul(code_attribute *code) {
     if (DEBUG) printf("DMUL\n");
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint64_t result  = doubleToUint64(makeDouble(value1_hi.data, value1_lo.data)*(makeDouble(value2_hi.data, value2_lo.data)));
+
+    operand op_hi, op_lo;
+    op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = DOUBLE_TYPE;
+    
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Idiv(code_attribute *code) {
     if (DEBUG) printf("IDIV\n");
@@ -895,9 +960,38 @@ void Ldiv(code_attribute *code) {
 }
 void Fdiv(code_attribute *code) {
     if (DEBUG) printf("FDIV\n");
+    operand op;
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+
+    float result = makeFloat(value1.data) / makeFloat(value2.data);
+    op.data        = floatToUint32(result);
+    op.cat         = UNIQUE;
+    op.type        = FLOAT_TYPE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Ddiv(code_attribute *code) {
     if (DEBUG) printf("DDIV\n");
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint64_t result  = doubleToUint64(makeDouble(value1_hi.data, value1_lo.data)/(makeDouble(value2_hi.data, value2_lo.data)));
+
+    operand op_hi, op_lo;
+    op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = DOUBLE_TYPE;
+    
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Irem(code_attribute *code) {
     if (DEBUG) printf("IREM\n");
@@ -1508,7 +1602,7 @@ void Invokevirtual(code_attribute *code) {
                 printf("%d", (int32_t)op.data);
                 break;
             case FLOAT_TYPE:
-                printf("%f", (float)op.data);
+                printf("%f", makeFloat(op.data));
                 break;
             case BYTE_TYPE:
                 printf("%x", (uint8_t)op.data);
@@ -1532,8 +1626,7 @@ void Invokevirtual(code_attribute *code) {
                 break;
             case DOUBLE_TYPE: {
                 op2    = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-                longao = (((uint64_t)op.data << 32) | (uint64_t)op2.data);
-                printf("%lf", (double)longao);
+                printf("%lf", makeDouble(op.data, op2.data));
                 break;
             }
             case CLASS_TYPE: {

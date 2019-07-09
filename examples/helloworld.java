@@ -1,8 +1,8 @@
 public class helloworld{
     public static void main(String[] args) {
-        float first = 1;
-        float second = 15;
-        float sum = first + second;
+        double first = 21;
+        double second = 7;
+        double sum = first / second;
         System.out.println(sum);
 
         //double third = 10.666666f;
