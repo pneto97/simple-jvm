@@ -1785,6 +1785,47 @@ void Tableswitch(code_attribute *code) {
 }
 void Lookupswitch(code_attribute *code) {
     if (DEBUG) printf("LOOKUPSWITCH\n");
+    uint32_t key = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data;
+
+    int32_t offset;
+    int resto     = 3 - (GLOBAL_jvm_stack->top->pc % 4);
+    int pc_offset = resto + GLOBAL_jvm_stack->top->pc;
+
+    uint32_t default_variable = build32(code->code[pc_offset + 1], code->code[pc_offset + 2], code->code[pc_offset + 3], code->code[pc_offset + 4]);
+    uint32_t n_pairs          = build32(code->code[pc_offset + 5], code->code[pc_offset + 6], code->code[pc_offset + 7], code->code[pc_offset + 8]);
+    int32_t * match_offset_table = (int32_t * ) malloc ((n_pairs) * sizeof(int32_t)); 
+    int32_t * match_table = (int32_t * ) malloc ((n_pairs) * sizeof(int32_t)); 
+
+    uint32_t return_amount = 0xFFFF;
+
+    if (DEBUG) printf(" // %d\n", n_pairs);
+    for (int j = 0; j < n_pairs * 2; j += 2) {
+        int aux_off     = resto + GLOBAL_jvm_stack->top->pc + j * 4;
+        int index       = build32(code->code[aux_off + 9], code->code[aux_off + 10], code->code[aux_off + 11], code->code[aux_off + 12]);
+        int jump_amount = build32(code->code[aux_off + 13], code->code[aux_off + 14], code->code[aux_off + 15], code->code[aux_off + 16]);
+        match_offset_table[j/2] = jump_amount;
+        match_table[j/2] = index;
+        if (DEBUG) printf("\t\t%d: %d (+%d)\n", index, jump_amount + GLOBAL_jvm_stack->top->pc, jump_amount);
+
+        if (return_amount > jump_amount) return_amount = jump_amount;
+    }
+    if (DEBUG) printf("\t\tdefault: %d (+%d)\n", GLOBAL_jvm_stack->top->pc + default_variable, default_variable);
+
+    for(int i = 0; i< n_pairs; i++){
+        if(key == match_table[i]){
+            if (DEBUG) printf("\tkey: %d match_table:(+%d)\n", key, match_table[i]);
+            offset = match_offset_table[i];
+            break;
+        }
+        else {
+            offset = default_variable;
+        }
+    }
+    if (DEBUG) printf("offset: %d\n",offset);
+    GLOBAL_jvm_stack->top->pc += offset-1;
+    free(match_offset_table);
+    free(match_table);
+
 }
 void Ireturn(code_attribute *code) {
     if (DEBUG) printf("IRETURN\n");

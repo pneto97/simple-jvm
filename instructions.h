@@ -189,7 +189,7 @@ void GoTo        (code_attribute *); //Feito e testado
 void Jsr         (code_attribute *); //Feito
 void Ret         (code_attribute *); //Feito
 void Tableswitch (code_attribute *); //Feito e testado
-void Lookupswitch(code_attribute *); //demetrio e chris
+void Lookupswitch(code_attribute *); //Feito e testado
 void Ireturn     (code_attribute *);
 void Lreturn     (code_attribute *);
 void Freturn     (code_attribute *);
