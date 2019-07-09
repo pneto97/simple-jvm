@@ -776,24 +776,90 @@ void Iastore(code_attribute *code) {
 }
 void Lastore(code_attribute *code) {
     if (DEBUG) printf("LASTORE\n");
+    uint32_t hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    uint32_t lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    uint32_t index = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    reference_type * array_ref = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.ref;
+
+    if (array_ref == NULL) {
+        printf("NullPointerException\n");
+        exit(3);
+    }
+    array_ref->arrayref->low[index].data.bytes = hi;
+    array_ref->arrayref->low[index].data.bytes = lo;
 }
 void Fastore(code_attribute *code) {
     if (DEBUG) printf("FASTORE\n");
+    uint32_t value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    uint32_t index = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    reference_type * array_ref = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.ref;
+
+    if (array_ref == NULL) {
+        printf("NullPointerException\n");
+        exit(3);
+    }
+
+    array_ref->arrayref->low[index].data.bytes = value;
 }
 void Dastore(code_attribute *code) {
     if (DEBUG) printf("DASTORE\n");
+
+    uint32_t hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    uint32_t lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    uint32_t index = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    reference_type * array_ref = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.ref;
+
+    if (array_ref == NULL) {
+        printf("NullPointerException\n");
+        exit(3);
+    }
+    array_ref->arrayref->low[index].data.bytes = (uint32_t) hi;
+    array_ref->arrayref->low[index].data.bytes = (uint32_t) lo;
 }
 void Aastore(code_attribute *code) {
     if (DEBUG) printf("AASTORE\n");
 }
 void Bastore(code_attribute *code) {
     if (DEBUG) printf("BASTORE\n");
+
+    uint32_t value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    uint32_t index = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    reference_type * array_ref = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.ref;
+
+    if (array_ref == NULL) {
+        printf("NullPointerException\n");
+        exit(3);
+    }
+
+    array_ref->arrayref->low[index].data.bytes = value;
 }
 void Castore(code_attribute *code) {
     if (DEBUG) printf("CASTORE\n");
+
+    uint32_t value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    uint32_t index = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    reference_type * array_ref = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.ref;
+
+    if (array_ref == NULL) {
+        printf("NullPointerException\n");
+        exit(3);
+    }
+
+    array_ref->arrayref->low[index].data.bytes = value;
 }
 void Sastore(code_attribute *code) {
     if (DEBUG) printf("SASTORE\n");
+
+    uint32_t value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    uint32_t index = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    reference_type * array_ref = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.ref;
+
+    if (array_ref == NULL) {
+        printf("NullPointerException\n");
+        exit(3);
+    }
+
+    array_ref->arrayref->low[index].data.bytes = value;
 }
 void Pop(code_attribute *code) {
     if (DEBUG) printf("POP\n");
