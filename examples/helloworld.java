@@ -1,7 +1,7 @@
 public class helloworld{
     public static void main(String[] args) {
         float first = 1;
-        float second = 2;
+        float second = 15;
         float sum = first + second;
         System.out.println(sum);
 

@@ -1,8 +1,8 @@
 public class rodrigo{
     public static void main(String[] args) {
-        int first = 1;
-        int second = 1;
-        int sum = 3;
+        double first = 1f;
+        double second = 0f;
+        double sum = 3f;
         if (first < second){
             sum = first + second;
         }

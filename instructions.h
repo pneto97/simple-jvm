@@ -20,9 +20,9 @@ void Dconst_0    (code_attribute *); //Verificar
 void Dconst_1    (code_attribute *); //Verificar
 void Bipush      (code_attribute *); //Feito
 void Sipush      (code_attribute *);
-void Ldc         (code_attribute *);
+void Ldc         (code_attribute *); //Feito
 void Ldc_w       (code_attribute *);
-void Ldc2_w      (code_attribute *);
+void Ldc2_w      (code_attribute *); //Feito
 // Paulo
 void Iload  (code_attribute *); //Feito
 void Lload  (code_attribute *); //Feito

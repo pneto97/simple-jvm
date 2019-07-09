@@ -101,13 +101,23 @@ void Lconst_0(code_attribute *code) {
 
 void Lconst_1(code_attribute *code) {
     if (DEBUG) printf("LCONST_1\n");
+    operand hi, low;
+    hi.data  = 0x0;
+    hi.type  = LONG_TYPE;
+    hi.cat   = FIRST;
+    low.data = 0x1;
+    low.type = LONG_TYPE;
+    low.cat  = SECOND;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, low);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, hi);
 }
 void Fconst_0(code_attribute *code) {
     if (DEBUG) printf("FCONST_0\n");
 
     operand op_variable;
     float var        = 0;
-    op_variable.data = var;
+    
+    op_variable.data = floatToUint32(var);
     op_variable.type = FLOAT_TYPE;
     op_variable.cat  = UNIQUE;
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
@@ -117,26 +127,51 @@ void Fconst_1(code_attribute *code) {
 
     operand op_variable;
     float var        = 1;
-    op_variable.data = var;
+    op_variable.data = floatToUint32(var);
     op_variable.type = FLOAT_TYPE;
     op_variable.cat  = UNIQUE;
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
 }
 void Fconst_2(code_attribute *code) {
     if (DEBUG) printf("FCONST_2\n");
-
     operand op_variable;
     float var        = 2;
-    op_variable.data = var;
+    op_variable.data = floatToUint32(var);
     op_variable.type = FLOAT_TYPE;
     op_variable.cat  = UNIQUE;
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
 }
 void Dconst_0(code_attribute *code) {
     if (DEBUG) printf("DCONST_0\n");
+    operand op_high,op_low;
+    uint32_t high, low;
+    uint64_t var        = doubleToUint64(0);
+    high = (uint32_t) ((var >> 32) & 0x00000000ffffffff);
+    low = (uint32_t) ((var) & 0x00000000ffffffff);
+    op_high.data = high;
+    op_high.type = DOUBLE_TYPE;
+    op_high.cat  = FIRST;
+    op_low.data = low;
+    op_low.type = DOUBLE_TYPE;
+    op_low.cat  = SECOND;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_low);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_high);
 }
 void Dconst_1(code_attribute *code) {
     if (DEBUG) printf("DCONST_1\n");
+    operand op_high,op_low;
+    uint32_t high, low;
+    uint64_t var        = doubleToUint64(1);
+    high = (uint32_t) ((var >> 32) & 0x00000000ffffffff);
+    low = (uint32_t) ((var) & 0x00000000ffffffff);
+    op_high.data = high;
+    op_high.type = DOUBLE_TYPE;
+    op_high.cat  = FIRST;
+    op_low.data = low;
+    op_low.type = DOUBLE_TYPE;
+    op_low.cat  = SECOND;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_low);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_high);
 }
 
 void Bipush(code_attribute *code) {
@@ -158,12 +193,77 @@ void Sipush(code_attribute *code) {
 }
 void Ldc(code_attribute *code) {
     if (DEBUG) printf("LDC\n");
+    operand op;
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index             = code->code[GLOBAL_jvm_stack->top->pc];
+    cp_info cp = GLOBAL_jvm_stack->top->constant_pool[index - 1];
+
+    switch (cp.tag)
+    {
+    case CONSTANT_Integer:
+        op.data = cp.info.integerInfo.bytes;
+        op.cat = UNIQUE;
+        op.type = INT_TYPE;
+        break;
+    case CONSTANT_Float:
+        op.data = cp.info.floatInfo.bytes;
+        op.cat = UNIQUE;
+        op.type = FLOAT_TYPE;
+        break;
+    case CONSTANT_String:
+        op.data = (uint32_t) GLOBAL_jvm_stack->top->constant_pool[cp.info.stringInfo.string_index - 1].info.utf8Info.bytes;
+        op.cat = UNIQUE;
+        op.type = CHAR_TYPE;
+        break;
+    // case CONSTANT_Class:
+    //     op.data = cp.info.classInfo.name_index;
+    //     op.cat = UNIQUE;
+    //     op.type = CLASS_TYPE;
+    //     printf("falta implementar [constant class do LDC]\n");
+    //     break;
+    default:
+        op.data = 0;
+        op.cat = UNIQUE;
+        op.type = NULL_TYPE;
+        printf("Deu ruim no LDC\n");
+        break;
+    }
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Ldc_w(code_attribute *code) {
     if (DEBUG) printf("LDC_W\n");
 }
 void Ldc2_w(code_attribute *code) {
     if (DEBUG) printf("LDC2_W\n");
+    operand op_high,op_low;
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t indexbyte1             = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t indexbyte2             = code->code[GLOBAL_jvm_stack->top->pc];
+    uint16_t index = ((uint16_t) indexbyte1 << 8) | (uint16_t) indexbyte2;
+    cp_info cp = GLOBAL_jvm_stack->top->constant_pool[index - 1];
+
+    if (cp.tag == CONSTANT_Long) {
+        op_high.data = cp.info.longInfo.high_bytes;
+        op_high.cat = FIRST;
+        op_high.type = LONG_TYPE;
+
+        op_low.data = cp.info.longInfo.low_bytes;
+        op_low.cat = SECOND;
+        op_low.type = LONG_TYPE;
+    }
+    else{
+        op_high.data = cp.info.doubleInfo.high_bytes;
+        op_high.cat = FIRST;
+        op_high.type = DOUBLE_TYPE;
+
+        op_low.data = cp.info.doubleInfo.low_bytes;
+        op_low.cat = SECOND;
+        op_low.type = DOUBLE_TYPE;
+    }
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_low);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_high);
+
 }
 void Iload(code_attribute *code) {
     if (DEBUG) printf("ILOAD\n");
@@ -692,6 +792,17 @@ void Ladd(code_attribute *code) {
 }
 void Fadd(code_attribute *code) {
     if (DEBUG) printf("FADD\n");
+    operand op;
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+
+    float result = makeFloat(value1.data) + makeFloat(value2.data);
+    op.data        = result;
+    op.cat         = UNIQUE;
+    op.type        = INT_TYPE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
+
 }
 void Dadd(code_attribute *code) {
     if (DEBUG) printf("DADD\n");
