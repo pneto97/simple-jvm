@@ -581,6 +581,10 @@ void Dstore(code_attribute *code) {
 }
 void Astore(code_attribute *code) {
     if (DEBUG) printf("ASTORE\n");
+    GLOBAL_jvm_stack->top->pc                = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index                            = code->code[GLOBAL_jvm_stack->top->pc];
+    operand reference                        = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = reference;
 }
 
 void Istore_0(code_attribute *code) {

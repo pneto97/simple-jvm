@@ -62,7 +62,7 @@ void Istore   (code_attribute *); //Feito
 void Lstore   (code_attribute *); //Feito e testado
 void Fstore   (code_attribute *); //Feito
 void Dstore   (code_attribute *); //Feito e testado
-void Astore   (code_attribute *); //Joma
+void Astore   (code_attribute *); //Feito (NECESSSITA VERIFICAR)
 void Istore_0 (code_attribute *); //Feito
 void Istore_1 (code_attribute *); //Feito
 void Istore_2 (code_attribute *); //Feito
