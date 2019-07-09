@@ -56,9 +56,9 @@ void Laload (code_attribute *); //Feito (NECESSITA VERIFICAR)
 void Faload (code_attribute *); //Feito (NECESSITA VERIFICAR)
 void Daload (code_attribute *); //Feito (NECESSITA VERIFICAR)
 void Aaload (code_attribute *); //Duvida (Como proceder com a referencia?)
-void Baload (code_attribute *);
-void Caload (code_attribute *);
-void Saload (code_attribute *);
+void Baload (code_attribute *); //Feito (NECESSITA VERIFICAR)
+void Caload (code_attribute *); //Feito (NECESSITA VERIFICAR)
+void Saload (code_attribute *); //Feito (NECESSITA VERIFICAR)
 void Istore   (code_attribute *); //Feito
 void Lstore   (code_attribute *); //Feito e testado
 void Fstore   (code_attribute *); //Feito
