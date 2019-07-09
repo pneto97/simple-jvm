@@ -190,12 +190,12 @@ void Jsr         (code_attribute *); //Feito
 void Ret         (code_attribute *); //Feito
 void Tableswitch (code_attribute *); //Feito e testado
 void Lookupswitch(code_attribute *); //Feito e testado
-void Ireturn     (code_attribute *);
-void Lreturn     (code_attribute *);
-void Freturn     (code_attribute *);
-void Dreturn     (code_attribute *);
-void Areturn     (code_attribute *);
-void Return      (code_attribute *);
+void Ireturn     (code_attribute *); //Feito Verificar!
+void Lreturn     (code_attribute *); //Feito Verificar!
+void Freturn     (code_attribute *); //Feito Verificar!
+void Dreturn     (code_attribute *); //Feito Verificar!
+void Areturn     (code_attribute *); //Feito Verificar!
+void Return      (code_attribute *); //Feito Verificar!
 void Getstatic      (code_attribute *); //Incompleto
 void Putstatic      (code_attribute *);
 void Getfield       (code_attribute *);
@@ -212,12 +212,12 @@ void Arraylength    (code_attribute *);
 void Athrow         (code_attribute *);
 void Checkcast      (code_attribute *);
 void Instanceof     (code_attribute *);
-void Monitorenter   (code_attribute *);
-void Monitorexit    (code_attribute *);
+void Monitorenter   (code_attribute *); // Não necessário
+void Monitorexit    (code_attribute *); // Não necessário
 void Wide           (code_attribute *);
 void Multianewarray (code_attribute *);
-void Ifnull         (code_attribute *);
-void Ifnonnull      (code_attribute *);
+void Ifnull         (code_attribute *); // Feito Verificar!
+void Ifnonnull      (code_attribute *); // Feito Verificar!
 void Goto_w         (code_attribute *); // Feito
 void Jsr_w          (code_attribute *); // Feito
 

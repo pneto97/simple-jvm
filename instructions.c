@@ -1841,21 +1841,57 @@ void Lookupswitch(code_attribute *code) {
 }
 void Ireturn(code_attribute *code) {
     if (DEBUG) printf("IRETURN\n");
+
+    operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    pop_jvm_stack(GLOBAL_jvm_stack);
+    if(GLOBAL_jvm_stack->top != NULL)
+        push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Lreturn(code_attribute *code) {
     if (DEBUG) printf("LRETURN\n");
+
+    operand hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    pop_jvm_stack(GLOBAL_jvm_stack);
+    if(GLOBAL_jvm_stack->top != NULL){
+        push_op_stack(GLOBAL_jvm_stack->top->op_stack, lo);
+        push_op_stack(GLOBAL_jvm_stack->top->op_stack, hi);
+    }
 }
 void Freturn(code_attribute *code) {
     if (DEBUG) printf("FRETURN\n");
+
+    operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    pop_jvm_stack(GLOBAL_jvm_stack);
+    if(GLOBAL_jvm_stack->top != NULL)
+        push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
+
 }
 void Dreturn(code_attribute *code) {
     if (DEBUG) printf("DRETURN\n");
+
+    operand hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    pop_jvm_stack(GLOBAL_jvm_stack);
+    if(GLOBAL_jvm_stack->top != NULL){
+        push_op_stack(GLOBAL_jvm_stack->top->op_stack, lo);
+        push_op_stack(GLOBAL_jvm_stack->top->op_stack, hi);
+    }
 }
 void Areturn(code_attribute *code) {
     if (DEBUG) printf("ARETURN\n");
+
+    operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    pop_jvm_stack(GLOBAL_jvm_stack);
+    if(GLOBAL_jvm_stack->top != NULL)
+        push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Return(code_attribute *code) {
     if (DEBUG) printf("RETURN\n");
+
+    pop_jvm_stack(GLOBAL_jvm_stack);
 }
 void Getstatic(code_attribute *code) {
     if (DEBUG) printf("GETSTATIC\n");
@@ -2124,9 +2160,34 @@ void Multianewarray(code_attribute *code) {
 }
 void Ifnull(code_attribute *code) {
     if (DEBUG) printf("IFNULL\n");
+    int32_t offset;
+
+    GLOBAL_jvm_stack->top->pc ++;
+    uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc ++;
+    uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset = (int32_t)((branchbyte1 << 8) | branchbyte2);
+
+    operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    if(op.type == NULL_TYPE)
+        GLOBAL_jvm_stack->top->pc += offset;
 }
 void Ifnonnull(code_attribute *code) {
     if (DEBUG) printf("IFNONNULL\n");
+
+        int32_t offset;
+
+    GLOBAL_jvm_stack->top->pc ++;
+    uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc ++;
+    uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset = (int32_t)((branchbyte1 << 8) | branchbyte2);
+
+    operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    if(op.type != NULL_TYPE)
+        GLOBAL_jvm_stack->top->pc += offset;
 }
 void Goto_w(code_attribute *code) {
     if (DEBUG) printf("GOTO_W\n");
