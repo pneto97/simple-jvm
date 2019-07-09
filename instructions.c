@@ -532,24 +532,82 @@ void Iaload(code_attribute *code) {
 }
 void Laload(code_attribute *code) {
     if (DEBUG) printf("LALOAD \n");
+    uint32_t index = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    reference_type * array_ref = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.ref;
+
+    if (array_ref == NULL) {
+        printf("NullPointerException\n");
+        exit(3);
+    }
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->high[index]);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->low[index + 1]);
 }
 void Faload(code_attribute *code) {
     if (DEBUG) printf("FALOAD \n");
+
+    uint32_t index = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    reference_type * array_ref = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.ref;
+
+    if (array_ref == NULL) {
+        printf("NullPointerException\n");
+        exit(3);
+    }
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->low[index]);
 }
+
 void Daload(code_attribute *code) {
     if (DEBUG) printf("DALOAD \n");
+    uint32_t index = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    reference_type * array_ref = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.ref;
+
+    if (array_ref == NULL) {
+        printf("NullPointerException\n");
+        exit(3);
+    }
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->high[index]);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->low[index + 1]);
 }
 void Aaload(code_attribute *code) {
     if (DEBUG) printf("AALOAD \n");
 }
 void Baload(code_attribute *code) {
     if (DEBUG) printf("BALOAD \n");
+    uint32_t index = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    reference_type * array_ref = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.ref;
+
+    if (array_ref == NULL) {
+        printf("NullPointerException\n");
+        exit(3);
+    }
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->low[index]);
 }
 void Caload(code_attribute *code) {
     if (DEBUG) printf("CALOAD \n");
+    uint32_t index = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    reference_type * array_ref = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.ref;
+
+    if (array_ref == NULL) {
+        printf("NullPointerException\n");
+        exit(3);
+    }
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->low[index]);
 }
 void Saload(code_attribute *code) {
     if (DEBUG) printf("SALOAD \n");
+    uint32_t index = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    reference_type * array_ref = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.ref;
+
+    if (array_ref == NULL) {
+        printf("NullPointerException\n");
+        exit(3);
+    }
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->low[index]);
 }
 
 void Istore(code_attribute *code) {
