@@ -53,6 +53,7 @@ uint64_t longToUint64(long number) {
     return *(uint64_t *)&number;
 }
 
+
 uint32_t floatToUint32(float bytes) {
     return *(uint32_t *)&bytes;
 }
