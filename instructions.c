@@ -1305,6 +1305,26 @@ void Ior(code_attribute *code) {
 }
 void Lor(code_attribute *code) {
     if (DEBUG) printf("LOR\n");
+
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint64_t result = longToUint64(makeLong(value1_hi.data, value1_lo.data) | (makeLong(value2_hi.data, value2_lo.data)));
+
+    operand op_hi, op_lo;
+    op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = LONG_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Ixor(code_attribute *code) {
     if (DEBUG) printf("IXOR\n");

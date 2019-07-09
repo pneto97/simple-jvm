@@ -140,7 +140,7 @@ void Lushr  (code_attribute *);
 void Iand   (code_attribute *); //Feito e testado
 void Land   (code_attribute *); 
 void Ior    (code_attribute *); //Feito e testado
-void Lor    (code_attribute *); 
+void Lor    (code_attribute *); //Feito e testado
 void Ixor   (code_attribute *); //Feito e testado
 void Lxor   (code_attribute *); 
 void Iinc   (code_attribute *); //Feito e testado

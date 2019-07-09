@@ -1,7 +1,7 @@
 public class chris{
     public static void main(String[] args) {
-        double test =  15.635;
-        test = -test;
+        long test =  4112;
+        test |= 0x00000101;
         System.out.println(test);
     }
 }
