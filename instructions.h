@@ -127,23 +127,23 @@ void Frem   (code_attribute *);
 void Drem   (code_attribute *);
 
 // Chris 
-void Ineg   (code_attribute *); 
+void Ineg   (code_attribute *); //Feito e testado
 void Lneg   (code_attribute *); 
 void Fneg   (code_attribute *); 
 void Dneg   (code_attribute *); 
-void Ishl   (code_attribute *); 
+void Ishl   (code_attribute *); //Feito e testado
 void Lshl   (code_attribute *); 
-void Ishr   (code_attribute *); 
+void Ishr   (code_attribute *); //Feito e testado
 void Lshr   (code_attribute *); 
-void Iushr  (code_attribute *);
+void Iushr  (code_attribute *); //Feito e testado
 void Lushr  (code_attribute *);
-void Iand   (code_attribute *); 
+void Iand   (code_attribute *); //Feito e testado
 void Land   (code_attribute *); 
-void Ior    (code_attribute *); 
+void Ior    (code_attribute *); //Feito e testado
 void Lor    (code_attribute *); 
-void Ixor   (code_attribute *); 
+void Ixor   (code_attribute *); //Feito e testado
 void Lxor   (code_attribute *); 
-void Iinc   (code_attribute *);
+void Iinc   (code_attribute *); //Feito e testado
 
 void I2l (code_attribute *);
 void I2f (code_attribute *);

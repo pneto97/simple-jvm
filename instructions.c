@@ -816,6 +816,12 @@ void Drem(code_attribute *code) {
 }
 void Ineg(code_attribute *code) {
     if (DEBUG) printf("INEG\n");
+    
+    operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    
+    op.data = -1 * (int32_t) op.data;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Lneg(code_attribute *code) {
     if (DEBUG) printf("LNEG\n");
@@ -828,42 +834,100 @@ void Dneg(code_attribute *code) {
 }
 void Ishl(code_attribute *code) {
     if (DEBUG) printf("ISHL\n");
+
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack); //Shift value
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack); //Value to shift
+
+    uint32_t shift = value2.data & 0x1f;
+
+    value1.data <<= shift;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value1);
 }
 void Lshl(code_attribute *code) {
     if (DEBUG) printf("LSHL\n");
 }
 void Ishr(code_attribute *code) {
     if (DEBUG) printf("ISHR\n");
+
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack); //Shift value
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack); //Value to shift
+
+    uint32_t shift = value2.data & 0x1f;
+
+    value1.data >>= shift;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value1);
 }
 void Lshr(code_attribute *code) {
     if (DEBUG) printf("LSHR\n");
 }
 void Iushr(code_attribute *code) {
     if (DEBUG) printf("IUSHR\n");
+
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack); //Shift value
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack); //Value to shift
+    int32_t shift = value2.data  & 0x1f;
+
+    if((int32_t) value1.data < 0){
+        value1.data = (value1.data >> shift) + (2 << ~shift);
+    } else {
+        value1.data >>= shift;
+    }
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value1);
 }
 void Lushr(code_attribute *code) {
     if (DEBUG) printf("LUSHR\n");
 }
 void Iand(code_attribute *code) {
     if (DEBUG) printf("IAND\n");
+
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    value1.data &= value2.data;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value1);
 }
 void Land(code_attribute *code) {
     if (DEBUG) printf("LAND\n");
 }
 void Ior(code_attribute *code) {
     if (DEBUG) printf("IOR\n");
+
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    value1.data |= value2.data;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value1);
 }
 void Lor(code_attribute *code) {
     if (DEBUG) printf("LOR\n");
 }
 void Ixor(code_attribute *code) {
     if (DEBUG) printf("IXOR\n");
+
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    value1.data ^= value2.data;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, value1);
 }
 void Lxor(code_attribute *code) {
     if (DEBUG) printf("LXOR\n");
 }
 void Iinc(code_attribute *code) {
     if (DEBUG) printf("IINC\n");
+
+    GLOBAL_jvm_stack->top->pc++;
+    uint8_t index             = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc++;
+    uint8_t const_inc         = code->code[GLOBAL_jvm_stack->top->pc];
+
+    GLOBAL_jvm_stack->top->local_vars[index].data += const_inc;
 }
 void I2l(code_attribute *code) {
     if (DEBUG) printf("I2L\n");
