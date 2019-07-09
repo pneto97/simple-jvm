@@ -44,3 +44,4 @@ uint64_t doubleToUint64(double number){
 uint32_t floatToUint32(float bytes){
     return *(uint32_t*)&bytes;
 }
+
