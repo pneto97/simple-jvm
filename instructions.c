@@ -197,8 +197,7 @@ void Sipush(code_attribute *code) {
     uint8_t byte2 = code->code[GLOBAL_jvm_stack->top->pc];
     operand op;
     uint16_t value = (((int16_t)byte1 << 8) | (int16_t)byte2);
-
-    op.type = BYTE_TYPE;
+    op.type = SHORT_TYPE;
     op.data = (int32_t)value;
     op.cat  = UNIQUE;
 
@@ -1782,6 +1781,7 @@ void Tableswitch(code_attribute *code) {
     if (DEBUG) printf(" %d to %d\n", low_variable, high_variable);
     if (DEBUG) printf("\t\tdefault: %d (+%d)\n", GLOBAL_jvm_stack->top->pc + default_variable, default_variable);
     GLOBAL_jvm_stack->top->pc += offset-1;
+    free(jump_table);
 }
 void Lookupswitch(code_attribute *code) {
     if (DEBUG) printf("LOOKUPSWITCH\n");
