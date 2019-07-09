@@ -28,7 +28,7 @@ void push_jvm_stack(jvm_stack *stack, frame *new_frame) {
 operand pop_op_stack(operand_stack *stack) {
     operand_item *aux = stack->top;
     stack->top        = stack->top->next;
-    operand ret = aux->op;
+    operand ret       = aux->op;
     free(aux);
     return ret;
 }

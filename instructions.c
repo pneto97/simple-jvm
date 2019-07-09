@@ -1,11 +1,11 @@
 #include "frame.h"
 #include "global.h"
 #include "instruction_helpers.h"
-#include <stdint.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <math.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #define DEBUG 1
 
 void Nop(code_attribute *code) {
@@ -17,7 +17,7 @@ void Aconst_null(code_attribute *code) {
     operand op_variable;
     op_variable.data = 0;
     op_variable.type = NULL_TYPE;
-    op_variable.cat = UNIQUE;
+    op_variable.cat  = UNIQUE;
     //*op_variable.data = NULL; Verificar se será um tipo de objeto (corretude)
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_variable);
 }
@@ -115,8 +115,8 @@ void Fconst_0(code_attribute *code) {
     if (DEBUG) printf("FCONST_0\n");
 
     operand op_variable;
-    float var        = 0;
-    
+    float var = 0;
+
     op_variable.data = floatToUint32(var);
     op_variable.type = FLOAT_TYPE;
     op_variable.cat  = UNIQUE;
@@ -143,33 +143,33 @@ void Fconst_2(code_attribute *code) {
 }
 void Dconst_0(code_attribute *code) {
     if (DEBUG) printf("DCONST_0\n");
-    operand op_high,op_low;
+    operand op_high, op_low;
     uint32_t high, low;
-    uint64_t var        = doubleToUint64(0);
-    high = (uint32_t) ((var >> 32) & 0x00000000ffffffff);
-    low = (uint32_t) ((var) & 0x00000000ffffffff);
+    uint64_t var = doubleToUint64(0);
+    high         = (uint32_t)((var >> 32) & 0x00000000ffffffff);
+    low          = (uint32_t)((var)&0x00000000ffffffff);
     op_high.data = high;
     op_high.type = DOUBLE_TYPE;
     op_high.cat  = FIRST;
-    op_low.data = low;
-    op_low.type = DOUBLE_TYPE;
-    op_low.cat  = SECOND;
+    op_low.data  = low;
+    op_low.type  = DOUBLE_TYPE;
+    op_low.cat   = SECOND;
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_low);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_high);
 }
 void Dconst_1(code_attribute *code) {
     if (DEBUG) printf("DCONST_1\n");
-    operand op_high,op_low;
+    operand op_high, op_low;
     uint32_t high, low;
-    uint64_t var        = doubleToUint64(1);
-    high = (uint32_t) ((var >> 32) & 0x00000000ffffffff);
-    low = (uint32_t) ((var) & 0x00000000ffffffff);
+    uint64_t var = doubleToUint64(1);
+    high         = (uint32_t)((var >> 32) & 0x00000000ffffffff);
+    low          = (uint32_t)((var)&0x00000000ffffffff);
     op_high.data = high;
     op_high.type = DOUBLE_TYPE;
     op_high.cat  = FIRST;
-    op_low.data = low;
-    op_low.type = DOUBLE_TYPE;
-    op_low.cat  = SECOND;
+    op_low.data  = low;
+    op_low.type  = DOUBLE_TYPE;
+    op_low.cat   = SECOND;
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_low);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_high);
 }
@@ -181,7 +181,7 @@ void Bipush(code_attribute *code) {
     int8_t value = code->code[GLOBAL_jvm_stack->top->pc];
     operand op;
 
-    op.type  = BYTE_TYPE;
+    op.type = BYTE_TYPE;
     op.data = (int32_t)value;
     op.cat  = UNIQUE;
 
@@ -195,10 +195,10 @@ void Sipush(code_attribute *code) {
     GLOBAL_jvm_stack->top->pc++;
     uint8_t byte2 = code->code[GLOBAL_jvm_stack->top->pc];
     operand op;
-    uint16_t value = (((int16_t) byte1 << 8) | (int16_t) byte2);
+    uint16_t value = (((int16_t)byte1 << 8) | (int16_t)byte2);
 
-    op.type  = BYTE_TYPE;
-    op.data = (int32_t) value;
+    op.type = BYTE_TYPE;
+    op.data = (int32_t)value;
     op.cat  = UNIQUE;
 
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
@@ -208,23 +208,22 @@ void Ldc(code_attribute *code) {
     operand op;
     GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
     uint8_t index             = code->code[GLOBAL_jvm_stack->top->pc];
-    cp_info cp = GLOBAL_jvm_stack->top->constant_pool[index - 1];
+    cp_info cp                = GLOBAL_jvm_stack->top->constant_pool[index - 1];
 
-    switch (cp.tag)
-    {
+    switch (cp.tag) {
     case CONSTANT_Integer:
         op.data = cp.info.integerInfo.bytes;
-        op.cat = UNIQUE;
+        op.cat  = UNIQUE;
         op.type = INT_TYPE;
         break;
     case CONSTANT_Float:
         op.data = cp.info.floatInfo.bytes;
-        op.cat = UNIQUE;
+        op.cat  = UNIQUE;
         op.type = FLOAT_TYPE;
         break;
     case CONSTANT_String:
-        op.data = (uint32_t) GLOBAL_jvm_stack->top->constant_pool[cp.info.stringInfo.string_index - 1].info.utf8Info.bytes;
-        op.cat = UNIQUE;
+        op.data = (uint32_t)GLOBAL_jvm_stack->top->constant_pool[cp.info.stringInfo.string_index - 1].info.utf8Info.bytes;
+        op.cat  = UNIQUE;
         op.type = CHAR_TYPE;
         break;
     // case CONSTANT_Class:
@@ -235,7 +234,7 @@ void Ldc(code_attribute *code) {
     //     break;
     default:
         op.data = 0;
-        op.cat = UNIQUE;
+        op.cat  = UNIQUE;
         op.type = NULL_TYPE;
         printf("Deu ruim no LDC\n");
         break;
@@ -246,28 +245,27 @@ void Ldc_w(code_attribute *code) {
     if (DEBUG) printf("LDC_W\n");
     operand op;
     GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
-    uint8_t indexbyte1             = code->code[GLOBAL_jvm_stack->top->pc];
+    uint8_t indexbyte1        = code->code[GLOBAL_jvm_stack->top->pc];
     GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
-    uint8_t indexbyte2             = code->code[GLOBAL_jvm_stack->top->pc];
-    uint16_t index = (((uint16_t) indexbyte1 << 8) | (uint16_t) indexbyte2);
-    
+    uint8_t indexbyte2        = code->code[GLOBAL_jvm_stack->top->pc];
+    uint16_t index            = (((uint16_t)indexbyte1 << 8) | (uint16_t)indexbyte2);
+
     cp_info cp = GLOBAL_jvm_stack->top->constant_pool[index - 1];
 
-    switch (cp.tag)
-    {
+    switch (cp.tag) {
     case CONSTANT_Integer:
         op.data = cp.info.integerInfo.bytes;
-        op.cat = UNIQUE;
+        op.cat  = UNIQUE;
         op.type = INT_TYPE;
         break;
     case CONSTANT_Float:
         op.data = cp.info.floatInfo.bytes;
-        op.cat = UNIQUE;
+        op.cat  = UNIQUE;
         op.type = FLOAT_TYPE;
         break;
     case CONSTANT_String:
-        op.data = (uint32_t) GLOBAL_jvm_stack->top->constant_pool[cp.info.stringInfo.string_index - 1].info.utf8Info.bytes;
-        op.cat = UNIQUE;
+        op.data = (uint32_t)GLOBAL_jvm_stack->top->constant_pool[cp.info.stringInfo.string_index - 1].info.utf8Info.bytes;
+        op.cat  = UNIQUE;
         op.type = CHAR_TYPE;
         break;
     // case CONSTANT_Class:
@@ -278,7 +276,7 @@ void Ldc_w(code_attribute *code) {
     //     break;
     default:
         op.data = 0;
-        op.cat = UNIQUE;
+        op.cat  = UNIQUE;
         op.type = NULL_TYPE;
         printf("Deu ruim no LDC\n");
         break;
@@ -287,35 +285,33 @@ void Ldc_w(code_attribute *code) {
 }
 void Ldc2_w(code_attribute *code) {
     if (DEBUG) printf("LDC2_W\n");
-    operand op_high,op_low;
+    operand op_high, op_low;
     GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
-    uint8_t indexbyte1             = code->code[GLOBAL_jvm_stack->top->pc];
+    uint8_t indexbyte1        = code->code[GLOBAL_jvm_stack->top->pc];
     GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
-    uint8_t indexbyte2             = code->code[GLOBAL_jvm_stack->top->pc];
-    uint16_t index = ((uint16_t) indexbyte1 << 8) | (uint16_t) indexbyte2;
-    cp_info cp = GLOBAL_jvm_stack->top->constant_pool[index - 1];
+    uint8_t indexbyte2        = code->code[GLOBAL_jvm_stack->top->pc];
+    uint16_t index            = ((uint16_t)indexbyte1 << 8) | (uint16_t)indexbyte2;
+    cp_info cp                = GLOBAL_jvm_stack->top->constant_pool[index - 1];
 
     if (cp.tag == CONSTANT_Long) {
         op_high.data = cp.info.longInfo.high_bytes;
-        op_high.cat = FIRST;
+        op_high.cat  = FIRST;
         op_high.type = LONG_TYPE;
 
         op_low.data = cp.info.longInfo.low_bytes;
-        op_low.cat = SECOND;
+        op_low.cat  = SECOND;
         op_low.type = LONG_TYPE;
-    }
-    else{
+    } else {
         op_high.data = cp.info.doubleInfo.high_bytes;
-        op_high.cat = FIRST;
+        op_high.cat  = FIRST;
         op_high.type = DOUBLE_TYPE;
 
         op_low.data = cp.info.doubleInfo.low_bytes;
-        op_low.cat = SECOND;
+        op_low.cat  = SECOND;
         op_low.type = DOUBLE_TYPE;
     }
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_low);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_high);
-
 }
 void Iload(code_attribute *code) {
     if (DEBUG) printf("ILOAD\n");
@@ -328,15 +324,14 @@ void Iload(code_attribute *code) {
 void Lload(code_attribute *code) {
     if (DEBUG) printf("LLOAD  \n");
 
-    GLOBAL_jvm_stack->top->pc  = GLOBAL_jvm_stack->top->pc + 1;
-    uint8_t index_hi           = code->code[GLOBAL_jvm_stack->top->pc];
-    operand value_hi           = GLOBAL_jvm_stack->top->local_vars[index_hi];
-    uint8_t index_lo           = index_hi + 1;
-    operand value_lo           = GLOBAL_jvm_stack->top->local_vars[index_lo];
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index_hi          = code->code[GLOBAL_jvm_stack->top->pc];
+    operand value_hi          = GLOBAL_jvm_stack->top->local_vars[index_hi];
+    uint8_t index_lo          = index_hi + 1;
+    operand value_lo          = GLOBAL_jvm_stack->top->local_vars[index_lo];
 
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_lo);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_hi);
-
 }
 void Fload(code_attribute *code) {
     if (DEBUG) printf("FLOAD  \n");
@@ -349,15 +344,14 @@ void Fload(code_attribute *code) {
 void Dload(code_attribute *code) {
     if (DEBUG) printf("DLOAD  \n");
 
-    GLOBAL_jvm_stack->top->pc   = GLOBAL_jvm_stack->top->pc + 1;
-    uint8_t index_hi            = code->code[GLOBAL_jvm_stack->top->pc];
-    operand value_hi            = GLOBAL_jvm_stack->top->local_vars[index_hi];
-    uint8_t index_lo            = index_hi + 1;
-    operand value_lo            = GLOBAL_jvm_stack->top->local_vars[index_lo];
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index_hi          = code->code[GLOBAL_jvm_stack->top->pc];
+    operand value_hi          = GLOBAL_jvm_stack->top->local_vars[index_hi];
+    uint8_t index_lo          = index_hi + 1;
+    operand value_lo          = GLOBAL_jvm_stack->top->local_vars[index_lo];
 
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_lo);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_hi);
-
 }
 void Aload(code_attribute *code) {
     if (DEBUG) printf("ALOAD  \n");
@@ -556,27 +550,27 @@ void Istore(code_attribute *code) {
 }
 void Lstore(code_attribute *code) {
     if (DEBUG) printf("LSTORE\n");
-    GLOBAL_jvm_stack->top->pc                = GLOBAL_jvm_stack->top->pc + 1;
-    uint8_t index                            = code->code[GLOBAL_jvm_stack->top->pc];
-    operand hi                               = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    operand lo                               = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    GLOBAL_jvm_stack->top->local_vars[index] = hi;
+    GLOBAL_jvm_stack->top->pc                    = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index                                = code->code[GLOBAL_jvm_stack->top->pc];
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand lo                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
     GLOBAL_jvm_stack->top->local_vars[index + 1] = lo;
 }
 void Fstore(code_attribute *code) {
     if (DEBUG) printf("FSTORE\n");
-    GLOBAL_jvm_stack->top->pc                    = GLOBAL_jvm_stack->top->pc + 1;
-    uint8_t index                                = code->code[GLOBAL_jvm_stack->top->pc];
-    operand value                                = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    GLOBAL_jvm_stack->top->local_vars[index]     = value;
+    GLOBAL_jvm_stack->top->pc                = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index                            = code->code[GLOBAL_jvm_stack->top->pc];
+    operand value                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = value;
 }
 void Dstore(code_attribute *code) {
     if (DEBUG) printf("DSTORE\n");
-    GLOBAL_jvm_stack->top->pc                = GLOBAL_jvm_stack->top->pc + 1;
-    uint8_t index                            = code->code[GLOBAL_jvm_stack->top->pc];
-    operand hi                               = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    operand lo                               = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    GLOBAL_jvm_stack->top->local_vars[index] = hi;
+    GLOBAL_jvm_stack->top->pc                    = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index                                = code->code[GLOBAL_jvm_stack->top->pc];
+    operand hi                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand lo                                   = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index]     = hi;
     GLOBAL_jvm_stack->top->local_vars[index + 1] = lo;
 }
 void Astore(code_attribute *code) {
@@ -646,28 +640,27 @@ void Lstore_3(code_attribute *code) {
 }
 void Fstore_0(code_attribute *code) {
     if (DEBUG) printf("FSTORE_0\n");
-    uint8_t index                                = 0;
-    operand value                                = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    GLOBAL_jvm_stack->top->local_vars[index]     = value;
-
+    uint8_t index                            = 0;
+    operand value                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = value;
 }
 void Fstore_1(code_attribute *code) {
     if (DEBUG) printf("FSTORE_1\n");
-    uint8_t index                                = 1;
-    operand value                                = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    GLOBAL_jvm_stack->top->local_vars[index]     = value;
+    uint8_t index                            = 1;
+    operand value                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = value;
 }
 void Fstore_2(code_attribute *code) {
     if (DEBUG) printf("FSTORE_2\n");
-    uint8_t index                                = 2;
-    operand value                                = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    GLOBAL_jvm_stack->top->local_vars[index]     = value;
+    uint8_t index                            = 2;
+    operand value                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = value;
 }
 void Fstore_3(code_attribute *code) {
     if (DEBUG) printf("FSTORE_3\n");
-    uint8_t index                                = 3;
-    operand value                                = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    GLOBAL_jvm_stack->top->local_vars[index]     = value;
+    uint8_t index                            = 3;
+    operand value                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = value;
 }
 void Dstore_0(code_attribute *code) {
     if (DEBUG) printf("DSTORE_0\n");
@@ -843,7 +836,7 @@ void Ladd(code_attribute *code) {
     operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-    uint64_t result = longToUint64(makeLong(value1_hi.data, value1_lo.data)+(makeLong(value2_hi.data, value2_lo.data)));
+    uint64_t result = longToUint64(makeLong(value1_hi.data, value1_lo.data) + (makeLong(value2_hi.data, value2_lo.data)));
 
     operand op_hi, op_lo;
     op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
@@ -863,13 +856,11 @@ void Fadd(code_attribute *code) {
     operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-
     float result = makeFloat(value1.data) + makeFloat(value2.data);
-    op.data        = floatToUint32(result);
-    op.cat         = UNIQUE;
-    op.type        = FLOAT_TYPE;
+    op.data      = floatToUint32(result);
+    op.cat       = UNIQUE;
+    op.type      = FLOAT_TYPE;
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
-
 }
 void Dadd(code_attribute *code) {
     if (DEBUG) printf("DADD\n");
@@ -880,7 +871,7 @@ void Dadd(code_attribute *code) {
     operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-    uint64_t result  = doubleToUint64(makeDouble(value1_hi.data, value1_lo.data)+(makeDouble(value2_hi.data, value2_lo.data)));
+    uint64_t result = doubleToUint64(makeDouble(value1_hi.data, value1_lo.data) + (makeDouble(value2_hi.data, value2_lo.data)));
 
     operand op_hi, op_lo;
     op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
@@ -890,7 +881,7 @@ void Dadd(code_attribute *code) {
     op_lo.cat = SECOND;
 
     op_hi.type = op_lo.type = DOUBLE_TYPE;
-    
+
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
@@ -914,7 +905,7 @@ void Lsub(code_attribute *code) {
     operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-    uint64_t result = longToUint64(makeLong(value1_hi.data, value1_lo.data)-(makeLong(value2_hi.data, value2_lo.data)));
+    uint64_t result = longToUint64(makeLong(value1_hi.data, value1_lo.data) - (makeLong(value2_hi.data, value2_lo.data)));
 
     operand op_hi, op_lo;
     op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
@@ -934,11 +925,10 @@ void Fsub(code_attribute *code) {
     operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-
-    float result   = makeFloat(value1.data) - makeFloat(value2.data);
-    op.data        = floatToUint32(result);
-    op.cat         = UNIQUE;
-    op.type        = FLOAT_TYPE;
+    float result = makeFloat(value1.data) - makeFloat(value2.data);
+    op.data      = floatToUint32(result);
+    op.cat       = UNIQUE;
+    op.type      = FLOAT_TYPE;
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Dsub(code_attribute *code) {
@@ -949,7 +939,7 @@ void Dsub(code_attribute *code) {
     operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-    uint64_t result  = doubleToUint64(makeDouble(value1_hi.data, value1_lo.data)-(makeDouble(value2_hi.data, value2_lo.data)));
+    uint64_t result = doubleToUint64(makeDouble(value1_hi.data, value1_lo.data) - (makeDouble(value2_hi.data, value2_lo.data)));
 
     operand op_hi, op_lo;
     op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
@@ -959,7 +949,7 @@ void Dsub(code_attribute *code) {
     op_lo.cat = SECOND;
 
     op_hi.type = op_lo.type = DOUBLE_TYPE;
-    
+
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
@@ -983,7 +973,7 @@ void Lmul(code_attribute *code) {
     operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-    uint64_t result = longToUint64(makeLong(value1_hi.data, value1_lo.data)*(makeLong(value2_hi.data, value2_lo.data)));
+    uint64_t result = longToUint64(makeLong(value1_hi.data, value1_lo.data) * (makeLong(value2_hi.data, value2_lo.data)));
 
     operand op_hi, op_lo;
     op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
@@ -1003,11 +993,10 @@ void Fmul(code_attribute *code) {
     operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-
     float result = makeFloat(value1.data) * makeFloat(value2.data);
-    op.data        = floatToUint32(result);
-    op.cat         = UNIQUE;
-    op.type        = FLOAT_TYPE;
+    op.data      = floatToUint32(result);
+    op.cat       = UNIQUE;
+    op.type      = FLOAT_TYPE;
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Dmul(code_attribute *code) {
@@ -1018,7 +1007,7 @@ void Dmul(code_attribute *code) {
     operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-    uint64_t result  = doubleToUint64(makeDouble(value1_hi.data, value1_lo.data)*(makeDouble(value2_hi.data, value2_lo.data)));
+    uint64_t result = doubleToUint64(makeDouble(value1_hi.data, value1_lo.data) * (makeDouble(value2_hi.data, value2_lo.data)));
 
     operand op_hi, op_lo;
     op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
@@ -1028,7 +1017,7 @@ void Dmul(code_attribute *code) {
     op_lo.cat = SECOND;
 
     op_hi.type = op_lo.type = DOUBLE_TYPE;
-    
+
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
@@ -1038,16 +1027,16 @@ void Idiv(code_attribute *code) {
     operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     int32_t result;
-    if ((value1.data== 0x8000000) && (value2.data == 0xFFFFFFFF)) result = value1.data;
+    if ((value1.data == 0x8000000) && (value2.data == 0xFFFFFFFF))
+        result = value1.data;
     else if (value2.data == 0) {
         printf("ArithmeticException\n");
         exit(3);
-    }
-    else {
-        result = (int32_t)value1.data / (int32_t)value2.data;
-        op.data        = result;
-        op.cat         = UNIQUE;
-        op.type        = INT_TYPE;
+    } else {
+        result  = (int32_t)value1.data / (int32_t)value2.data;
+        op.data = result;
+        op.cat  = UNIQUE;
+        op.type = INT_TYPE;
         push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
     }
 }
@@ -1059,7 +1048,7 @@ void Ldiv(code_attribute *code) {
     operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-    uint64_t result = longToUint64(makeLong(value1_hi.data, value1_lo.data)/(makeLong(value2_hi.data, value2_lo.data)));
+    uint64_t result = longToUint64(makeLong(value1_hi.data, value1_lo.data) / (makeLong(value2_hi.data, value2_lo.data)));
 
     operand op_hi, op_lo;
     op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
@@ -1079,11 +1068,10 @@ void Fdiv(code_attribute *code) {
     operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-
     float result = makeFloat(value1.data) / makeFloat(value2.data);
-    op.data        = floatToUint32(result);
-    op.cat         = UNIQUE;
-    op.type        = FLOAT_TYPE;
+    op.data      = floatToUint32(result);
+    op.cat       = UNIQUE;
+    op.type      = FLOAT_TYPE;
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Ddiv(code_attribute *code) {
@@ -1094,7 +1082,7 @@ void Ddiv(code_attribute *code) {
     operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-    uint64_t result  = doubleToUint64(makeDouble(value1_hi.data, value1_lo.data)/(makeDouble(value2_hi.data, value2_lo.data)));
+    uint64_t result = doubleToUint64(makeDouble(value1_hi.data, value1_lo.data) / (makeDouble(value2_hi.data, value2_lo.data)));
 
     operand op_hi, op_lo;
     op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
@@ -1104,7 +1092,7 @@ void Ddiv(code_attribute *code) {
     op_lo.cat = SECOND;
 
     op_hi.type = op_lo.type = DOUBLE_TYPE;
-    
+
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
@@ -1116,9 +1104,8 @@ void Irem(code_attribute *code) {
     if (value2.data == 0) {
         printf("ArithmeticException\n");
         exit(3);
-    }
-    else {
-        int32_t result = (int32_t) value1.data % (int32_t) value2.data;
+    } else {
+        int32_t result = (int32_t)value1.data % (int32_t)value2.data;
         op.data        = result;
         op.cat         = UNIQUE;
         op.type        = INT_TYPE;
@@ -1127,16 +1114,16 @@ void Irem(code_attribute *code) {
 }
 void Lrem(code_attribute *code) {
     if (DEBUG) printf("LREM\n");
-        if (DEBUG) printf("LADD\n");
+    if (DEBUG) printf("LADD\n");
     operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
     operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-    int64_t long1 = (((int64_t)value1_hi.data << 32) | (int64_t)value1_lo.data);
-    int64_t long2 = (((int64_t)value2_hi.data << 32) | (int64_t)value2_lo.data);
-    int64_t result  = long1 % long2;
+    int64_t long1  = (((int64_t)value1_hi.data << 32) | (int64_t)value1_lo.data);
+    int64_t long2  = (((int64_t)value2_hi.data << 32) | (int64_t)value2_lo.data);
+    int64_t result = long1 % long2;
 
     operand op_hi, op_lo;
     op_hi.data = (uint32_t)(result >> 32) & 0x0000FFFF;
@@ -1156,11 +1143,10 @@ void Frem(code_attribute *code) {
     operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-
     float result = fmod(makeFloat(value1.data), makeFloat(value2.data));
-    op.data        = floatToUint32(result);
-    op.cat         = UNIQUE;
-    op.type        = FLOAT_TYPE;
+    op.data      = floatToUint32(result);
+    op.cat       = UNIQUE;
+    op.type      = FLOAT_TYPE;
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Drem(code_attribute *code) {
@@ -1171,7 +1157,7 @@ void Drem(code_attribute *code) {
     operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-    uint64_t result  = doubleToUint64(fmod(makeDouble(value1_hi.data, value1_lo.data),(makeDouble(value2_hi.data, value2_lo.data))));
+    uint64_t result = doubleToUint64(fmod(makeDouble(value1_hi.data, value1_lo.data), (makeDouble(value2_hi.data, value2_lo.data))));
 
     operand op_hi, op_lo;
     op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
@@ -1181,16 +1167,16 @@ void Drem(code_attribute *code) {
     op_lo.cat = SECOND;
 
     op_hi.type = op_lo.type = DOUBLE_TYPE;
-    
+
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Ineg(code_attribute *code) {
     if (DEBUG) printf("INEG\n");
-    
+
     operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    
-    op.data = -1 * (int32_t) op.data;
+
+    op.data = -1 * (int32_t)op.data;
 
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
@@ -1238,9 +1224,9 @@ void Iushr(code_attribute *code) {
 
     operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack); //Shift value
     operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack); //Value to shift
-    int32_t shift = value2.data  & 0x1f;
+    int32_t shift  = value2.data & 0x1f;
 
-    if((int32_t) value1.data < 0){
+    if ((int32_t)value1.data < 0) {
         value1.data = (value1.data >> shift) + (2 << ~shift);
     } else {
         value1.data >>= shift;
@@ -1294,9 +1280,9 @@ void Iinc(code_attribute *code) {
     if (DEBUG) printf("IINC\n");
 
     GLOBAL_jvm_stack->top->pc++;
-    uint8_t index             = code->code[GLOBAL_jvm_stack->top->pc];
+    uint8_t index = code->code[GLOBAL_jvm_stack->top->pc];
     GLOBAL_jvm_stack->top->pc++;
-    uint8_t const_inc         = code->code[GLOBAL_jvm_stack->top->pc];
+    uint8_t const_inc = code->code[GLOBAL_jvm_stack->top->pc];
 
     GLOBAL_jvm_stack->top->local_vars[index].data += const_inc;
 }
@@ -1359,16 +1345,16 @@ void Lcmp(code_attribute *code) {
     int64_t long1 = (((int64_t)value1_hi.data << 32) + (int64_t)value1_lo.data);
     int64_t long2 = (((int64_t)value2_hi.data << 32) + (int64_t)value2_lo.data);
 
-    if(long1 > long2)
+    if (long1 > long2)
         result = 1;
-    else if(long1 < long2)
+    else if (long1 < long2)
         result = -1;
     else
         result = 0;
-    
+
     operand op;
     op.data = result;
-    op.cat = UNIQUE;
+    op.cat  = UNIQUE;
     op.type = INT_TYPE;
 
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
@@ -1384,15 +1370,15 @@ void Fcmpl(code_attribute *code) {
     fvalue1 = makeFloat(value1.data);
     fvalue2 = makeFloat(value2.data);
 
-    if(fvalue1 < fvalue2)
+    if (fvalue1 < fvalue2)
         result = 1;
-    else if(fvalue1 > fvalue2)
+    else if (fvalue1 > fvalue2)
         result = -1;
     else
         result = 0;
     operand op;
     op.data = result;
-    op.cat = UNIQUE;
+    op.cat  = UNIQUE;
     op.type = INT_TYPE;
 
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
@@ -1408,16 +1394,16 @@ void Fcmpg(code_attribute *code) {
     fvalue1 = makeFloat(value1.data);
     fvalue2 = makeFloat(value2.data);
 
-    if(fvalue1 > fvalue2)
+    if (fvalue1 > fvalue2)
         result = 1;
-    else if(fvalue1 < fvalue2)
+    else if (fvalue1 < fvalue2)
         result = -1;
     else
         result = 0;
 
     operand op;
     op.data = result;
-    op.cat = UNIQUE;
+    op.cat  = UNIQUE;
     op.type = INT_TYPE;
 
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
@@ -1437,18 +1423,18 @@ void Dcmpl(code_attribute *code) {
     dvalue1 = makeDouble(value1_hi.data, value1_lo.data);
     dvalue2 = makeDouble(value2_hi.data, value2_lo.data);
 
-    if(isnan(dvalue1) || isnan(dvalue2))
+    if (isnan(dvalue1) || isnan(dvalue2))
         result = -1;
-    else if(dvalue1 < dvalue2)
+    else if (dvalue1 < dvalue2)
         result = 1;
-    else if(dvalue1 > dvalue2)
+    else if (dvalue1 > dvalue2)
         result = -1;
     else
         result = 0;
 
     operand op;
     op.data = result;
-    op.cat = UNIQUE;
+    op.cat  = UNIQUE;
     op.type = INT_TYPE;
 
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
@@ -1468,18 +1454,18 @@ void Dcmpg(code_attribute *code) {
     dvalue1 = makeDouble(value1_hi.data, value1_lo.data);
     dvalue2 = makeDouble(value2_hi.data, value2_lo.data);
 
-    if(isnan(dvalue1) || isnan(dvalue2))
+    if (isnan(dvalue1) || isnan(dvalue2))
         result = 1;
-    else if(dvalue1 > dvalue2)
+    else if (dvalue1 > dvalue2)
         result = 1;
-    else if(dvalue1 < dvalue2)
+    else if (dvalue1 < dvalue2)
         result = -1;
     else
         result = 0;
 
     operand op;
     op.data = result;
-    op.cat = UNIQUE;
+    op.cat  = UNIQUE;
     op.type = INT_TYPE;
 
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
@@ -1487,180 +1473,179 @@ void Dcmpg(code_attribute *code) {
 void Ifeq(code_attribute *code) {
     if (DEBUG) printf("IFEQ\n");
     uint16_t offset;
-    operand value                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    if ((int32_t) value.data == 0) {
-    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
-    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
-    offset                    = (branchbyte1 << 8) | branchbyte2; 
-    }
-    else offset = 3;
-    GLOBAL_jvm_stack->top->pc += offset-1;
-
+    operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t)value.data == 0) {
+        uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+        uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+        offset              = (branchbyte1 << 8) | branchbyte2;
+    } else
+        offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void Ifne(code_attribute *code) {
     if (DEBUG) printf("IFNE\n");
     uint16_t offset;
-    operand value                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    if ((int32_t) value.data != 0) {
-    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
-    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
-    offset                    = (branchbyte1 << 8) | branchbyte2; 
-    }
-    else offset = 3;
-    if (DEBUG) printf("Offset: %d\n",offset);
-    GLOBAL_jvm_stack->top->pc += offset-1;
+    operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t)value.data != 0) {
+        uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+        uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+        offset              = (branchbyte1 << 8) | branchbyte2;
+    } else
+        offset = 3;
+    if (DEBUG) printf("Offset: %d\n", offset);
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void Iflt(code_attribute *code) {
     if (DEBUG) printf("IFLT\n");
     uint16_t offset;
-    operand value                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    if ((int32_t) value.data < 0) {
-    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
-    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
-    offset                    = (branchbyte1 << 8) | branchbyte2; 
-    }
-    else offset = 3;
-    GLOBAL_jvm_stack->top->pc += offset-1;
+    operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t)value.data < 0) {
+        uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+        uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+        offset              = (branchbyte1 << 8) | branchbyte2;
+    } else
+        offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void Ifge(code_attribute *code) {
     if (DEBUG) printf("IFGE\n");
     uint16_t offset;
-    operand value                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    if ((int32_t) value.data >= 0) {
-    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
-    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
-    offset                    = (branchbyte1 << 8) | branchbyte2; 
-    }
-    else offset = 3;
-    GLOBAL_jvm_stack->top->pc += offset-1;
+    operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t)value.data >= 0) {
+        uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+        uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+        offset              = (branchbyte1 << 8) | branchbyte2;
+    } else
+        offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void Ifgt(code_attribute *code) {
     if (DEBUG) printf("IFGT\n");
     uint16_t offset;
-    operand value                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    if ((int32_t) value.data > 0) {
-    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
-    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
-    offset                    = (branchbyte1 << 8) | branchbyte2; 
-    }
-    else offset = 3;
-    GLOBAL_jvm_stack->top->pc += offset-1;
+    operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t)value.data > 0) {
+        uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+        uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+        offset              = (branchbyte1 << 8) | branchbyte2;
+    } else
+        offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void Ifle(code_attribute *code) {
     if (DEBUG) printf("IFLE\n");
     uint16_t offset;
-    operand value                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    if ((int32_t) value.data <= 0) {
-    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
-    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
-    offset                    = (branchbyte1 << 8) | branchbyte2; 
-    }
-    else offset = 3;
-    GLOBAL_jvm_stack->top->pc += offset-1;
+    operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t)value.data <= 0) {
+        uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+        uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+        offset              = (branchbyte1 << 8) | branchbyte2;
+    } else
+        offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void If_icmpeq(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPEQ\n");
     uint16_t offset;
-    operand value1                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    operand value2                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    if ((int32_t) value1.data == (int32_t) value2.data) {
-    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
-    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
-    offset                    = (branchbyte1 << 8) | branchbyte2; 
-    }
-    else offset = 3;
-    GLOBAL_jvm_stack->top->pc += offset-1;
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t)value1.data == (int32_t)value2.data) {
+        uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+        uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+        offset              = (branchbyte1 << 8) | branchbyte2;
+    } else
+        offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void If_icmpne(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPNE\n");
     uint16_t offset;
-    operand value1                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    operand value2                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    if ((int32_t) value1.data != (int32_t) value2.data) {
-    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
-    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
-    offset                    = (branchbyte1 << 8) | branchbyte2; 
-    }
-    else offset = 3;
-    GLOBAL_jvm_stack->top->pc += offset-1;
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t)value1.data != (int32_t)value2.data) {
+        uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+        uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+        offset              = (branchbyte1 << 8) | branchbyte2;
+    } else
+        offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void If_icmplt(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPLT\n");
     uint16_t offset;
-    operand value1                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    operand value2                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    if ((int32_t) value1.data < (int32_t) value2.data) {
-    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
-    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
-    offset                    = (branchbyte1 << 8) | branchbyte2; 
-    }
-    else offset = 3;
-    GLOBAL_jvm_stack->top->pc += offset-1;
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t)value1.data < (int32_t)value2.data) {
+        uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+        uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+        offset              = (branchbyte1 << 8) | branchbyte2;
+    } else
+        offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void If_icmpge(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPGE\n");
     uint16_t offset;
-    operand value1                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    operand value2                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    if ((int32_t) value1.data >= (int32_t) value2.data) {
-    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
-    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
-    offset                    = (branchbyte1 << 8) | branchbyte2; 
-    }
-    else offset = 3;
-    GLOBAL_jvm_stack->top->pc += offset-1;
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t)value1.data >= (int32_t)value2.data) {
+        uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+        uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+        offset              = (branchbyte1 << 8) | branchbyte2;
+    } else
+        offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void If_icmpgt(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPGT\n");
     uint16_t offset;
-    operand value1                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    operand value2                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    if ((int32_t) value1.data > (int32_t) value2.data) {
-    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
-    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
-    offset                    = (branchbyte1 << 8) | branchbyte2; 
-    }
-    else offset = 3;
-    GLOBAL_jvm_stack->top->pc += offset-1;
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t)value1.data > (int32_t)value2.data) {
+        uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+        uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+        offset              = (branchbyte1 << 8) | branchbyte2;
+    } else
+        offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void If_icmple(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPLE\n");
     uint16_t offset;
-    operand value1                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    operand value2                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    if ((int32_t) value1.data <= (int32_t) value2.data) {
-    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
-    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
-    offset                    = (branchbyte1 << 8) | branchbyte2; 
-    }
-    else offset = 3;
-    GLOBAL_jvm_stack->top->pc += offset-1;
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if ((int32_t)value1.data <= (int32_t)value2.data) {
+        uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+        uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+        offset              = (branchbyte1 << 8) | branchbyte2;
+    } else
+        offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void If_acmpeq(code_attribute *code) {
     if (DEBUG) printf("IF_ACMPEQ\n");
     uint16_t offset;
-    operand value1                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    operand value2                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     if (value1.data == value2.data) {
-    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
-    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
-    offset                    = (branchbyte1 << 8) | branchbyte2; 
-    }
-    else offset = 3;
-    GLOBAL_jvm_stack->top->pc += offset-1;
+        uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+        uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+        offset              = (branchbyte1 << 8) | branchbyte2;
+    } else
+        offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void If_acmpne(code_attribute *code) {
     if (DEBUG) printf("IF_ACMPNE\n");
     uint16_t offset;
-    operand value1                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    operand value2                            = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     if (value1.data != value2.data) {
-    uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
-    uint8_t branchbyte2        = code->code[GLOBAL_jvm_stack->top->pc + 2];
-    offset                    = (branchbyte1 << 8) | branchbyte2; 
-    }
-    else offset = 3;
-    GLOBAL_jvm_stack->top->pc += offset-1;
+        uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+        uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+        offset              = (branchbyte1 << 8) | branchbyte2;
+    } else
+        offset = 3;
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void GoTo(code_attribute *code) {
     if (DEBUG) printf("GOTO\n");
@@ -1782,14 +1767,14 @@ void Invokevirtual(code_attribute *code) {
                 op.data == 0 ? printf("false") : printf("true");
                 break;
             case LONG_TYPE:
-                op2    = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+                op2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
                 printf("%ld", makeLong(op.data, op2.data));
                 break;
             case NULL_TYPE:
                 printf("NULL");
                 break;
             case DOUBLE_TYPE: {
-                op2    = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+                op2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
                 printf("%lf", makeDouble(op.data, op2.data));
                 break;
             }

@@ -25,35 +25,34 @@ char *getUtf8Type(uint16_t index) {
     return (char *)descriptor.info.utf8Info.bytes;
 }
 
-double makeDouble(uint32_t high, uint32_t low){
+double makeDouble(uint32_t high, uint32_t low) {
     uint64_t number;
 
-    number = (((uint64_t) high) << 32) | ((uint64_t) low);
-    
-    return *(double*)&number;
+    number = (((uint64_t)high) << 32) | ((uint64_t)low);
+
+    return *(double *)&number;
 }
 
-long makeLong(uint32_t high, uint32_t low){
+long makeLong(uint32_t high, uint32_t low) {
     uint64_t number;
 
-    number = (((uint64_t) high) << 32) | ((uint64_t) low);
-    
-    return *(long*)&number;
+    number = (((uint64_t)high) << 32) | ((uint64_t)low);
 
+    return *(long *)&number;
 }
 
-float makeFloat(uint32_t bytes){
-    return *(float*)&bytes;
+float makeFloat(uint32_t bytes) {
+    return *(float *)&bytes;
 }
 
-uint64_t doubleToUint64(double number){
-    return *(uint64_t*)&number;
+uint64_t doubleToUint64(double number) {
+    return *(uint64_t *)&number;
 }
 
-uint64_t longToUint64(long number){
-    return *(uint64_t*)&number;
+uint64_t longToUint64(long number) {
+    return *(uint64_t *)&number;
 }
 
-uint32_t floatToUint32(float bytes){
-    return *(uint32_t*)&bytes;
+uint32_t floatToUint32(float bytes) {
+    return *(uint32_t *)&bytes;
 }
