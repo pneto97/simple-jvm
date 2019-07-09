@@ -197,8 +197,7 @@ void Sipush(code_attribute *code) {
     uint8_t byte2 = code->code[GLOBAL_jvm_stack->top->pc];
     operand op;
     uint16_t value = (((int16_t)byte1 << 8) | (int16_t)byte2);
-
-    op.type = BYTE_TYPE;
+    op.type = SHORT_TYPE;
     op.data = (int32_t)value;
     op.cat  = UNIQUE;
 
@@ -1761,24 +1760,40 @@ void Tableswitch(code_attribute *code) {
     if (DEBUG) printf("TABLESWITCH\n");
     // uint8_t branchbyte1        = code->code[GLOBAL_jvm_stack->top->pc + 1];
     int resto     = 3 - (GLOBAL_jvm_stack->top->pc % 4);
-    int pc_offset = resto + GLOBAL_jvm_stack->top->pc;
+    int pc_offset = resto + GLOBAL_jvm_stack->top->pc; 
 
-    // uint32_t default_variable = build32(code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 1 ], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 2], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 3], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 4]);
-    uint32_t low_variable     = build32(code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 5], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 6], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 7], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 8]);
-    uint32_t high_variable    = build32(code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 9], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 10], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 11], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 12]);
+    uint32_t default_variable = build32(code->code[pc_offset + 1 ], code->code[pc_offset + 2], code->code[pc_offset + 3], code->code[pc_offset + 4]);
+    uint32_t low_variable     = build32(code->code[pc_offset + 5], code->code[pc_offset + 6], code->code[pc_offset + 7], code->code[pc_offset + 8]);
+    uint32_t high_variable    = build32(code->code[pc_offset + 9], code->code[pc_offset + 10], code->code[pc_offset + 11], code->code[pc_offset + 12]);
 
     uint32_t return_amount = 0xFFFF;
 
-    // if (DEBUG) printf(" %d to %d\n", low_variable, high_variable);
+    uint32_t index = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data;
+
+    int32_t * jump_table = (int32_t * ) malloc ((high_variable - low_variable + 1) * sizeof(int32_t)); 
+    int32_t offset;
     for (int j = 0; j < high_variable - low_variable + 1; j++) {
         int aux_off     = resto + GLOBAL_jvm_stack->top->pc + j * 4;
-        int jump_amount = build32(code->code[GLOBAL_jvm_stack->top->pc + aux_off + 13], code->code[GLOBAL_jvm_stack->top->pc + aux_off + 14], code->code[GLOBAL_jvm_stack->top->pc + aux_off + 15], code->code[GLOBAL_jvm_stack->top->pc + aux_off + 16]);
-        // if (DEBUG) printf("\t\t%d: %d (+%d)\n", j + low_variable, jump_amount + GLOBAL_jvm_stack->top->pc, jump_amount);
+        int jump_amount = build32(code->code[aux_off + 13], code->code[aux_off + 14], code->code[aux_off + 15], code->code[aux_off + 16]);
+        jump_table[j] = jump_amount;
+        
+        if (DEBUG) printf("\t\t%d: %d (+%d)\n", j + low_variable, jump_amount + GLOBAL_jvm_stack->top->pc, jump_amount);
 
         if (return_amount > jump_amount) return_amount = jump_amount;
     }
-    // if (DEBUG) printf("\t\tdefault: %d (+%d)", GLOBAL_jvm_stack->top->pc + default_variable, default_variable);
-    // return (return_amount - 1);
+
+    if (index < low_variable || index > high_variable) {
+        offset = default_variable;
+    }
+    else {
+        printf("index-low: %d\n",index - low_variable);
+        offset = jump_table[index - low_variable];
+    }
+    
+    if (DEBUG) printf(" %d to %d\n", low_variable, high_variable);
+    if (DEBUG) printf("\t\tdefault: %d (+%d)\n", GLOBAL_jvm_stack->top->pc + default_variable, default_variable);
+    GLOBAL_jvm_stack->top->pc += offset-1;
+    free(jump_table);
 }
 void Lookupswitch(code_attribute *code) {
     if (DEBUG) printf("LOOKUPSWITCH\n");

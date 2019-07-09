@@ -185,10 +185,10 @@ void If_icmple(code_attribute *); //Feito
 void If_acmpeq(code_attribute *); //Feito
 void If_acmpne(code_attribute *); //Feito
 
-void GoTo        (code_attribute *); //Feito
+void GoTo        (code_attribute *); //Feito e testado
 void Jsr         (code_attribute *); //Feito
 void Ret         (code_attribute *); //Feito
-void Tableswitch (code_attribute *); //demetrio e chris
+void Tableswitch (code_attribute *); //Feito e testado
 void Lookupswitch(code_attribute *); //demetrio e chris
 void Ireturn     (code_attribute *);
 void Lreturn     (code_attribute *);
