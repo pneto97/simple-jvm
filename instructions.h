@@ -28,7 +28,7 @@ void Iload  (code_attribute *); //Feito
 void Lload  (code_attribute *); //Feito e testado
 void Fload  (code_attribute *); //Feito
 void Dload  (code_attribute *); //Feito
-void Aload  (code_attribute *); //Feito
+void Aload  (code_attribute *); //Verificar
 void Iload_0(code_attribute *); //Feito
 void Iload_1(code_attribute *); //Feito
 void Iload_2(code_attribute *); //Feito
@@ -81,10 +81,10 @@ void Dstore_0 (code_attribute *);   //Feito
 void Dstore_1 (code_attribute *);   //Feito
 void Dstore_2 (code_attribute *);   //Feito
 void Dstore_3 (code_attribute *);   //Feito
-void Astore_0 (code_attribute *);     
-void Astore_1 (code_attribute *);
-void Astore_2 (code_attribute *);
-void Astore_3 (code_attribute *);
+void Astore_0 (code_attribute *);   //Feito (NECESSSITA VERIFICAR)
+void Astore_1 (code_attribute *);   //Feito (NECESSSITA VERIFICAR)
+void Astore_2 (code_attribute *);   //Feito (NECESSSITA VERIFICAR)
+void Astore_3 (code_attribute *);   //Feito (NECESSSITA VERIFICAR)
 void Iastore  (code_attribute *);
 void Lastore  (code_attribute *);
 void Fastore  (code_attribute *);

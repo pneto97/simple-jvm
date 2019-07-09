@@ -696,15 +696,27 @@ void Dstore_3(code_attribute *code) {
 }
 void Astore_0(code_attribute *code) {
     if (DEBUG) printf("ASTORE_0\n");
+    uint8_t index                            = 0;
+    operand reference                        = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = reference;
 }
 void Astore_1(code_attribute *code) {
     if (DEBUG) printf("ASTORE_1\n");
+    uint8_t index                            = 1;
+    operand reference                        = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = reference;
 }
 void Astore_2(code_attribute *code) {
     if (DEBUG) printf("ASTORE_2\n");
+    uint8_t index                            = 2;
+    operand reference                        = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = reference;
 }
 void Astore_3(code_attribute *code) {
     if (DEBUG) printf("ASTORE_3\n");
+    uint8_t index                            = 3;
+    operand reference                        = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = reference;
 }
 void Iastore(code_attribute *code) {
     if (DEBUG) printf("IASTORE\n");
