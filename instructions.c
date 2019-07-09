@@ -226,12 +226,12 @@ void Ldc(code_attribute *code) {
         op.cat  = UNIQUE;
         op.type = CHAR_TYPE;
         break;
-    case CONSTANT_Class:
+    //case CONSTANT_Class:
         // op.data = cp.info.classInfo.name_index;
         // op.cat = UNIQUE;
         // op.type = CLASS_TYPE;
-        printf("LDC: CONSTANT_CLASS N IMPLEMENTADO\n");
-        break;
+        //printf("LDC: CONSTANT_CLASS N IMPLEMENTADO\n");
+        //break;
     default:
         op.data = 0;
         op.cat  = UNIQUE;
@@ -268,12 +268,12 @@ void Ldc_w(code_attribute *code) {
         op.cat  = UNIQUE;
         op.type = CHAR_TYPE;
         break;
-    case CONSTANT_Class:
+    //case CONSTANT_Class:
         // op.data = cp.info.classInfo.name_index;
         // op.cat = UNIQUE;
         // op.type = CLASS_TYPE;
-        printf("LDC_W: CONSTANT_CLASS N IMPLEMENTADO\n");
-        break;
+        //printf("LDC_W: CONSTANT_CLASS N IMPLEMENTADO\n");
+        //break;
     default:
         op.data = 0;
         op.cat  = UNIQUE;
@@ -1535,7 +1535,7 @@ void Dcmpg(code_attribute *code) {
 }
 void Ifeq(code_attribute *code) {
     if (DEBUG) printf("IFEQ\n");
-    uint16_t offset;
+    int16_t offset;
     operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     if ((int32_t)value.data == 0) {
         uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
@@ -1547,7 +1547,7 @@ void Ifeq(code_attribute *code) {
 }
 void Ifne(code_attribute *code) {
     if (DEBUG) printf("IFNE\n");
-    uint16_t offset;
+    int16_t offset;
     operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     if ((int32_t)value.data != 0) {
         uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
@@ -1560,7 +1560,7 @@ void Ifne(code_attribute *code) {
 }
 void Iflt(code_attribute *code) {
     if (DEBUG) printf("IFLT\n");
-    uint16_t offset;
+    int16_t offset;
     operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     if ((int32_t)value.data < 0) {
         uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
@@ -1572,7 +1572,7 @@ void Iflt(code_attribute *code) {
 }
 void Ifge(code_attribute *code) {
     if (DEBUG) printf("IFGE\n");
-    uint16_t offset;
+    int16_t offset;
     operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     if ((int32_t)value.data >= 0) {
         uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
@@ -1584,7 +1584,7 @@ void Ifge(code_attribute *code) {
 }
 void Ifgt(code_attribute *code) {
     if (DEBUG) printf("IFGT\n");
-    uint16_t offset;
+    int16_t offset;
     operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     if ((int32_t)value.data > 0) {
         uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
@@ -1596,7 +1596,7 @@ void Ifgt(code_attribute *code) {
 }
 void Ifle(code_attribute *code) {
     if (DEBUG) printf("IFLE\n");
-    uint16_t offset;
+    int16_t offset;
     operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     if ((int32_t)value.data <= 0) {
         uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
@@ -1608,7 +1608,7 @@ void Ifle(code_attribute *code) {
 }
 void If_icmpeq(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPEQ\n");
-    uint16_t offset;
+    int16_t offset;
     operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     if ((int32_t)value1.data == (int32_t)value2.data) {
@@ -1621,7 +1621,7 @@ void If_icmpeq(code_attribute *code) {
 }
 void If_icmpne(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPNE\n");
-    uint16_t offset;
+    int16_t offset;
     operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     if ((int32_t)value1.data != (int32_t)value2.data) {
@@ -1634,7 +1634,7 @@ void If_icmpne(code_attribute *code) {
 }
 void If_icmplt(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPLT\n");
-    uint16_t offset;
+    int16_t offset;
     operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     if ((int32_t)value1.data < (int32_t)value2.data) {
@@ -1647,7 +1647,7 @@ void If_icmplt(code_attribute *code) {
 }
 void If_icmpge(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPGE\n");
-    uint16_t offset;
+    int16_t offset;
     operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     if ((int32_t)value1.data >= (int32_t)value2.data) {
@@ -1660,7 +1660,7 @@ void If_icmpge(code_attribute *code) {
 }
 void If_icmpgt(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPGT\n");
-    uint16_t offset;
+    int16_t offset;
     operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     if ((int32_t)value1.data > (int32_t)value2.data) {
@@ -1673,7 +1673,7 @@ void If_icmpgt(code_attribute *code) {
 }
 void If_icmple(code_attribute *code) {
     if (DEBUG) printf("IF_ICMPLE\n");
-    uint16_t offset;
+    int16_t offset;
     operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     if ((int32_t)value1.data <= (int32_t)value2.data) {
@@ -1686,7 +1686,7 @@ void If_icmple(code_attribute *code) {
 }
 void If_acmpeq(code_attribute *code) {
     if (DEBUG) printf("IF_ACMPEQ\n");
-    uint16_t offset;
+    int16_t offset;
     operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     if (value1.data == value2.data) {
@@ -1699,7 +1699,7 @@ void If_acmpeq(code_attribute *code) {
 }
 void If_acmpne(code_attribute *code) {
     if (DEBUG) printf("IF_ACMPNE\n");
-    uint16_t offset;
+    int16_t offset;
     operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     if (value1.data != value2.data) {
@@ -1712,12 +1712,37 @@ void If_acmpne(code_attribute *code) {
 }
 void GoTo(code_attribute *code) {
     if (DEBUG) printf("GOTO\n");
+
+    int16_t offset;
+    uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset              = (branchbyte1 << 8) | branchbyte2;
+
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void Jsr(code_attribute *code) {
     if (DEBUG) printf("JSR\n");
+    int32_t offset;
+    uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    offset = (int32_t)((branchbyte1 << 8) | branchbyte2);
+
+    operand op;
+    op.data = GLOBAL_jvm_stack->top->pc + 1;
+    op.cat  = UNIQUE;
+    op.type = RETURN_ADDR_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void Ret(code_attribute *code) {
     if (DEBUG) printf("RET\n");
+    GLOBAL_jvm_stack->top->pc++;
+    uint8_t index = code->code[GLOBAL_jvm_stack->top->pc];
+
+    operand op = GLOBAL_jvm_stack->top->local_vars[index];
+
+    GLOBAL_jvm_stack->top->pc += op.data - 1;
 }
 void Tableswitch(code_attribute *code) {
     if (DEBUG) printf("TABLESWITCH\n");
@@ -2016,9 +2041,34 @@ void Ifnonnull(code_attribute *code) {
 }
 void Goto_w(code_attribute *code) {
     if (DEBUG) printf("GOTO_W\n");
+
+    int32_t offset;
+    uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    uint8_t branchbyte3 = code->code[GLOBAL_jvm_stack->top->pc + 3];
+    uint8_t branchbyte4 = code->code[GLOBAL_jvm_stack->top->pc + 4];
+
+    offset              = (branchbyte1 << 24) | (branchbyte2 << 16) | (branchbyte3 << 8) | branchbyte4;
+
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void Jsr_w(code_attribute *code) {
     if (DEBUG) printf("JSR_W\n");
+
+    int32_t offset;
+    uint8_t branchbyte1 = code->code[GLOBAL_jvm_stack->top->pc + 1];
+    uint8_t branchbyte2 = code->code[GLOBAL_jvm_stack->top->pc + 2];
+    uint8_t branchbyte3 = code->code[GLOBAL_jvm_stack->top->pc + 3];
+    uint8_t branchbyte4 = code->code[GLOBAL_jvm_stack->top->pc + 4];
+
+    offset = (int32_t)((branchbyte1 << 24) | (branchbyte2 << 16) | (branchbyte3 << 8) | branchbyte4);
+    operand op;
+    op.data = GLOBAL_jvm_stack->top->pc + 1;
+    op.cat  = UNIQUE;
+    op.type = RETURN_ADDR_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
+    GLOBAL_jvm_stack->top->pc += offset - 1;
 }
 void Breakpoint(code_attribute *code) {
     if (DEBUG) printf("BREAKPOINT\n");

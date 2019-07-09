@@ -185,9 +185,9 @@ void If_icmple(code_attribute *); //Feito
 void If_acmpeq(code_attribute *); //Feito
 void If_acmpne(code_attribute *); //Feito
 
-void GoTo        (code_attribute *); //lucao
-void Jsr         (code_attribute *); //lucao
-void Ret         (code_attribute *); //lucao
+void GoTo        (code_attribute *); //Feito
+void Jsr         (code_attribute *); //Feito
+void Ret         (code_attribute *); //Feito
 void Tableswitch (code_attribute *); //demetrio e chris
 void Lookupswitch(code_attribute *); //demetrio e chris
 void Ireturn     (code_attribute *);
@@ -207,22 +207,22 @@ void Invokeinterface(code_attribute *);
 void Invokedynamic  (code_attribute *);
 void New            (code_attribute *);
 void Newarray       (code_attribute *);
-void Anewarray(code_attribute *);
-void Arraylength(code_attribute *);
-void Athrow(code_attribute *);
-void Checkcast(code_attribute *);
-void Instanceof(code_attribute *);
+void Anewarray      (code_attribute *);
+void Arraylength    (code_attribute *);
+void Athrow         (code_attribute *);
+void Checkcast      (code_attribute *);
+void Instanceof     (code_attribute *);
 void Monitorenter   (code_attribute *);
-void Monitorexit(code_attribute *);
-void Wide            (code_attribute *);
-void Multianewarray(code_attribute *);
-void Ifnull(code_attribute *);
-void Ifnonnull(code_attribute *);
-void Goto_w(code_attribute *);
-void Jsr_w(code_attribute *);
-void Breakpoint(code_attribute *);
-void Impdep1(code_attribute *);
-void Impdep2(code_attribute *);
+void Monitorexit    (code_attribute *);
+void Wide           (code_attribute *);
+void Multianewarray (code_attribute *);
+void Ifnull         (code_attribute *);
+void Ifnonnull      (code_attribute *);
+void Goto_w         (code_attribute *); // Feito
+void Jsr_w          (code_attribute *); // Feito
+void Breakpoint     (code_attribute *); // ??????????
+void Impdep1        (code_attribute *);
+void Impdep2        (code_attribute *);
 
 void (*inst_vector[256])(code_attribute *) = {
 Nop         	/*0x00 */,
