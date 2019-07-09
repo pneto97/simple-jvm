@@ -1,9 +1,9 @@
 public class helloworld{
     public static void main(String[] args) {
-        float first = 1;
-        float second = 2;
-        float sum = first + second;
-        System.out.println(sum);
+        long first = 1;
+        long second = 2;
+        //long sum = first + second;
+        System.out.println(first);
 
         //double third = 10.666666f;
         //double forth = 20f;

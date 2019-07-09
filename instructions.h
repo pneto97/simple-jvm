@@ -74,9 +74,9 @@ void Lstore_1 (code_attribute *);   //feito
 void Lstore_2 (code_attribute *);   //feito
 void Lstore_3 (code_attribute *);   //feito
 void Fstore_0 (code_attribute *);   //feito
-void Fstore_1 (code_attribute *);   //feito
-void Fstore_2 (code_attribute *);   //feito
-void Fstore_3 (code_attribute *);   //feito
+void Fstore_1 (code_attribute *);   //feito e testado
+void Fstore_2 (code_attribute *);   //feito e testado
+void Fstore_3 (code_attribute *);   //feito e testado
 void Dstore_0 (code_attribute *);   //feito
 void Dstore_1 (code_attribute *);   //feito
 void Dstore_2 (code_attribute *);   //feito
