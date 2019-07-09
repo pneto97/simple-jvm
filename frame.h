@@ -9,13 +9,67 @@
 #include "class_structure.h"
 #include "data_type.h"
 
+
+typedef uint32_t var_cat1;
+
+typedef struct var_cat2{
+    uint32_t high;
+    uint32_t low;
+}var_cat2;
+
+typedef union data{
+    var_cat1 datac1;
+    var_cat2 datac2;
+} data;
+
 typedef struct operand
-{
+{   
     cat_type cat;
     data_type type;
-    uint32_t data;
+    union {
+        uint32_t bytes;
+        union reference_type * ref;
+    }data;
 
 } operand;
+
+typedef struct field{
+    uint8_t *name;
+    uint8_t *class_name;
+    data_type type;
+    data data;
+} field;
+typedef struct class_loaded{
+    uint8_t *name;
+    class_structure *class_str;
+    field *fields; // fields estáticos
+
+    struct class_loaded *next;
+}class_loaded;
+
+typedef struct class_instance{
+    uint8_t *name;
+    class_loaded *class; 
+    field *fields;  // fields da instância
+} class_instance;
+
+typedef struct array{
+    operand * high; // Utilizado só para dados cat2
+    operand * low; // Utilizado sempre
+    int arraysize;
+} array;
+
+typedef struct object_handler{
+    class_loaded *class;
+    class_instance *class_instance;
+} object;
+
+typedef union reference_type{
+    object * objectref;
+    array * arrayref;
+    // interface_instance;
+    // null;
+} reference_type;
 
 typedef struct operand_item
 {
@@ -44,60 +98,16 @@ typedef struct jvm_stack
     int frame_size;
 } jvm_stack;
 
-typedef uint32_t var_cat1;
 
-typedef struct var_cat2{
-    uint32_t high;
-    uint32_t low;
-}var_cat2;
 
-typedef union data{
-    var_cat1 datac1;
-    var_cat2 datac2;
-} data;
-
-typedef struct field{
-    uint8_t *name;
-    uint8_t *class_name;
-    data_type type;
-    data data;
-} field;
-
-typedef struct class_loaded{
-    uint8_t *name;
-    class_structure *class_str;
-    field *fields; // fields estáticos
-
-    struct class_loaded *next;
-}class_loaded;
-
-typedef struct class_instance{
-    uint8_t *name;
-    class_loaded *class; 
-    field *fields;  // fields da instância
-} class_instance;
 
 typedef struct method_area{
     class_loaded *first;
     class_loaded *last;
 } method_area;
 
-typedef union object{
-    class_instance *class_inst;
-    // interface_instance;
-    // array array;
-    // null;
-} object;
 
-typedef struct object_handler{
-    class_loaded *class;
-    class_instance *class_instance;
-} objectref;
 
-typedef struct array{
-    uint16_t **data;
-    int arraysize;
-} array;
 
 // typedef struct heap{
 //     // LIsta/vetor/pilha de object

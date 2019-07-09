@@ -1,4 +1,6 @@
 #include "global.h"
+#include "primitive_types.h"
+#include <stdio.h>
 
 char *getUtf8Class(uint16_t index) {
     cp_info field       = GLOBAL_jvm_stack->top->constant_pool[index - 1];
@@ -56,4 +58,20 @@ uint64_t longToUint64(long number) {
 
 uint32_t floatToUint32(float bytes) {
     return *(uint32_t *)&bytes;
+}
+
+data_type PrimitiveType(int8_t atype) {
+    switch (atype) {
+    case T_BOOLEAN: return BOOLEAN_TYPE; break;
+    case T_CHAR: return CHAR_TYPE; break;
+    case T_FLOAT: return FLOAT_TYPE; break;
+    case T_DOUBLE: return DOUBLE_TYPE; break;
+    case T_BYTE: return BYTE_TYPE; break;
+    case T_SHORT: return SHORT_TYPE; break;
+    case T_INT: return INT_TYPE; break;
+    case T_LONG: return LONG_TYPE; break;
+    default: 
+        printf("Primitive Type ERROR!");
+        return NULL_TYPE;
+    }
 }
