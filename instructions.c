@@ -190,6 +190,18 @@ void Bipush(code_attribute *code) {
 
 void Sipush(code_attribute *code) {
     if (DEBUG) printf("SIPUSH\n");
+    GLOBAL_jvm_stack->top->pc++;
+    uint8_t byte1 = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc++;
+    uint8_t byte2 = code->code[GLOBAL_jvm_stack->top->pc];
+    operand op;
+    uint16_t value = (((int16_t) byte1 << 8) | (int16_t) byte2);
+
+    op.type  = BYTE_TYPE;
+    op.data = (int32_t) value;
+    op.cat  = UNIQUE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Ldc(code_attribute *code) {
     if (DEBUG) printf("LDC\n");
@@ -232,6 +244,46 @@ void Ldc(code_attribute *code) {
 }
 void Ldc_w(code_attribute *code) {
     if (DEBUG) printf("LDC_W\n");
+    operand op;
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t indexbyte1             = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t indexbyte2             = code->code[GLOBAL_jvm_stack->top->pc];
+    uint16_t index = (((uint16_t) indexbyte1 << 8) | (uint16_t) indexbyte2);
+    
+    cp_info cp = GLOBAL_jvm_stack->top->constant_pool[index - 1];
+
+    switch (cp.tag)
+    {
+    case CONSTANT_Integer:
+        op.data = cp.info.integerInfo.bytes;
+        op.cat = UNIQUE;
+        op.type = INT_TYPE;
+        break;
+    case CONSTANT_Float:
+        op.data = cp.info.floatInfo.bytes;
+        op.cat = UNIQUE;
+        op.type = FLOAT_TYPE;
+        break;
+    case CONSTANT_String:
+        op.data = (uint32_t) GLOBAL_jvm_stack->top->constant_pool[cp.info.stringInfo.string_index - 1].info.utf8Info.bytes;
+        op.cat = UNIQUE;
+        op.type = CHAR_TYPE;
+        break;
+    // case CONSTANT_Class:
+    //     op.data = cp.info.classInfo.name_index;
+    //     op.cat = UNIQUE;
+    //     op.type = CLASS_TYPE;
+    //     printf("falta implementar [constant class do LDC]\n");
+    //     break;
+    default:
+        op.data = 0;
+        op.cat = UNIQUE;
+        op.type = NULL_TYPE;
+        printf("Deu ruim no LDC\n");
+        break;
+    }
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Ldc2_w(code_attribute *code) {
     if (DEBUG) printf("LDC2_W\n");
@@ -276,11 +328,10 @@ void Iload(code_attribute *code) {
 void Lload(code_attribute *code) {
     if (DEBUG) printf("LLOAD  \n");
 
-    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
-    uint8_t index_hi             = code->code[(GLOBAL_jvm_stack->top->pc)++];
+    GLOBAL_jvm_stack->top->pc  = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index_hi           = code->code[GLOBAL_jvm_stack->top->pc];
     operand value_hi           = GLOBAL_jvm_stack->top->local_vars[index_hi];
-
-    uint8_t index_lo            = code->code[GLOBAL_jvm_stack->top->pc];
+    uint8_t index_lo           = index_hi + 1;
     operand value_lo           = GLOBAL_jvm_stack->top->local_vars[index_lo];
 
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_lo);
@@ -505,6 +556,12 @@ void Istore(code_attribute *code) {
 }
 void Lstore(code_attribute *code) {
     if (DEBUG) printf("LSTORE\n");
+    GLOBAL_jvm_stack->top->pc                = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index                            = code->code[GLOBAL_jvm_stack->top->pc];
+    operand hi                               = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand lo                               = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = lo;
 }
 void Fstore(code_attribute *code) {
     if (DEBUG) printf("FSTORE\n");
@@ -782,13 +839,11 @@ void Ladd(code_attribute *code) {
     operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-    int64_t longao1 = (((int64_t)value1_hi.data << 32) + (int64_t)value1_lo.data);
-    int64_t longao2 = (((int64_t)value2_hi.data << 32) + (int64_t)value2_lo.data);
-    int64_t result  = longao1 + longao2;
+    uint64_t result = longToUint64(makeLong(value1_hi.data, value1_lo.data)+(makeLong(value2_hi.data, value2_lo.data)));
 
     operand op_hi, op_lo;
-    op_hi.data = (uint32_t)(result >> 32) & 0x0000FFFF;
-    op_lo.data = (uint32_t)(result & 0x0000FFFF);
+    op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data = (uint32_t)(result & 0x00000000FFFFFFFF);
 
     op_hi.cat = FIRST;
     op_lo.cat = SECOND;
@@ -797,7 +852,6 @@ void Ladd(code_attribute *code) {
 
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
-
 }
 void Fadd(code_attribute *code) {
     if (DEBUG) printf("FADD\n");
@@ -850,6 +904,25 @@ void Isub(code_attribute *code) {
 }
 void Lsub(code_attribute *code) {
     if (DEBUG) printf("LSUB\n");
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint64_t result = longToUint64(makeLong(value1_hi.data, value1_lo.data)-(makeLong(value2_hi.data, value2_lo.data)));
+
+    operand op_hi, op_lo;
+    op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = LONG_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Fsub(code_attribute *code) {
     if (DEBUG) printf("FSUB\n");
@@ -900,6 +973,25 @@ void Imul(code_attribute *code) {
 }
 void Lmul(code_attribute *code) {
     if (DEBUG) printf("LMUL\n");
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint64_t result = longToUint64(makeLong(value1_hi.data, value1_lo.data)*(makeLong(value2_hi.data, value2_lo.data)));
+
+    operand op_hi, op_lo;
+    op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = LONG_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Fmul(code_attribute *code) {
     if (DEBUG) printf("FMUL\n");
@@ -957,6 +1049,25 @@ void Idiv(code_attribute *code) {
 }
 void Ldiv(code_attribute *code) {
     if (DEBUG) printf("LDIV\n");
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint64_t result = longToUint64(makeLong(value1_hi.data, value1_lo.data)/(makeLong(value2_hi.data, value2_lo.data)));
+
+    operand op_hi, op_lo;
+    op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = LONG_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Fdiv(code_attribute *code) {
     if (DEBUG) printf("FDIV\n");
@@ -1625,7 +1736,6 @@ void Invokevirtual(code_attribute *code) {
     char *type       = getUtf8Type(index);
 
     operand op2;
-    uint64_t longao;
 
     printf("CLASS NAME:  %s\n", class_name);
     printf("METHOD NAME: %s\n", name);
@@ -1669,8 +1779,7 @@ void Invokevirtual(code_attribute *code) {
                 break;
             case LONG_TYPE:
                 op2    = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-                longao = (((uint64_t)op.data << 32) | (uint64_t)op2.data);
-                printf("%lld", longao);
+                printf("%ld", makeLong(op.data, op2.data));
                 break;
             case NULL_TYPE:
                 printf("NULL");
