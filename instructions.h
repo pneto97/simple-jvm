@@ -163,11 +163,11 @@ void I2c (code_attribute *);
 void I2s (code_attribute *);
 
 // Lucao
-void Lcmp     (code_attribute *); // Feito
-void Fcmpl    (code_attribute *); // Feito
-void Fcmpg    (code_attribute *); // Feito
-void Dcmpl    (code_attribute *); // Feito
-void Dcmpg    (code_attribute *); // Feito
+void Lcmp     (code_attribute *); //Feito
+void Fcmpl    (code_attribute *); //Feito
+void Fcmpg    (code_attribute *); //Feito
+void Dcmpl    (code_attribute *); //Feito
+void Dcmpg    (code_attribute *); //Feito
 
 // Demetrio
 void Ifeq     (code_attribute *); //Feito 
@@ -214,12 +214,12 @@ void Checkcast      (code_attribute *);
 void Instanceof     (code_attribute *);
 void Monitorenter   (code_attribute *); // Não necessário
 void Monitorexit    (code_attribute *); // Não necessário
-void Wide           (code_attribute *);
+void Wide           (code_attribute *); 
 void Multianewarray (code_attribute *);
-void Ifnull         (code_attribute *); // Feito Verificar!
-void Ifnonnull      (code_attribute *); // Feito Verificar!
-void Goto_w         (code_attribute *); // Feito
-void Jsr_w          (code_attribute *); // Feito
+void Ifnull         (code_attribute *); //Feito Verificar!
+void Ifnonnull      (code_attribute *); //Feito Verificar!
+void Goto_w         (code_attribute *); //Feito
+void Jsr_w          (code_attribute *); //Feito
 
 void (*inst_vector[256])(code_attribute *) = {
 Nop         	/*0x00 */,
