@@ -1202,6 +1202,15 @@ void Lneg(code_attribute *code) {
 }
 void Fneg(code_attribute *code) {
     if (DEBUG) printf("FNEG\n");
+
+    operand op;
+    operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    float result = 0 - makeFloat(value.data);
+    op.data      = floatToUint32(result);
+    op.cat       = UNIQUE;
+    op.type      = FLOAT_TYPE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Dneg(code_attribute *code) {
     if (DEBUG) printf("DNEG\n");
