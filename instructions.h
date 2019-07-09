@@ -130,7 +130,7 @@ void Drem   (code_attribute *); //Feito
 void Ineg   (code_attribute *); //Feito e testado
 void Lneg   (code_attribute *); //Feito e testado
 void Fneg   (code_attribute *); //Feito e testado 
-void Dneg   (code_attribute *); 
+void Dneg   (code_attribute *); //Feito e testado 
 void Ishl   (code_attribute *); //Feito e testado
 void Lshl   (code_attribute *); 
 void Ishr   (code_attribute *); //Feito e testado

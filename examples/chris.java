@@ -1,6 +1,6 @@
 public class chris{
     public static void main(String[] args) {
-        float test =  15;
+        double test =  15.635;
         test = -test;
         System.out.println(test);
     }

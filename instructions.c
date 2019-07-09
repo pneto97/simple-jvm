@@ -1214,6 +1214,23 @@ void Fneg(code_attribute *code) {
 }
 void Dneg(code_attribute *code) {
     if (DEBUG) printf("DNEG\n");
+
+    operand hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint64_t result = doubleToUint64(0 - makeDouble(hi.data, lo.data));
+
+    operand op_hi, op_lo;
+    op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = DOUBLE_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Ishl(code_attribute *code) {
     if (DEBUG) printf("ISHL\n");
