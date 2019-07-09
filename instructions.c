@@ -190,6 +190,18 @@ void Bipush(code_attribute *code) {
 
 void Sipush(code_attribute *code) {
     if (DEBUG) printf("SIPUSH\n");
+    GLOBAL_jvm_stack->top->pc++;
+    uint8_t byte1 = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc++;
+    uint8_t byte2 = code->code[GLOBAL_jvm_stack->top->pc];
+    operand op;
+    uint16_t value = (((int16_t) byte1 << 8) | (int16_t) byte2);
+
+    op.type  = BYTE_TYPE;
+    op.data = (int32_t) value;
+    op.cat  = UNIQUE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Ldc(code_attribute *code) {
     if (DEBUG) printf("LDC\n");
@@ -232,6 +244,46 @@ void Ldc(code_attribute *code) {
 }
 void Ldc_w(code_attribute *code) {
     if (DEBUG) printf("LDC_W\n");
+    operand op;
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t indexbyte1             = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t indexbyte2             = code->code[GLOBAL_jvm_stack->top->pc];
+    uint16_t index = (((uint16_t) indexbyte1 << 8) | (uint16_t) indexbyte2);
+    
+    cp_info cp = GLOBAL_jvm_stack->top->constant_pool[index - 1];
+
+    switch (cp.tag)
+    {
+    case CONSTANT_Integer:
+        op.data = cp.info.integerInfo.bytes;
+        op.cat = UNIQUE;
+        op.type = INT_TYPE;
+        break;
+    case CONSTANT_Float:
+        op.data = cp.info.floatInfo.bytes;
+        op.cat = UNIQUE;
+        op.type = FLOAT_TYPE;
+        break;
+    case CONSTANT_String:
+        op.data = (uint32_t) GLOBAL_jvm_stack->top->constant_pool[cp.info.stringInfo.string_index - 1].info.utf8Info.bytes;
+        op.cat = UNIQUE;
+        op.type = CHAR_TYPE;
+        break;
+    // case CONSTANT_Class:
+    //     op.data = cp.info.classInfo.name_index;
+    //     op.cat = UNIQUE;
+    //     op.type = CLASS_TYPE;
+    //     printf("falta implementar [constant class do LDC]\n");
+    //     break;
+    default:
+        op.data = 0;
+        op.cat = UNIQUE;
+        op.type = NULL_TYPE;
+        printf("Deu ruim no LDC\n");
+        break;
+    }
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Ldc2_w(code_attribute *code) {
     if (DEBUG) printf("LDC2_W\n");

@@ -19,9 +19,9 @@ void Fconst_2    (code_attribute *); //Feito
 void Dconst_0    (code_attribute *); //Feito
 void Dconst_1    (code_attribute *); //Feito
 void Bipush      (code_attribute *); //Feito
-void Sipush      (code_attribute *); //demetrio
+void Sipush      (code_attribute *); //Feito
 void Ldc         (code_attribute *); //Feito
-void Ldc_w       (code_attribute *); //demetrio
+void Ldc_w       (code_attribute *); //Feito
 void Ldc2_w      (code_attribute *); //Feito
 // Paulo
 void Iload  (code_attribute *); //Feito
