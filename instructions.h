@@ -20,8 +20,8 @@ void Dconst_0    (code_attribute *); //Feito
 void Dconst_1    (code_attribute *); //Feito
 void Bipush      (code_attribute *); //Feito
 void Sipush      (code_attribute *); //Feito
-void Ldc         (code_attribute *); //Feito
-void Ldc_w       (code_attribute *); //Feito
+void Ldc         (code_attribute *); //Feito (verificar case String)
+void Ldc_w       (code_attribute *); //Feito (verificar case String)
 void Ldc2_w      (code_attribute *); //Feito
 // Paulo
 void Iload  (code_attribute *); //Feito
@@ -128,7 +128,7 @@ void Drem   (code_attribute *); //Feito
 
 // Chris 
 void Ineg   (code_attribute *); //Feito e testado
-void Lneg   (code_attribute *); 
+void Lneg   (code_attribute *); //Feito e testado
 void Fneg   (code_attribute *); 
 void Dneg   (code_attribute *); 
 void Ishl   (code_attribute *); //Feito e testado

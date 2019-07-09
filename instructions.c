@@ -226,12 +226,12 @@ void Ldc(code_attribute *code) {
         op.cat  = UNIQUE;
         op.type = CHAR_TYPE;
         break;
-    // case CONSTANT_Class:
-    //     op.data = cp.info.classInfo.name_index;
-    //     op.cat = UNIQUE;
-    //     op.type = CLASS_TYPE;
-    //     printf("falta implementar [constant class do LDC]\n");
-    //     break;
+    case CONSTANT_Class:
+        // op.data = cp.info.classInfo.name_index;
+        // op.cat = UNIQUE;
+        // op.type = CLASS_TYPE;
+        printf("LDC: CONSTANT_CLASS N IMPLEMENTADO\n");
+        break;
     default:
         op.data = 0;
         op.cat  = UNIQUE;
@@ -268,12 +268,12 @@ void Ldc_w(code_attribute *code) {
         op.cat  = UNIQUE;
         op.type = CHAR_TYPE;
         break;
-    // case CONSTANT_Class:
-    //     op.data = cp.info.classInfo.name_index;
-    //     op.cat = UNIQUE;
-    //     op.type = CLASS_TYPE;
-    //     printf("falta implementar [constant class do LDC]\n");
-    //     break;
+    case CONSTANT_Class:
+        // op.data = cp.info.classInfo.name_index;
+        // op.cat = UNIQUE;
+        // op.type = CLASS_TYPE;
+        printf("LDC_W: CONSTANT_CLASS N IMPLEMENTADO\n");
+        break;
     default:
         op.data = 0;
         op.cat  = UNIQUE;
@@ -1182,6 +1182,23 @@ void Ineg(code_attribute *code) {
 }
 void Lneg(code_attribute *code) {
     if (DEBUG) printf("LNEG\n");
+
+    operand hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint64_t result = longToUint64(0 - makeLong(hi.data, lo.data));
+
+    operand op_hi, op_lo;
+    op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = LONG_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Fneg(code_attribute *code) {
     if (DEBUG) printf("FNEG\n");
@@ -1783,6 +1800,7 @@ void Invokevirtual(code_attribute *code) {
                 //             ClassLoader *class_loader = class_instance->classe;
                 //             std::string class_name    = cpAttrAux.getUTF8(class_loader->getConstPool(), class_loader->getThisClass());
                 //             std::cout << class_name << "@" << class_instance;
+                printf("INVOKEVIRTUAL: CLASS_TYPE N IMPLEMENTADO\n");
                 break;
             }
             default:
