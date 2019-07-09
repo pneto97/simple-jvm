@@ -1,11 +1,8 @@
 #include "frame.h"
 #include "global.h"
 #include "instruction_helpers.h"
-<<<<<<< HEAD
 #include "read_utils.h"
-=======
 #include <math.h>
->>>>>>> a079a653000d47574eb7edbf603155f45cdd4b2f
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -251,13 +248,8 @@ void Ldc_w(code_attribute *code) {
     GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
     uint8_t indexbyte1        = code->code[GLOBAL_jvm_stack->top->pc];
     GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
-<<<<<<< HEAD
-    uint8_t indexbyte2             = code->code[GLOBAL_jvm_stack->top->pc];
-    uint16_t index = (((uint16_t) indexbyte1 << 8) | (uint16_t) indexbyte2);
-=======
     uint8_t indexbyte2        = code->code[GLOBAL_jvm_stack->top->pc];
     uint16_t index            = (((uint16_t)indexbyte1 << 8) | (uint16_t)indexbyte2);
->>>>>>> a079a653000d47574eb7edbf603155f45cdd4b2f
 
     cp_info cp = GLOBAL_jvm_stack->top->constant_pool[index - 1];
 
@@ -1759,7 +1751,7 @@ void Tableswitch(code_attribute *code) {
     int resto     = 3 - (GLOBAL_jvm_stack->top->pc % 4);
     int pc_offset = resto + GLOBAL_jvm_stack->top->pc;
 
-    uint32_t default_variable = build32(code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 1 ], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 2], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 3], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 4]);
+    // uint32_t default_variable = build32(code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 1 ], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 2], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 3], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 4]);
     uint32_t low_variable     = build32(code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 5], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 6], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 7], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 8]);
     uint32_t high_variable    = build32(code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 9], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 10], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 11], code->code[GLOBAL_jvm_stack->top->pc + pc_offset + 12]);
 
