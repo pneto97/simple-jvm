@@ -1012,12 +1012,63 @@ void Irem(code_attribute *code) {
 }
 void Lrem(code_attribute *code) {
     if (DEBUG) printf("LREM\n");
+        if (DEBUG) printf("LADD\n");
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    int64_t long1 = (((int64_t)value1_hi.data << 32) | (int64_t)value1_lo.data);
+    int64_t long2 = (((int64_t)value2_hi.data << 32) | (int64_t)value2_lo.data);
+    int64_t result  = long1 % long2;
+
+    operand op_hi, op_lo;
+    op_hi.data = (uint32_t)(result >> 32) & 0x0000FFFF;
+    op_lo.data = (uint32_t)(result & 0x0000FFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = LONG_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Frem(code_attribute *code) {
     if (DEBUG) printf("FREM\n");
+    operand op;
+    operand value2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+
+    float result = fmod(makeFloat(value1.data), makeFloat(value2.data));
+    op.data        = floatToUint32(result);
+    op.cat         = UNIQUE;
+    op.type        = FLOAT_TYPE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Drem(code_attribute *code) {
     if (DEBUG) printf("DREM\n");
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint64_t result  = doubleToUint64(fmod(makeDouble(value1_hi.data, value1_lo.data),(makeDouble(value2_hi.data, value2_lo.data))));
+
+    operand op_hi, op_lo;
+    op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = DOUBLE_TYPE;
+    
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Ineg(code_attribute *code) {
     if (DEBUG) printf("INEG\n");

@@ -122,9 +122,9 @@ void Ldiv   (code_attribute *); //Joma
 void Fdiv   (code_attribute *); //Feito e testado
 void Ddiv   (code_attribute *); //Feito e testado
 void Irem   (code_attribute *); //Feito
-void Lrem   (code_attribute *); //Lucao
-void Frem   (code_attribute *); //Lucao
-void Drem   (code_attribute *); //Lucao
+void Lrem   (code_attribute *); //Feito
+void Frem   (code_attribute *); //Feito
+void Drem   (code_attribute *); //Feito
 
 // Chris 
 void Ineg   (code_attribute *); //Feito e testado
