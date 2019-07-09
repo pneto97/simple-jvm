@@ -20,12 +20,12 @@ void Dconst_0    (code_attribute *); //Feito
 void Dconst_1    (code_attribute *); //Feito
 void Bipush      (code_attribute *); //Feito
 void Sipush      (code_attribute *); //Feito
-void Ldc         (code_attribute *); //Feito
-void Ldc_w       (code_attribute *); //Feito
+void Ldc         (code_attribute *); //Feito (verificar case String)
+void Ldc_w       (code_attribute *); //Feito (verificar case String)
 void Ldc2_w      (code_attribute *); //Feito
 // Paulo
 void Iload  (code_attribute *); //Feito
-void Lload  (code_attribute *); //Feito
+void Lload  (code_attribute *); //Feito e testado
 void Fload  (code_attribute *); //Feito
 void Dload  (code_attribute *); //Feito
 void Aload  (code_attribute *); //Feito
@@ -59,10 +59,10 @@ void Baload (code_attribute *);
 void Caload (code_attribute *);
 void Saload (code_attribute *);
 void Istore   (code_attribute *); //Feito
-void Lstore   (code_attribute *); //Joma
+void Lstore   (code_attribute *); //Feito e testado
 void Fstore   (code_attribute *); //Feito
 void Dstore   (code_attribute *); //Feito e testado
-void Astore   (code_attribute *); //Joma
+void Astore   (code_attribute *); //Feito (NECESSSITA VERIFICAR)
 void Istore_0 (code_attribute *); //Feito
 void Istore_1 (code_attribute *); //Feito
 void Istore_2 (code_attribute *); //Feito
@@ -106,31 +106,31 @@ void Dup2_x2  (code_attribute *); //Feito
 void Swap     (code_attribute *); //Feito
 
 void Iadd   (code_attribute *); //Feito
-void Ladd   (code_attribute *); //Verificar 
+void Ladd   (code_attribute *); //Feito e testado
 void Fadd   (code_attribute *); //Feito e testado
 void Dadd   (code_attribute *); //Feito e testado
 void Isub   (code_attribute *); //Feito
-void Lsub   (code_attribute *); //Joma
+void Lsub   (code_attribute *); //Feito e testado
 void Fsub   (code_attribute *); //Feito e testado
 void Dsub   (code_attribute *); //Feito e testado
 void Imul   (code_attribute *); //Feito
-void Lmul   (code_attribute *); //Joma
+void Lmul   (code_attribute *); //Feito e testado
 void Fmul   (code_attribute *); //Feito e testado
 void Dmul   (code_attribute *); //Feito e testado
 void Idiv   (code_attribute *); //Feito
-void Ldiv   (code_attribute *); //Joma
+void Ldiv   (code_attribute *); //Feito e testado
 void Fdiv   (code_attribute *); //Feito e testado
 void Ddiv   (code_attribute *); //Feito e testado
 void Irem   (code_attribute *); //Feito
-void Lrem   (code_attribute *); //Lucao
-void Frem   (code_attribute *); //Lucao
-void Drem   (code_attribute *); //Lucao
+void Lrem   (code_attribute *); //Feito
+void Frem   (code_attribute *); //Feito
+void Drem   (code_attribute *); //Feito
 
 // Chris 
 void Ineg   (code_attribute *); //Feito e testado
-void Lneg   (code_attribute *); 
-void Fneg   (code_attribute *); 
-void Dneg   (code_attribute *); 
+void Lneg   (code_attribute *); //Feito e testado
+void Fneg   (code_attribute *); //Feito e testado 
+void Dneg   (code_attribute *); //Feito e testado 
 void Ishl   (code_attribute *); //Feito e testado
 void Lshl   (code_attribute *); 
 void Ishr   (code_attribute *); //Feito e testado
@@ -140,7 +140,7 @@ void Lushr  (code_attribute *);
 void Iand   (code_attribute *); //Feito e testado
 void Land   (code_attribute *); 
 void Ior    (code_attribute *); //Feito e testado
-void Lor    (code_attribute *); 
+void Lor    (code_attribute *); //Feito e testado
 void Ixor   (code_attribute *); //Feito e testado
 void Lxor   (code_attribute *); 
 void Iinc   (code_attribute *); //Feito e testado
@@ -185,9 +185,9 @@ void If_icmple(code_attribute *); //Feito
 void If_acmpeq(code_attribute *); //Feito
 void If_acmpne(code_attribute *); //Feito
 
-void GoTo        (code_attribute *); //lucao
-void Jsr         (code_attribute *); //lucao
-void Ret         (code_attribute *); //lucao
+void GoTo        (code_attribute *); //Feito
+void Jsr         (code_attribute *); //Feito
+void Ret         (code_attribute *); //Feito
 void Tableswitch (code_attribute *); //demetrio e chris
 void Lookupswitch(code_attribute *); //demetrio e chris
 void Ireturn     (code_attribute *);
@@ -207,22 +207,22 @@ void Invokeinterface(code_attribute *);
 void Invokedynamic  (code_attribute *);
 void New            (code_attribute *);
 void Newarray       (code_attribute *);
-void Anewarray(code_attribute *);
-void Arraylength(code_attribute *);
-void Athrow(code_attribute *);
-void Checkcast(code_attribute *);
-void Instanceof(code_attribute *);
+void Anewarray      (code_attribute *);
+void Arraylength    (code_attribute *);
+void Athrow         (code_attribute *);
+void Checkcast      (code_attribute *);
+void Instanceof     (code_attribute *);
 void Monitorenter   (code_attribute *);
-void Monitorexit(code_attribute *);
-void Wide            (code_attribute *);
-void Multianewarray(code_attribute *);
-void Ifnull(code_attribute *);
-void Ifnonnull(code_attribute *);
-void Goto_w(code_attribute *);
-void Jsr_w(code_attribute *);
-void Breakpoint(code_attribute *);
-void Impdep1(code_attribute *);
-void Impdep2(code_attribute *);
+void Monitorexit    (code_attribute *);
+void Wide           (code_attribute *);
+void Multianewarray (code_attribute *);
+void Ifnull         (code_attribute *);
+void Ifnonnull      (code_attribute *);
+void Goto_w         (code_attribute *); // Feito
+void Jsr_w          (code_attribute *); // Feito
+void Breakpoint     (code_attribute *); // ??????????
+void Impdep1        (code_attribute *);
+void Impdep2        (code_attribute *);
 
 void (*inst_vector[256])(code_attribute *) = {
 Nop         	/*0x00 */,
@@ -279,8 +279,8 @@ Aaload      	/*0x32 */,
 Baload      	/*0x33 */,
 Caload      	/*0x34 */,
 Saload      	/*0x35 */,
-Lstore      	/*0x37 */,
 Istore      	/*0x36 */,
+Lstore      	/*0x37 */,
 Fstore      	/*0x38 */,
 Dstore      	/*0x39 */,
 Astore      	/*0x3a */,

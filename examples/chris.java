@@ -1,7 +1,7 @@
 public class chris{
     public static void main(String[] args) {
-        int first = 10;
-        first += 3;
-        System.out.println(first);
+        long test =  4112;
+        test |= 0x00000101;
+        System.out.println(test);
     }
 }
