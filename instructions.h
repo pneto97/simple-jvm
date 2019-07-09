@@ -19,9 +19,9 @@ void Fconst_2    (code_attribute *); //Feito
 void Dconst_0    (code_attribute *); //Feito
 void Dconst_1    (code_attribute *); //Feito
 void Bipush      (code_attribute *); //Feito
-void Sipush      (code_attribute *);
+void Sipush      (code_attribute *); //demetrio
 void Ldc         (code_attribute *); //Feito
-void Ldc_w       (code_attribute *);
+void Ldc_w       (code_attribute *); //demetrio
 void Ldc2_w      (code_attribute *); //Feito
 // Paulo
 void Iload  (code_attribute *); //Feito
@@ -59,10 +59,10 @@ void Baload (code_attribute *);
 void Caload (code_attribute *);
 void Saload (code_attribute *);
 void Istore   (code_attribute *); //Feito
-void Lstore   (code_attribute *);
-void Fstore   (code_attribute *);
-void Dstore   (code_attribute *);
-void Astore   (code_attribute *);
+void Lstore   (code_attribute *); //Joma
+void Fstore   (code_attribute *); //Feito
+void Dstore   (code_attribute *); //Feito e testado
+void Astore   (code_attribute *); //Joma
 void Istore_0 (code_attribute *); //Feito
 void Istore_1 (code_attribute *); //Feito
 void Istore_2 (code_attribute *); //Feito
@@ -81,7 +81,7 @@ void Dstore_0 (code_attribute *);   //Feito
 void Dstore_1 (code_attribute *);   //Feito
 void Dstore_2 (code_attribute *);   //Feito
 void Dstore_3 (code_attribute *);   //Feito
-void Astore_0 (code_attribute *);   
+void Astore_0 (code_attribute *);     
 void Astore_1 (code_attribute *);
 void Astore_2 (code_attribute *);
 void Astore_3 (code_attribute *);
@@ -110,21 +110,21 @@ void Ladd   (code_attribute *); //Verificar
 void Fadd   (code_attribute *); //Feito e testado
 void Dadd   (code_attribute *); //Feito e testado
 void Isub   (code_attribute *); //Feito
-void Lsub   (code_attribute *); 
+void Lsub   (code_attribute *); //Joma
 void Fsub   (code_attribute *); //Feito e testado
 void Dsub   (code_attribute *); //Feito e testado
 void Imul   (code_attribute *); //Feito
-void Lmul   (code_attribute *); 
+void Lmul   (code_attribute *); //Joma
 void Fmul   (code_attribute *); //Feito e testado
 void Dmul   (code_attribute *); //Feito e testado
 void Idiv   (code_attribute *); //Feito
-void Ldiv   (code_attribute *); 
+void Ldiv   (code_attribute *); //Joma
 void Fdiv   (code_attribute *); //Feito e testado
 void Ddiv   (code_attribute *); //Feito e testado
 void Irem   (code_attribute *); //Feito
-void Lrem   (code_attribute *); 
-void Frem   (code_attribute *); 
-void Drem   (code_attribute *);
+void Lrem   (code_attribute *); //Lucao
+void Frem   (code_attribute *); //Lucao
+void Drem   (code_attribute *); //Lucao
 
 // Chris 
 void Ineg   (code_attribute *); //Feito e testado
@@ -145,6 +145,7 @@ void Ixor   (code_attribute *); //Feito e testado
 void Lxor   (code_attribute *); 
 void Iinc   (code_attribute *); //Feito e testado
 
+//PAULIN
 void I2l (code_attribute *);
 void I2f (code_attribute *);
 void I2d (code_attribute *);
