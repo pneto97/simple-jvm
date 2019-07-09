@@ -276,11 +276,10 @@ void Iload(code_attribute *code) {
 void Lload(code_attribute *code) {
     if (DEBUG) printf("LLOAD  \n");
 
-    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
-    uint8_t index_hi             = code->code[(GLOBAL_jvm_stack->top->pc)++];
+    GLOBAL_jvm_stack->top->pc  = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index_hi           = code->code[GLOBAL_jvm_stack->top->pc];
     operand value_hi           = GLOBAL_jvm_stack->top->local_vars[index_hi];
-
-    uint8_t index_lo            = code->code[GLOBAL_jvm_stack->top->pc];
+    uint8_t index_lo           = index_hi + 1;
     operand value_lo           = GLOBAL_jvm_stack->top->local_vars[index_lo];
 
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, value_lo);
@@ -505,6 +504,12 @@ void Istore(code_attribute *code) {
 }
 void Lstore(code_attribute *code) {
     if (DEBUG) printf("LSTORE\n");
+    GLOBAL_jvm_stack->top->pc                = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t index                            = code->code[GLOBAL_jvm_stack->top->pc];
+    operand hi                               = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand lo                               = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    GLOBAL_jvm_stack->top->local_vars[index] = hi;
+    GLOBAL_jvm_stack->top->local_vars[index + 1] = lo;
 }
 void Fstore(code_attribute *code) {
     if (DEBUG) printf("FSTORE\n");
@@ -782,13 +787,11 @@ void Ladd(code_attribute *code) {
     operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
-    int64_t longao1 = (((int64_t)value1_hi.data << 32) + (int64_t)value1_lo.data);
-    int64_t longao2 = (((int64_t)value2_hi.data << 32) + (int64_t)value2_lo.data);
-    int64_t result  = longao1 + longao2;
+    uint64_t result = longToUint64(makeLong(value1_hi.data, value1_lo.data)+(makeLong(value2_hi.data, value2_lo.data)));
 
     operand op_hi, op_lo;
-    op_hi.data = (uint32_t)(result >> 32) & 0x0000FFFF;
-    op_lo.data = (uint32_t)(result & 0x0000FFFF);
+    op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data = (uint32_t)(result & 0x00000000FFFFFFFF);
 
     op_hi.cat = FIRST;
     op_lo.cat = SECOND;
@@ -797,7 +800,6 @@ void Ladd(code_attribute *code) {
 
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
-
 }
 void Fadd(code_attribute *code) {
     if (DEBUG) printf("FADD\n");
@@ -850,6 +852,25 @@ void Isub(code_attribute *code) {
 }
 void Lsub(code_attribute *code) {
     if (DEBUG) printf("LSUB\n");
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint64_t result = longToUint64(makeLong(value1_hi.data, value1_lo.data)-(makeLong(value2_hi.data, value2_lo.data)));
+
+    operand op_hi, op_lo;
+    op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = LONG_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Fsub(code_attribute *code) {
     if (DEBUG) printf("FSUB\n");
@@ -900,6 +921,25 @@ void Imul(code_attribute *code) {
 }
 void Lmul(code_attribute *code) {
     if (DEBUG) printf("LMUL\n");
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint64_t result = longToUint64(makeLong(value1_hi.data, value1_lo.data)*(makeLong(value2_hi.data, value2_lo.data)));
+
+    operand op_hi, op_lo;
+    op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = LONG_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Fmul(code_attribute *code) {
     if (DEBUG) printf("FMUL\n");
@@ -957,6 +997,25 @@ void Idiv(code_attribute *code) {
 }
 void Ldiv(code_attribute *code) {
     if (DEBUG) printf("LDIV\n");
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint64_t result = longToUint64(makeLong(value1_hi.data, value1_lo.data)/(makeLong(value2_hi.data, value2_lo.data)));
+
+    operand op_hi, op_lo;
+    op_hi.data = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = LONG_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Fdiv(code_attribute *code) {
     if (DEBUG) printf("FDIV\n");
@@ -1574,7 +1633,6 @@ void Invokevirtual(code_attribute *code) {
     char *type       = getUtf8Type(index);
 
     operand op2;
-    uint64_t longao;
 
     printf("CLASS NAME:  %s\n", class_name);
     printf("METHOD NAME: %s\n", name);
@@ -1618,8 +1676,7 @@ void Invokevirtual(code_attribute *code) {
                 break;
             case LONG_TYPE:
                 op2    = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-                longao = (((uint64_t)op.data << 32) | (uint64_t)op2.data);
-                printf("%lld", longao);
+                printf("%ld", makeLong(op.data, op2.data));
                 break;
             case NULL_TYPE:
                 printf("NULL");

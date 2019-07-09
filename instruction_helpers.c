@@ -33,11 +33,24 @@ double makeDouble(uint32_t high, uint32_t low){
     return *(double*)&number;
 }
 
+long makeLong(uint32_t high, uint32_t low){
+    uint64_t number;
+
+    number = (((uint64_t) high) << 32) | ((uint64_t) low);
+    
+    return *(long*)&number;
+
+}
+
 float makeFloat(uint32_t bytes){
     return *(float*)&bytes;
 }
 
 uint64_t doubleToUint64(double number){
+    return *(uint64_t*)&number;
+}
+
+uint64_t longToUint64(long number){
     return *(uint64_t*)&number;
 }
 

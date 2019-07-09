@@ -25,7 +25,7 @@ void Ldc_w       (code_attribute *); //demetrio
 void Ldc2_w      (code_attribute *); //Feito
 // Paulo
 void Iload  (code_attribute *); //Feito
-void Lload  (code_attribute *); //Feito
+void Lload  (code_attribute *); //Feito e testado
 void Fload  (code_attribute *); //Feito
 void Dload  (code_attribute *); //Feito
 void Aload  (code_attribute *); //Feito
@@ -59,7 +59,7 @@ void Baload (code_attribute *);
 void Caload (code_attribute *);
 void Saload (code_attribute *);
 void Istore   (code_attribute *); //Feito
-void Lstore   (code_attribute *); //Joma
+void Lstore   (code_attribute *); //Feito e testado
 void Fstore   (code_attribute *); //Feito
 void Dstore   (code_attribute *); //Feito e testado
 void Astore   (code_attribute *); //Joma
@@ -106,19 +106,19 @@ void Dup2_x2  (code_attribute *); //Feito
 void Swap     (code_attribute *); //Feito
 
 void Iadd   (code_attribute *); //Feito
-void Ladd   (code_attribute *); //Verificar 
+void Ladd   (code_attribute *); //Feito e testado
 void Fadd   (code_attribute *); //Feito e testado
 void Dadd   (code_attribute *); //Feito e testado
 void Isub   (code_attribute *); //Feito
-void Lsub   (code_attribute *); //Joma
+void Lsub   (code_attribute *); //Feito e testado
 void Fsub   (code_attribute *); //Feito e testado
 void Dsub   (code_attribute *); //Feito e testado
 void Imul   (code_attribute *); //Feito
-void Lmul   (code_attribute *); //Joma
+void Lmul   (code_attribute *); //Feito e testado
 void Fmul   (code_attribute *); //Feito e testado
 void Dmul   (code_attribute *); //Feito e testado
 void Idiv   (code_attribute *); //Feito
-void Ldiv   (code_attribute *); //Joma
+void Ldiv   (code_attribute *); //Feito e testado
 void Fdiv   (code_attribute *); //Feito e testado
 void Ddiv   (code_attribute *); //Feito e testado
 void Irem   (code_attribute *); //Feito
@@ -279,8 +279,8 @@ Aaload      	/*0x32 */,
 Baload      	/*0x33 */,
 Caload      	/*0x34 */,
 Saload      	/*0x35 */,
-Lstore      	/*0x37 */,
 Istore      	/*0x36 */,
+Lstore      	/*0x37 */,
 Fstore      	/*0x38 */,
 Dstore      	/*0x39 */,
 Astore      	/*0x3a */,
