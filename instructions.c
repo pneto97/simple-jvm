@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define DEBUG 1
+#define DEBUG 0
 
 void Nop(code_attribute *code) {
     if (DEBUG) printf("NOP\n");
@@ -858,6 +858,9 @@ void Bastore(code_attribute *code) {
         exit(3);
     }
 
+    uint32_t prev_value = array_ref->arrayref->low[index].data.bytes & 0xFFFFFF00;
+    value = (value & 0x000000FF) | prev_value;
+
     array_ref->arrayref->low[index].data.bytes = value;
 }
 void Castore(code_attribute *code) {
@@ -872,6 +875,9 @@ void Castore(code_attribute *code) {
         exit(3);
     }
 
+    uint32_t prev_value = array_ref->arrayref->low[index].data.bytes & 0xFFFFFF00;
+    value = (value & 0x000000FF) | prev_value;
+
     array_ref->arrayref->low[index].data.bytes = value;
 }
 void Sastore(code_attribute *code) {
@@ -885,6 +891,9 @@ void Sastore(code_attribute *code) {
         printf("NullPointerException\n");
         exit(3);
     }
+
+    uint32_t prev_value = array_ref->arrayref->low[index].data.bytes & 0xFFFF0000;
+    value = (value & 0x0000FFFF) | prev_value;
 
     array_ref->arrayref->low[index].data.bytes = value;
 }
