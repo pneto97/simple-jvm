@@ -272,6 +272,7 @@ void execute(code_attribute *code) {
         // printf("\n");
         inst_vector[code->code[GLOBAL_jvm_stack->top->pc]](code);
         // printf("\n");
+        if (GLOBAL_jvm_stack->top == NULL) break;
         if (DEBUG) {
             PrintLocalVar();
             PrintOpStack();
@@ -284,23 +285,26 @@ void execute(code_attribute *code) {
 
 void PrintLocalVar() {
     frame *fr = GLOBAL_jvm_stack->top;
-    printf("LOCAL VARS: \n");
-    for (int i = 0; i < fr->local_vars_size; i++) {
-        printf("[%d]->%x | ", i, fr->local_vars[i].data);
+    if (fr != NULL){
+        printf("LOCAL VARS: \n");
+        for (int i = 0; i < fr->local_vars_size; i++) {
+            printf("[%d]->%x | ", i, fr->local_vars[i].data.bytes);
+        }
+        printf("\n");
     }
-    printf("\n");
 }
 
 void PrintOpStack() {
-    operand_item *op_item = GLOBAL_jvm_stack->top->op_stack->top;
+    if (GLOBAL_jvm_stack->top != NULL){
+        operand_item *op_item = GLOBAL_jvm_stack->top->op_stack->top;
+        int i = 0;
 
-    int i = 0;
-
-    printf("OPERAND STACK: \n");
-    while (op_item != NULL) {
-        printf("[%d]->%x | ", i, op_item->op.data);
-        op_item = op_item->next;
-        i++;
+        printf("OPERAND STACK: \n");
+        while (op_item != NULL) {
+            printf("[%d]->%x | ", i, op_item->op.data.bytes);
+            op_item = op_item->next;
+            i++;
+        }
+        printf("\n\n");
     }
-    printf("\n\n");
 }

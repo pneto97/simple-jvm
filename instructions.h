@@ -5,12 +5,12 @@
 void Nop         (code_attribute *); //Feito
 void Aconst_null (code_attribute *); //Verificar
 void Iconst_m1   (code_attribute *); //Feito
-void Iconst_0    (code_attribute *); //Feito
-void Iconst_1    (code_attribute *); //Feito
-void Iconst_2    (code_attribute *); //Feito
-void Iconst_3    (code_attribute *); //Feito
-void Iconst_4    (code_attribute *); //Feito
-void Iconst_5    (code_attribute *); //Feito
+void Iconst_0    (code_attribute *); //Feito e testado
+void Iconst_1    (code_attribute *); //Feito e testado
+void Iconst_2    (code_attribute *); //Feito e testado
+void Iconst_3    (code_attribute *); //Feito e testado
+void Iconst_4    (code_attribute *); //Feito e testado
+void Iconst_5    (code_attribute *); //Feito e testado
 void Lconst_0    (code_attribute *); //Feito
 void Lconst_1    (code_attribute *); //Feito
 void Fconst_0    (code_attribute *); //Feito
@@ -18,7 +18,7 @@ void Fconst_1    (code_attribute *); //Feito
 void Fconst_2    (code_attribute *); //Feito
 void Dconst_0    (code_attribute *); //Feito
 void Dconst_1    (code_attribute *); //Feito
-void Bipush      (code_attribute *); //Feito
+void Bipush      (code_attribute *); //Feito e testado
 void Sipush      (code_attribute *); //Feito
 void Ldc         (code_attribute *); //Feito (verificar case String)
 void Ldc_w       (code_attribute *); //Feito (verificar case String)
@@ -50,7 +50,8 @@ void Aload_1(code_attribute *); //Feito
 void Aload_2(code_attribute *); //Feito
 void Aload_3(code_attribute *); //Feito
 
-void Iaload (code_attribute *);
+//Jominha
+void Iaload (code_attribute *); //Feito e testado
 void Laload (code_attribute *);
 void Faload (code_attribute *);
 void Daload (code_attribute *);
@@ -85,7 +86,8 @@ void Astore_0 (code_attribute *);   //Feito (NECESSSITA VERIFICAR)
 void Astore_1 (code_attribute *);   //Feito (NECESSSITA VERIFICAR)
 void Astore_2 (code_attribute *);   //Feito (NECESSSITA VERIFICAR)
 void Astore_3 (code_attribute *);   //Feito (NECESSSITA VERIFICAR)
-void Iastore  (code_attribute *);
+//Lucao
+void Iastore  (code_attribute *);   //Feito e testado
 void Lastore  (code_attribute *);
 void Fastore  (code_attribute *);
 void Dastore  (code_attribute *);
@@ -97,7 +99,7 @@ void Sastore  (code_attribute *);
 // Lucao
 void Pop      (code_attribute *); //Feito
 void Pop2     (code_attribute *); //Feito
-void Dup      (code_attribute *); //Feito
+void Dup      (code_attribute *); //Feito e testado
 void Dup_x1   (code_attribute *); //Feito
 void Dup_x2   (code_attribute *); //Feito
 void Dup2     (code_attribute *); //Feito
@@ -206,16 +208,16 @@ void Invokestatic   (code_attribute *);
 void Invokeinterface(code_attribute *);
 void Invokedynamic  (code_attribute *);
 void New            (code_attribute *);
-void Newarray       (code_attribute *);
-void Anewarray      (code_attribute *);
-void Arraylength    (code_attribute *);
-void Athrow         (code_attribute *);
+void Newarray       (code_attribute *); //Feito e testado
+void Anewarray      (code_attribute *); //demetrio
+void Arraylength    (code_attribute *); //demetrio
+void Athrow         (code_attribute *); 
 void Checkcast      (code_attribute *);
 void Instanceof     (code_attribute *);
 void Monitorenter   (code_attribute *); // Não necessário
 void Monitorexit    (code_attribute *); // Não necessário
 void Wide           (code_attribute *);
-void Multianewarray (code_attribute *);
+void Multianewarray (code_attribute *); ///demetrio
 void Ifnull         (code_attribute *); // Feito Verificar!
 void Ifnonnull      (code_attribute *); // Feito Verificar!
 void Goto_w         (code_attribute *); // Feito
