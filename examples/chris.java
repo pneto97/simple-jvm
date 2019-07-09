@@ -1,7 +1,8 @@
 public class chris{
     public static void main(String[] args) {
-        long test =  4112;
-        test |= 0x00000101;
+        long test = 4369;
+        long test2 = 257;
+        test = test & test2;
         System.out.println(test);
     }
 }

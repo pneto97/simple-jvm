@@ -134,17 +134,17 @@ void Lneg   (code_attribute *); //Feito e testado
 void Fneg   (code_attribute *); //Feito e testado 
 void Dneg   (code_attribute *); //Feito e testado 
 void Ishl   (code_attribute *); //Feito e testado
-void Lshl   (code_attribute *); 
+void Lshl   (code_attribute *); //Feito e testado 
 void Ishr   (code_attribute *); //Feito e testado
-void Lshr   (code_attribute *); 
+void Lshr   (code_attribute *); //Feito e testado
 void Iushr  (code_attribute *); //Feito e testado
-void Lushr  (code_attribute *);
+void Lushr  (code_attribute *); //Feito e testado
 void Iand   (code_attribute *); //Feito e testado
-void Land   (code_attribute *); 
+void Land   (code_attribute *); //Feito e testado 
 void Ior    (code_attribute *); //Feito e testado
 void Lor    (code_attribute *); //Feito e testado
 void Ixor   (code_attribute *); //Feito e testado
-void Lxor   (code_attribute *); 
+void Lxor   (code_attribute *); //Feito e testado 
 void Iinc   (code_attribute *); //Feito e testado
 
 //PAULIN

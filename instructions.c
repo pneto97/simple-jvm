@@ -1346,6 +1346,26 @@ void Ishl(code_attribute *code) {
 }
 void Lshl(code_attribute *code) {
     if (DEBUG) printf("LSHL\n");
+
+    operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack); //Shift value
+    operand hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint32_t shift = value.data.bytes & 0x3f;
+
+    uint64_t result = longToUint64(makeLong(hi.data.bytes, lo.data.bytes) << shift);
+
+    operand op_hi, op_lo;
+    op_hi.data.bytes = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data.bytes = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = LONG_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Ishr(code_attribute *code) {
     if (DEBUG) printf("ISHR\n");
@@ -1361,6 +1381,26 @@ void Ishr(code_attribute *code) {
 }
 void Lshr(code_attribute *code) {
     if (DEBUG) printf("LSHR\n");
+
+    operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack); //Shift value
+    operand hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint32_t shift = value.data.bytes & 0x3f;
+
+    uint64_t result = longToUint64(makeLong(hi.data.bytes, lo.data.bytes) >> shift);
+
+    operand op_hi, op_lo;
+    op_hi.data.bytes = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data.bytes = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = LONG_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Iushr(code_attribute *code) {
     if (DEBUG) printf("IUSHR\n");
@@ -1379,6 +1419,33 @@ void Iushr(code_attribute *code) {
 }
 void Lushr(code_attribute *code) {
     if (DEBUG) printf("LUSHR\n");
+
+    operand value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack); //Shift value
+    operand hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint32_t shift = value.data.bytes & 0x3f;
+    long long_val = makeLong(hi.data.bytes, lo.data.bytes);
+
+    if (long_val < 0) {
+        long_val = (long_val >> shift) + (2L << ~shift);
+    } else {
+        long_val >>= shift;
+    }
+
+    uint64_t result = longToUint64(long_val);
+
+    operand op_hi, op_lo;
+    op_hi.data.bytes = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data.bytes = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = LONG_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Iand(code_attribute *code) {
     if (DEBUG) printf("IAND\n");
@@ -1392,6 +1459,27 @@ void Iand(code_attribute *code) {
 }
 void Land(code_attribute *code) {
     if (DEBUG) printf("LAND\n");
+
+
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint64_t result = longToUint64(makeLong(value2_hi.data.bytes, value2_lo.data.bytes) & makeLong(value1_hi.data.bytes, value1_lo.data.bytes));
+
+    operand op_hi, op_lo;
+    op_hi.data.bytes = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data.bytes = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = LONG_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Ior(code_attribute *code) {
     if (DEBUG) printf("IOR\n");
@@ -1438,6 +1526,26 @@ void Ixor(code_attribute *code) {
 }
 void Lxor(code_attribute *code) {
     if (DEBUG) printf("LXOR\n");
+
+    operand value2_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value2_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand value1_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand value1_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    uint64_t result = longToUint64(makeLong(value2_hi.data.bytes, value2_lo.data.bytes) ^ makeLong(value1_hi.data.bytes, value1_lo.data.bytes));
+
+    operand op_hi, op_lo;
+    op_hi.data.bytes = (uint32_t)(result >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data.bytes = (uint32_t)(result & 0x00000000FFFFFFFF);
+
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+
+    op_hi.type = op_lo.type = LONG_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
 }
 void Iinc(code_attribute *code) {
     if (DEBUG) printf("IINC\n");
