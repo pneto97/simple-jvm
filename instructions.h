@@ -88,13 +88,13 @@ void Astore_2 (code_attribute *);   //Feito (NECESSSITA VERIFICAR)
 void Astore_3 (code_attribute *);   //Feito (NECESSSITA VERIFICAR)
 //Lucao
 void Iastore  (code_attribute *);   //Feito e testado
-void Lastore  (code_attribute *);
-void Fastore  (code_attribute *);
-void Dastore  (code_attribute *);
-void Aastore  (code_attribute *);
-void Bastore  (code_attribute *);
-void Castore  (code_attribute *);
-void Sastore  (code_attribute *);
+void Lastore  (code_attribute *);   //Feito Verificar!
+void Fastore  (code_attribute *);   //Feito Verificar!
+void Dastore  (code_attribute *);   //Feito Verificar!
+void Aastore  (code_attribute *);   //Verificar!!!!!!!!!!!!!!!!!!!!!!!!!
+void Bastore  (code_attribute *);   //Feito Verificar!
+void Castore  (code_attribute *);   //Feito Verificar!
+void Sastore  (code_attribute *);   //Feito Verificar!
 
 // Lucao
 void Pop      (code_attribute *); //Feito
