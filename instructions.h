@@ -217,7 +217,7 @@ void Instanceof     (code_attribute *);
 void Monitorenter   (code_attribute *); // Não necessário
 void Monitorexit    (code_attribute *); // Não necessário
 void Wide           (code_attribute *);
-void Multianewarray (code_attribute *); ///demetrio
+void Multianewarray (code_attribute *); // Não feito
 void Ifnull         (code_attribute *); //Feito Verificar!
 void Ifnonnull      (code_attribute *); //Feito Verificar!
 void Goto_w         (code_attribute *); //Feito
