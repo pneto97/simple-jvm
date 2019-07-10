@@ -1,3 +1,7 @@
+/**
+ * @file instructions.h
+ * @brief Instruções da JVM, contendo ponteiros para funções.
+ */
 #ifndef INSTRUCTIONS_H
 #define INSTRUCTIONS_H
 #include <stdio.h>

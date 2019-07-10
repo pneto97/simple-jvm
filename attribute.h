@@ -10,7 +10,7 @@
 //Exception_table
 
 /**
- * Struct para atributo do tipo excepetion table
+ * @brief Struct para atributo do tipo excepetion table
  */
 typedef struct exception_table {
 	uint16_t start_pc;
@@ -20,7 +20,7 @@ typedef struct exception_table {
 } exception_table;
 
 /**
- * Struct para atributo do tipo Constant value
+ * @brief Struct para atributo do tipo Constant value.
  * constant_value_attribute é também associado ao field_info
  */
 typedef struct constant_value_attribute {
@@ -28,7 +28,7 @@ typedef struct constant_value_attribute {
 } constant_value_attribute;
 
 /**
- * Struct para atributo do tipo Code
+ * @brief Struct para atributo do tipo Code.
  * Utilizado nas instrucoes
  */
 typedef struct code_attribute {
@@ -43,7 +43,7 @@ typedef struct code_attribute {
 } code_attribute;
 
 /**
- * Struct para atributo BootstrapMethods
+ * @brief Struct para atributo BootstrapMethods
  */
 typedef struct bootstrapMethods_attributes {
 	uint16_t num_bootstrap_methods;
@@ -51,7 +51,7 @@ typedef struct bootstrapMethods_attributes {
 } bootstrapMethods_attributes;
 
 /**
- * Struct para os componentes de BootstrapMethods
+ * @brief Struct para os componentes de BootstrapMethods
  */
 typedef struct bootstrap_methods {
 	uint16_t bootstrap_method_ref;
@@ -60,7 +60,7 @@ typedef struct bootstrap_methods {
 } bootstrap_methods;
 
 /**
- * Struct para o atributo Excepetions
+ * @brief Struct para o atributo Excepetions
  */
 typedef struct exceptions_attribute {
 	uint16_t number_of_exceptions;
@@ -68,14 +68,14 @@ typedef struct exceptions_attribute {
 } exceptions_attribute;
 
 /**
- * Struct para o atributo Signature
+ * @brief Struct para o atributo Signature
  */
 typedef struct signature_attribute {
 	uint16_t signature_index;
 } signature_attribute;
 
 /**
- * Struct para o atributo Line Number Table
+ * @brief Struct para o atributo Line Number Table
  */
 typedef struct lineNumberTable_attribute {
 	uint16_t line_number_table_length;
@@ -83,7 +83,7 @@ typedef struct lineNumberTable_attribute {
 } lineNumberTable_attribute;
 
 /**
- * Struct para os componentes do atributo Line Number Table
+ * @brief Struct para os componentes do atributo Line Number Table
  */
 typedef struct line_number_table {
 	uint16_t start_pc;
@@ -91,14 +91,14 @@ typedef struct line_number_table {
 } line_number_table;
 
 /**
- * Struct para o atributo Source File
+ * @brief Struct para o atributo Source File
  */
 typedef struct sourceFile_attribute {
 	uint16_t sourcefile_index;
 } sourceFile_attribute;
 
 /**
- * Struct para o atributo Inner Classes
+ * @brief Struct para o atributo Inner Classes
  */
 typedef struct innerClasses_attribute {
 	uint16_t number_of_classes;
@@ -106,7 +106,7 @@ typedef struct innerClasses_attribute {
 } innerClasses_attribute;
 
 /**
- * Struct para os componentes do atributo Inner Classes
+ * @brief Struct para os componentes do atributo Inner Classes
  */
 typedef struct classes {
 	uint16_t inner_class_info_index;
@@ -116,7 +116,7 @@ typedef struct classes {
 } classes;
 
 /**
- * Struct para o atributo Local Variable Table
+ * @brief Struct para o atributo Local Variable Table
  */
 typedef struct localVariableTable_attribute {
 	uint16_t attribute_name_index;
@@ -126,7 +126,7 @@ typedef struct localVariableTable_attribute {
 } localVariableTable_attribute;
 
 /**
- * Struct para os componentes do atributo Local Variable Table
+ * @brief Struct para os componentes do atributo Local Variable Table
  */
 typedef struct local_variable_table {
 	uint16_t start_pc;
@@ -137,8 +137,8 @@ typedef struct local_variable_table {
 } local_variable_table;
 
 /**
- * Struct geral dos attributtes
- * Union contendo todos os diferentes tipos de attributes
+ * @brief Struct geral dos attributtes
+ * @brief Union contendo todos os diferentes tipos de attributes
  */
 typedef struct attribute {
 	uint16_t attribute_name_index;

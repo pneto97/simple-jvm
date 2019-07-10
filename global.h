@@ -1,3 +1,9 @@
+/**
+ * @file global.h
+ * @brief Arquivo contendo as estruturas globais da JVM 
+ * 
+ */
+
 #ifndef GLOBAL_H
 #define GLOBAL_H
 #include "frame.h"

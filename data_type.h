@@ -1,3 +1,7 @@
+/**
+ * @file data_type.h
+ * @brief Estruturas de dados para definir os tipos de dados
+ */
 #ifndef DATA_TYPE_H
 #define DATA_TYPE_H
 
@@ -7,6 +11,7 @@ typedef enum data_type {
     INT_TYPE,
     LONG_TYPE,
     CHAR_TYPE,
+    STRING_TYPE,
     BOOLEAN_TYPE,
     FLOAT_TYPE,
     DOUBLE_TYPE,

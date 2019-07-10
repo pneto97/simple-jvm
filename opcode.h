@@ -1,3 +1,7 @@
+/**
+ * @file opcode.h
+ * @brief Arquivo contendo defines para todas as instruções da jvm
+ */
 //Constants
 #define NOP         	0x00
 #define ACONST_NULL 	0x01
