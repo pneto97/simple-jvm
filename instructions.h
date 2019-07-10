@@ -91,7 +91,7 @@ void Iastore  (code_attribute *);   //Feito e testado
 void Lastore  (code_attribute *);   //Feito Verificar!
 void Fastore  (code_attribute *);   //Feito Verificar!
 void Dastore  (code_attribute *);   //Feito Verificar!
-void Aastore  (code_attribute *);   //Verificar!!!!!!!!!!!!!!!!!!!!!!!!!
+void Aastore  (code_attribute *);   //Feito e testado
 void Bastore  (code_attribute *);   //Feito Verificar!
 void Castore  (code_attribute *);   //Feito Verificar!
 void Sastore  (code_attribute *);   //Feito Verificar!
