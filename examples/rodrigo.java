@@ -1,12 +1,13 @@
 public class rodrigo{
     public static void main(String[] args) {
-        int[] myNum = {10, 50, 30, 40};
-        if (myNum[1] < myNum[2]){
-            myNum[1] = myNum[2] + myNum[3];
+        double[][] myNum = {{10,20,30},{40,50,60}};
+        int length = myNum.length;
+        if (myNum[1][1] < myNum[0][1]){
+            myNum[1][1] = length + myNum[1][0];
         }
         else {
-            myNum[2] = myNum[2] + myNum[3];
+            myNum[1][1] = myNum[0][0] + length;
         }
-        System.out.println(myNum[2]);
+        System.out.println(myNum[1][1]);
     }
 }
