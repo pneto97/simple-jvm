@@ -1739,7 +1739,7 @@ void L2d(code_attribute *code) {
     operand op_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
     operand op_double_hi, op_double_lo;
-    op_double_hi.cat = op_double_lo.cat = DOUBLE_TYPE;
+    op_double_hi.type = op_double_lo.type = DOUBLE_TYPE;
     op_double_hi.cat = FIRST;
     op_double_lo.cat = SECOND;
 
