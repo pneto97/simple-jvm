@@ -2525,9 +2525,107 @@ void Putstatic(code_attribute *code) {
 }
 void Getfield(code_attribute *code) {
     if (DEBUG) printf("GETFIELD\n");
+
+        char *class_name, *name, *type;
+
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t indexbyte1        = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t indexbyte2        = code->code[GLOBAL_jvm_stack->top->pc];
+    uint16_t index            = 0x0;
+    index                     = (indexbyte1 << 8) | indexbyte2;
+    class_name                = getUtf8Class(index);
+    name                      = getUtf8Name(index);
+    type                      = getUtf8Type(index);
+    data_type d_type;
+    operand obj;
+
+    field *f = NULL;
+
+    if(DEBUG) printf("classname : %s\n", class_name);
+    if(DEBUG) printf("name : %s\n", name);
+    if(DEBUG) printf("type : %s\n", type);
+
+    d_type = getDataType(type);
+
+    if (!strcmp(class_name, "java/lang/System")) return;
+
+    obj = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    class_instance *iclass = obj.data.ref->objectref->class_instance;
+    f = getStaticField(iclass, name, type);
+
+    if(f ==NULL){
+        printf("IncompatibleClassChangeError\n");
+        exit(3);
+    }
+
+    if(d_type == DOUBLE_TYPE || d_type == LONG_TYPE){
+        push_op_stack(GLOBAL_jvm_stack->top->op_stack,f->lo);
+        push_op_stack(GLOBAL_jvm_stack->top->op_stack,f->hi);
+        if(DEBUG) printf("\tf->hi: %x\n", f->hi.data.bytes);
+        if(DEBUG) printf("\tf->lo: %x\n", f->lo.data.bytes);
+    }else{
+        push_op_stack(GLOBAL_jvm_stack->top->op_stack,f->lo);
+        if(DEBUG) printf("\tf->lo: %x\n", f->lo.data.bytes);
+    }
 }
 void Putfield(code_attribute *code) {
     if (DEBUG) printf("PUTFIELD\n");
+
+    char *class_name, *name, *type;
+
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t indexbyte1        = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t indexbyte2        = code->code[GLOBAL_jvm_stack->top->pc];
+    uint16_t index            = 0x0;
+    index                     = (indexbyte1 << 8) | indexbyte2;
+    class_name                = getUtf8Class(index);
+    name                      = getUtf8Name(index);
+    type                      = getUtf8Type(index);
+    data_type d_type;
+    operand hi;
+    operand lo;
+    operand op;
+    operand obj;
+
+    field *f = NULL;
+
+    if(DEBUG) printf("classname : %s\n", class_name);
+    if(DEBUG) printf("name : %s\n", name);
+    if(DEBUG) printf("type : %s\n", type);
+
+    d_type = getDataType(type);
+
+    if (!strcmp(class_name, "java/lang/System")) return;
+
+    if(d_type == DOUBLE_TYPE || d_type == LONG_TYPE){
+        hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+        lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    }else{
+        op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    }
+
+    obj = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    class_instance *iclass = obj.data.ref->objectref->class_instance;
+    f = getStaticField(iclass, name, type);
+
+    if(f ==NULL){
+        printf("IncompatibleClassChangeError\n");
+        exit(3);
+    }
+
+    if(d_type == DOUBLE_TYPE || d_type == LONG_TYPE){
+        f->hi = hi;
+        f->lo = lo;
+        if(DEBUG) printf("\tf->hi: %x\n", f->hi.data.bytes);
+        if(DEBUG) printf("\tf->lo: %x\n", f->lo.data.bytes);
+    }else{
+        f->lo = op;
+        if(DEBUG) printf("\tf->lo: %x\n", f->lo.data.bytes);
+    }
 }
 void Invokevirtual(code_attribute *code) {
     if (DEBUG) printf("INVOKEVIRTUAL\n");
@@ -2671,57 +2769,61 @@ void Invokevirtual(code_attribute *code) {
         //     this_frame->operand_stack.push(strLen);
     } else {
 
-        //     int argsCount  = 0;
-        //     uint16_t count = 1;
-        //     while (method_deor.at(count) != ')') {
-
-        //         if (method_deor.at(count) == 'L') {
-        //             while (method_deor.at(++count) != ';')
-        //                 ;
-        //         }
-
-        //         else if (method_deor.at(count) == '[') {
-        //             while (method_deor.at(++count) != '[')
-        //                 ;
-
-        //             if (method_deor[count] == 'L')
-        //                 while (method_deor.at(++count) != ';')
-        //                     ;
-        //         }
-        //         argsCount++;
-        //         count++;
-        //     }
-
-        //     std::vector<Operand *> args;
-
-        //     for (int i = 0; i < argsCount; ++i) { //verificar esta linha.
-
-        //         auto arg = this_frame->operand_stack.top();
-        //         this_frame->operand_stack.pop();
-
-        //         args.insert(args.begin(), arg);
-        //         if (arg->tag == CONSTANT_Double || arg->tag == CONSTANT_Long) args.insert(args.begin() + 1, Interpreter::createType("P"));
-        //     }
-        //     auto this_class = this_frame->operand_stack.top();
-        //     this_frame->operand_stack.pop();
-
-        //     args.insert(args.begin(), this_class);
-        //     auto instance = this_class->class_instance;
-
-        //     MethodsArea auxMeth;
-        //     //fdasfds
-        //     auto methods  = auxMeth.findMethodByNameOrDeor(instance->classe, method_name, method_deor);
-        //     auto newFrame = new Frame(instance->classe->getConstPool(), methods);
-
-        //     for (unsigned i = 0; i < args.size(); ++i) {
-        //         newFrame->local_variables.at(i) = args.at(i);
-        //     }
-        //     Interpreter auxInter;
-        //     auxInter.frame_stack.push(newFrame);
+        int argsCount = countArgs(type);
+        if(DEBUG) printf("argsCount: %d\n", argsCount);
     }
 }
 void Invokespecial(code_attribute *code) {
     if (DEBUG) printf("INVOKESPECIAL\n");
+
+    GLOBAL_jvm_stack->top->pc++;
+    int8_t indexbyte1 = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc++;
+    int8_t indexbyte2 = code->code[GLOBAL_jvm_stack->top->pc];
+
+    /* Constrói a referência */
+    uint16_t index = (indexbyte1 << 8) | indexbyte2;
+
+    char *class_name = getUtf8Class(index);
+    char *name       = getUtf8Name(index);
+    char *type       = getUtf8Type(index);
+    // Conta os args a partir do MethodDesc
+
+    printf("CLASS NAME:  %s\n", class_name);
+    printf("METHOD NAME: %s\n", name);
+    printf("TYPE:        %s\n", type);
+
+    int nargs = countArgs(type);
+    operand *args = (operand *) malloc(nargs * sizeof(operand));
+
+    // Pop nos args
+    for (int i = nargs-1; i < 0; i--)
+    {
+        args[i] = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    }
+    operand obj = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    // Verificações
+    // Se verdadeiras
+        // O método não é um init
+        // Se a referencia é uma classe, essa é superclass
+        // ACC_SUPER setada no class file
+    // LOOP
+        // Se a classe possui uma declaração igual ao método em questão, invoca o método
+        // Senão se C tem uma superclass procura pelo método -> Recursivo
+            // Se tiver o match - invoca
+        // Se a class é uma interface e a classe objeto possui public no método dele, é invocado
+        // Procura nas superinterfaces 
+
+    class_loaded *lclass = findClassLoaded((uint8_t *)class_name);
+    method_info *method  = findMethod(lclass, name);
+
+    // achou o método
+    // pega o code
+    // cria o frame
+    // push do frame
+    // execute()
+
 }
 void Invokestatic(code_attribute *code) {
     if (DEBUG) printf("INVOKESTATIC\n");

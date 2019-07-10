@@ -15,5 +15,6 @@ uint64_t doubleToUint64(double number);
 uint64_t longToUint64(long number);
 uint32_t floatToUint32(float bytes);
 data_type PrimitiveType(int8_t atype);
+int countArgs(char * type);
 
 #endif

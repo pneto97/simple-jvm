@@ -208,6 +208,13 @@ field * getField(class_loaded *lclass, char *name, char *type);
 char * getSuperClassName(class_structure *jclass);
 
 void insertDynamicFieldName(field *field, int field_index, object *obj);
+
 void insertDynamicFieldType(field *field, int field_index, object *obj);
+
+data_type getDataType(char *utf8);
+
+field * getStaticField(class_instance *iclass, char *name, char *type);
+
+method_info *findMethod(class_loaded *lclass, char *method_name);
 
 #endif

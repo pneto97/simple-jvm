@@ -412,3 +412,67 @@ char * getSuperClassName(class_structure *jclass){
     uint32_t utf8_index = jclass->constant_pool[class_index].info.classInfo.name_index;
     return (char *) jclass->constant_pool[utf8_index].info.utf8Info.bytes;
 }
+
+data_type getDataType(char *utf8){
+    data_type type;
+    switch ((char)utf8[0]) {
+        case 'B':
+            type = BYTE_TYPE;
+            break;
+        case 'C':
+            type = CHAR_TYPE;
+            break;
+        case 'D':
+            type = DOUBLE_TYPE;
+            break;
+        case 'F':
+            type = FLOAT_TYPE;
+            break;
+        case 'I':
+            type = INT_TYPE;
+            break;
+        case 'J':
+            type = LONG_TYPE;
+            break;
+        case 'L':
+            type = CLASS_TYPE;
+            break;
+        case 'S':
+            type = SHORT_TYPE;
+            break;
+        case 'Z':
+            type = BOOLEAN_TYPE;
+            break;
+        case '[':
+            type = ARRAY_TYPE;
+            break;
+        default:
+            type = 0;
+            break;
+    }
+    return type;
+}
+
+field * getStaticField(class_instance *iclass, char *name, char *type){
+    for (int i = 0; i < iclass->field_count; i++)
+    {
+        if(!strcmp((char*)iclass->fields[i].name, name)){
+            return &iclass->fields[i];
+        }
+    }
+    return NULL;
+}
+
+method_info *findMethod(class_loaded *lclass, char *method_name) {
+
+    class_structure *jclass = lclass->class_str;
+    for (uint16_t i = 0; i < jclass->methods_count; i++) {
+        uint16_t name_index = jclass->methods[i].name_index;
+        char *name          = (char *)jclass->constant_pool[name_index - 1].info.utf8Info.bytes;
+
+        if (!strcmp(name, method_name))
+            return &jclass->methods[i];
+        
+    }
+    return NULL;
+}

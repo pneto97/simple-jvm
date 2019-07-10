@@ -200,8 +200,8 @@ void Areturn     (code_attribute *); //Feito Verificar!
 void Return      (code_attribute *); //Feito Verificar!
 void Getstatic      (code_attribute *); //Feito
 void Putstatic      (code_attribute *); //Feito
-void Getfield       (code_attribute *);
-void Putfield       (code_attribute *);
+void Getfield       (code_attribute *); //Feito
+void Putfield       (code_attribute *); //Feito
 void Invokevirtual  (code_attribute *); //Incompleto
 void Invokespecial  (code_attribute *);
 void Invokestatic   (code_attribute *);
@@ -211,12 +211,12 @@ void New            (code_attribute *); //Feito!!!!_!_!!!!
 void Newarray       (code_attribute *); //Feito e testado
 void Anewarray      (code_attribute *); //Feito falta testar!!
 void Arraylength    (code_attribute *); //Feito e testado
-void Athrow         (code_attribute *); 
-void Checkcast      (code_attribute *);
+void Athrow         (code_attribute *); // Não necessário
+void Checkcast      (code_attribute *); // Não necessário
 void Instanceof     (code_attribute *);
 void Monitorenter   (code_attribute *); // Não necessário
 void Monitorexit    (code_attribute *); // Não necessário
-void Wide           (code_attribute *);
+void Wide           (code_attribute *); // Não necessário
 void Multianewarray (code_attribute *); // Não feito
 void Ifnull         (code_attribute *); //Feito Verificar!
 void Ifnonnull      (code_attribute *); //Feito Verificar!
