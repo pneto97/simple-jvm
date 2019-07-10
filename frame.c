@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DEBUG 0
+#define DEBUG 1
 
 void pop_jvm_stack(jvm_stack *stack) {
     frame *aux = stack->top;
@@ -266,6 +266,7 @@ void execute(code_attribute *code) {
         // printf("pc: %d\n",GLOBAL_jvm_stack->top->pc);
         // printOpcode(code->code[GLOBAL_jvm_stack->top->pc]);
         // printf("\n");
+        if (DEBUG) printf("(%d) ",GLOBAL_jvm_stack->top->pc);
         inst_vector[code->code[GLOBAL_jvm_stack->top->pc]](code);
         // printf("\n");
         if (GLOBAL_jvm_stack->top == NULL) break;

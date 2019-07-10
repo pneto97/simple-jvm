@@ -55,7 +55,7 @@ void Iaload (code_attribute *); //Feito e testado
 void Laload (code_attribute *); //Feito (NECESSITA VERIFICAR)
 void Faload (code_attribute *); //Feito (NECESSITA VERIFICAR)
 void Daload (code_attribute *); //Feito (NECESSITA VERIFICAR)
-void Aaload (code_attribute *); //Duvida (Como proceder com a referencia?)
+void Aaload (code_attribute *); //Feito falta testar!!
 void Baload (code_attribute *); //Feito (NECESSITA VERIFICAR)
 void Caload (code_attribute *); //Feito (NECESSITA VERIFICAR)
 void Saload (code_attribute *); //Feito (NECESSITA VERIFICAR)
@@ -209,7 +209,7 @@ void Invokeinterface(code_attribute *);
 void Invokedynamic  (code_attribute *);
 void New            (code_attribute *);
 void Newarray       (code_attribute *); //Feito e testado
-void Anewarray      (code_attribute *); //demetrio
+void Anewarray      (code_attribute *); //Feito falta testar!!
 void Arraylength    (code_attribute *); //Feito e testado
 void Athrow         (code_attribute *); 
 void Checkcast      (code_attribute *);

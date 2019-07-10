@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define DEBUG 0
+#define DEBUG 1
 
 void Nop(code_attribute *code) {
     if (DEBUG) printf("NOP\n");
@@ -572,6 +572,15 @@ void Daload(code_attribute *code) {
 }
 void Aaload(code_attribute *code) {
     if (DEBUG) printf("AALOAD \n");
+    uint32_t index = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    reference_type * array_ref = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.ref;
+
+    if (array_ref == NULL) {
+        printf("NullPointerException\n");
+        exit(3);
+    }
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->low[index]);
 }
 void Baload(code_attribute *code) {
     if (DEBUG) printf("BALOAD \n");
@@ -845,6 +854,16 @@ void Dastore(code_attribute *code) {
 }
 void Aastore(code_attribute *code) {
     if (DEBUG) printf("AASTORE\n");
+    reference_type * value = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.ref;
+    uint32_t index = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    reference_type * array_ref = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.ref;
+
+    if (array_ref == NULL) {
+        printf("NullPointerException\n");
+        exit(3);
+    }
+
+    array_ref->arrayref->low[index].data.ref = value;
 }
 void Bastore(code_attribute *code) {
     if (DEBUG) printf("BASTORE\n");
@@ -2489,7 +2508,7 @@ void Anewarray(code_attribute *code) {
             reference->arrayref->arraysize = count;
         break;
         default:
-            printf("Falta implementar essa parte do anewarray\n");
+            printf("ERRO ANEWARRAY!\n");
     }
 
 
