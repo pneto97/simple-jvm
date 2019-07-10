@@ -1671,7 +1671,7 @@ void I2f(code_attribute *code) {
     op_float.cat = UNIQUE;
     op_float.type = FLOAT_TYPE;
 
-    float floatValue = (float) op_int.data.bytes;
+    float floatValue = (float) ((int32_t)op_int.data.bytes);
 
     op_float.data.bytes = floatToUint32(floatValue);
 
@@ -1792,8 +1792,8 @@ void F2l(code_attribute *code) {
     op_long_hi.data.bytes = (uint32_t)(finalVal >> 32) & 0x00000000FFFFFFFF;
     op_long_lo.data.bytes = (uint32_t)(finalVal & 0x00000000FFFFFFFF);
 
-    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_long_hi);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_long_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_long_hi);
 }
 void F2d(code_attribute *code) {
     if (DEBUG) printf("F2D\n");
@@ -2427,30 +2427,39 @@ void Getstatic(code_attribute *code) {
     name                      = getUtf8Name(index);
     type                      = getUtf8Type(index);
 
+    field *f = NULL;
+    class_loaded *lclass = NULL;
+
     if (!strcmp(class_name, "java/lang/System")) return;
 
-    // // Achar a classe
-    // class_loaded lclass = findClassLoaded(class_name);
+    do{
+        // Achar a classe
+        lclass = findClassLoaded((uint8_t *)class_name);
 
-    // // Ver se ela ta carregada
-    // if(lclass != NULL)
-    //     loadClass(path,class_name);
+        // Ver se ela ta carregada
+        if(lclass != NULL)
+            loadClass(GLOBAL_path, class_name);
 
-    // // Pegar o operando do field
-    // do{
-    //     field *f = getField(lclass, name, type);
+        // Pegar o operando do field
+        f = getField(lclass, name, type);
 
-    //     // Buscar nas classes pais
-    //     if(f == NULL){
-    //         getSuperClassName(lclass->class_str);
-    //     }
-    // }while();
+        // Buscar nas classes pais
+        if(f == NULL){
+            class_name = getSuperClassName(lclass->class_str);
+            if(DEBUG) printf("SuperClass: %s", class_name);
+            if (!strcmp(class_name, "java/lang/Object")) return;
+        }
+
+    }while(f == NULL);
     
 
-    // // Carrega na pilha de operandos
-    // push_op_stack(GLOBAL_jvm_stack->top->op_stack, f->lo);
-    // if(f->type == DOUBLE_TYPE || f->type == LONG_TYPE)
-    //     push_op_stack(GLOBAL_jvm_stack->top->op_stack, f->hi);
+    // Carrega na pilha de operandos
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, f->lo);
+    if(DEBUG) printf("f->lo: %x", f->lo.data.bytes);
+    if(f->type == DOUBLE_TYPE || f->type == LONG_TYPE){
+        push_op_stack(GLOBAL_jvm_stack->top->op_stack, f->hi);
+        if(DEBUG) printf("f->lo: %x", f->hi.data.bytes);
+    }
 
     printf("%s\n", class_name);
     printf("%s\n", name);
@@ -2458,6 +2467,53 @@ void Getstatic(code_attribute *code) {
 }
 void Putstatic(code_attribute *code) {
     if (DEBUG) printf("PUTSTATIC\n");
+
+
+    char *class_name, *name, *type;
+
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t indexbyte1        = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t indexbyte2        = code->code[GLOBAL_jvm_stack->top->pc];
+    uint16_t index            = 0x0;
+    index                     = (indexbyte1 << 8) | indexbyte2;
+    class_name                = getUtf8Class(index);
+    name                      = getUtf8Name(index);
+    type                      = getUtf8Type(index);
+
+    field *f = NULL;
+    class_loaded *lclass = NULL;
+
+    if (!strcmp(class_name, "java/lang/System")) return;
+
+    do{
+        // Achar a classe
+        lclass = findClassLoaded((uint8_t *)class_name);
+
+        // Ver se ela ta carregada
+        if(lclass != NULL)
+            loadClass(GLOBAL_path, class_name);
+
+        // Pegar o operando do field
+        f = getField(lclass, name, type);
+
+        // Buscar nas classes pais
+        if(f == NULL){
+            class_name = getSuperClassName(lclass->class_str);
+            if (!strcmp(class_name, "java/lang/Object")) return;
+        }
+
+    }while(f == NULL);
+    
+
+    // Carrega na pilha de operandos
+    f->hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if(f->type == DOUBLE_TYPE || f->type == LONG_TYPE)
+        f->lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    printf("%s\n", class_name);
+    printf("%s\n", name);
+    printf("%s\n", type);
 }
 void Getfield(code_attribute *code) {
     if (DEBUG) printf("GETFIELD\n");
@@ -2788,6 +2844,56 @@ void Wide(code_attribute *code) {
 }
 void Multianewarray(code_attribute *code) {
     if (DEBUG) printf("MULTIANEWARRAY\n");
+    operand op;
+    GLOBAL_jvm_stack->top->pc ++;
+    uint8_t indexbyte1 = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc ++;
+    uint8_t indexbyte2 = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc ++;
+    uint8_t dimensions = code->code[GLOBAL_jvm_stack->top->pc];
+    int32_t * counts = (int32_t * ) malloc (dimensions * sizeof(int32_t)); 
+
+    for (int i = 0;i<dimensions;i++){
+        counts[i] = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+        if (DEBUG) printf("count[%d]:%d\n",i,counts[i]);
+    }
+
+
+
+    if (DEBUG) printf("Dimensões:%d\n",dimensions);
+    int16_t index = (indexbyte1 << 8) | indexbyte2;
+    char * type;
+    type = getUtf8Ref(index);
+    cp_info cp = GLOBAL_jvm_stack->top->constant_pool[index - 1];
+    if (DEBUG) printf("[%d]-> %s \n",cp.tag,type);
+
+
+    reference_type * reference = (reference_type * ) malloc ((1) * sizeof( reference_type));
+    // if (DEBUG) printf("Buggggggggggggggggggg \n");
+    reference->arrayref = (array * ) malloc ((1) * sizeof(array));
+    for(int i=0;i<dimensions;i++){
+        reference->arrayref->low = (operand *) malloc (counts[i]*sizeof(operand));
+    }
+    
+    switch (cp.tag){
+        case (CONSTANT_Class):
+            for(int i = 0;i < dimensions; i++){
+                for(int j = 0;j < counts[i]; j++){
+                    reference->arrayref->low[j].type = ARRAY_TYPE;
+                    reference->arrayref->low[j].data.ref = NULL;
+                }
+                reference->arrayref->arraysize = counts[i];
+            }
+        break;
+        default:
+            printf("ERRO MULTIANEWARRAY!\n");
+    }
+
+
+    op.data.ref= reference;
+    op.type = ARRAY_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Ifnull(code_attribute *code) {
     if (DEBUG) printf("IFNULL\n");
@@ -2802,7 +2908,7 @@ void Ifnull(code_attribute *code) {
     operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
     if(op.type == NULL_TYPE)
-        GLOBAL_jvm_stack->top->pc += offset;
+        GLOBAL_jvm_stack->top->pc += offset -1;
 }
 void Ifnonnull(code_attribute *code) {
     if (DEBUG) printf("IFNONNULL\n");
@@ -2818,7 +2924,7 @@ void Ifnonnull(code_attribute *code) {
     operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
     if(op.type != NULL_TYPE)
-        GLOBAL_jvm_stack->top->pc += offset;
+        GLOBAL_jvm_stack->top->pc += offset -1;
 }
 void Goto_w(code_attribute *code) {
     if (DEBUG) printf("GOTO_W\n");
