@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #define DEBUG 1
 
 void Nop(code_attribute *code) {
@@ -2735,22 +2736,44 @@ void New(code_attribute *code) {
     char * class_name;
     class_name = getUtf8Ref(index);
 
-    class_loaded *lclass = findClassLoaded(class_name);
+    class_loaded *lclass = findClassLoaded((uint8_t*) class_name);
     //Verificar se esta na area de metodos antes
     if (lclass == NULL)
     {
         lclass = loadClass(GLOBAL_path, class_name);
-        if(lclass = NULL){
+        if(lclass == NULL){
             printf("InstantiationError: %s\n", class_name);
             exit(3);
         }
     }
+
     // Criar class instance via malloc
-    //
-    // reference_type ref = 
-    
-    printf("FALTA IMPLEMENTAR\n");
-    exit(1);
+    class_instance *instance = (class_instance *)malloc(sizeof(instance));
+    instance->name = lclass->name;
+
+    object *obj = buildObject(lclass);
+
+    reference_type * ref = (reference_type * ) malloc (sizeof(reference_type));
+    ref->objectref = obj;
+
+    operand op;
+    op.data.ref = ref;
+    op.type = CLASS_TYPE;
+
+    // printf("NEW CLASS LOAD\n");
+    // printf("CLASS NAME: %s\n", op.data.ref->objectref->class->name);
+    // printf("STATIC FIELD COUNT: %d\n", op.data.ref->objectref->class->field_count);
+    // printf("DYNAMIC FIELD COUNT: %d\n", op.data.ref->objectref->class_instance->field_count);
+    // for (int i = 0; i < op.data.ref->objectref->class->field_count; i++)
+    // {
+    //     printf("STATIC FIELDS: %s\n", op.data.ref->objectref->class->fields[i].name);
+    // } 
+    // for (int i = 0; i < op.data.ref->objectref->class_instance->field_count; i++)
+    // {
+    //     printf("DYNAMIC FIELDS: %s\n", op.data.ref->objectref->class_instance->fields[i].name);
+    // }    
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Newarray(code_attribute *code) {
     if (DEBUG) printf("NEWARRAY\n");
