@@ -1645,48 +1645,285 @@ void Iinc(code_attribute *code) {
 }
 void I2l(code_attribute *code) {
     if (DEBUG) printf("I2L\n");
+
+    operand op_int = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op_hi, op_lo;
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+    op_hi.type = op_lo.type = LONG_TYPE;
+
+    int64_t longVal = (int64_t) op_int.data.bytes;
+    uint64_t finalVal = (uint64_t) longVal;
+
+    op_hi.data.bytes = (uint32_t)(finalVal >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data.bytes = (uint32_t)(finalVal & 0x00000000FFFFFFFF);
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
+
 }
 void I2f(code_attribute *code) {
     if (DEBUG) printf("I2F\n");
+
+    operand op_int = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand op_float;
+    op_float.cat = UNIQUE;
+    op_float.type = FLOAT_TYPE;
+
+    float floatValue = (float) op_int.data.bytes;
+
+    op_float.data.bytes = floatToUint32(floatValue);
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_float);
 }
 void I2d(code_attribute *code) {
     if (DEBUG) printf("I2D\n");
+
+    operand op_int = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op_hi, op_lo;
+    op_hi.cat = FIRST;
+    op_lo.cat = SECOND;
+    op_hi.type = op_lo.type = DOUBLE_TYPE;
+
+    double doubleVal = (double) op_int.data.bytes;
+    uint64_t finalVal = doubleToUint64(doubleVal);
+
+    op_hi.data.bytes = (uint32_t)(finalVal >> 32) & 0x00000000FFFFFFFF;
+    op_lo.data.bytes = (uint32_t)(finalVal & 0x00000000FFFFFFFF);
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_hi);
+
 }
 void L2i(code_attribute *code) {
     if (DEBUG) printf("L2I\n");
+
+    operand op_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand op_int;
+    op_int.cat = UNIQUE;
+    op_int.type = INT_TYPE;
+
+    int64_t longVal = (int64_t)((((uint64_t) op_hi.data.bytes) << 32) | ((uint64_t)op_lo.data.bytes));
+
+    int32_t intVal = (int32_t) longVal;
+
+    op_int.data.bytes = (uint32_t) intVal;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_int);
+
 }
 void L2f(code_attribute *code) {
     if (DEBUG) printf("L2F\n");
+
+    operand op_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand op_float;
+    op_float.cat = UNIQUE;
+    op_float.type = FLOAT_TYPE;
+
+    int64_t longVal = (int64_t)((((uint64_t) op_hi.data.bytes) << 32) | ((uint64_t)op_lo.data.bytes));
+    float floatValue = (float) longVal;
+
+    op_float.data.bytes = floatToUint32(floatValue);
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_float);
 }
 void L2d(code_attribute *code) {
     if (DEBUG) printf("L2D\n");
+
+    operand op_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand op_double_hi, op_double_lo;
+    op_double_hi.cat = op_double_lo.cat = DOUBLE_TYPE;
+    op_double_hi.cat = FIRST;
+    op_double_lo.cat = SECOND;
+
+    double doubleVal = (double) makeLong(op_hi.data.bytes, op_lo.data.bytes);
+
+    uint64_t finalVal = doubleToUint64(doubleVal);
+
+    op_double_hi.data.bytes = (uint32_t)(finalVal >> 32) & 0x00000000FFFFFFFF;
+    op_double_lo.data.bytes = (uint32_t)(finalVal & 0x00000000FFFFFFFF);
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_double_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_double_hi);
+
 }
 void F2i(code_attribute *code) {
     if (DEBUG) printf("F2I\n");
+
+    operand op_float = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand op_int;
+    op_int.cat = UNIQUE;
+    op_int.type = INT_TYPE;
+
+    float floatVal = makeFloat(op_float.data.bytes);
+
+    int32_t intVal = (int32_t) floatVal;
+
+    op_int.data.bytes = (uint32_t) intVal;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_int);
+    
 }
 void F2l(code_attribute *code) {
     if (DEBUG) printf("F2L\n");
+
+    operand op_float = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand op_long_hi, op_long_lo;
+    op_long_hi.cat = FIRST;
+    op_long_lo.cat = SECOND;
+    op_long_hi.type = op_long_lo.type = LONG_TYPE;
+
+    float floatVal = makeFloat(op_float.data.bytes);
+
+    int64_t longVal = (int64_t) floatVal;
+
+    //uint64_t finalVal = longToUint64(longVal);
+    uint64_t finalVal = (uint64_t) longVal;
+
+    op_long_hi.data.bytes = (uint32_t)(finalVal >> 32) & 0x00000000FFFFFFFF;
+    op_long_lo.data.bytes = (uint32_t)(finalVal & 0x00000000FFFFFFFF);
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_long_hi);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_long_lo);
 }
 void F2d(code_attribute *code) {
     if (DEBUG) printf("F2D\n");
+
+    operand op_float = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand op_double_hi, op_double_lo;
+    op_double_hi.cat = FIRST;
+    op_double_lo.cat = SECOND;
+    op_double_hi.type = op_double_lo.type = DOUBLE_TYPE;
+
+    float floatVal = makeFloat(op_float.data.bytes);
+
+    double doubleVal = (double) floatVal;
+
+    uint64_t finalVal = doubleToUint64(doubleVal);
+
+    op_double_hi.data.bytes = (uint32_t)(finalVal >> 32) & 0x00000000FFFFFFFF;
+    op_double_lo.data.bytes = (uint32_t)(finalVal & 0x00000000FFFFFFFF);
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_double_hi);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_double_lo);
 }
 void D2i(code_attribute *code) {
     if (DEBUG) printf("D2I\n");
+
+    operand op_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand op_int;
+    op_int.cat = UNIQUE;
+    op_int.type = INT_TYPE;
+
+    double doubleVal = (double) makeDouble(op_hi.data.bytes, op_lo.data.bytes); 
+
+    int32_t intVal = (int32_t) doubleVal;
+
+    op_int.data.bytes = (uint32_t) intVal;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_int);
 }
 void D2l(code_attribute *code) {
     if (DEBUG) printf("D2L\n");
+
+    operand op_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand op_long_hi, op_long_lo;
+    op_long_hi.cat = FIRST;
+    op_long_lo.cat = SECOND;
+    op_long_hi.type = op_long_lo.type = LONG_TYPE;
+
+    double doubleVal = (double) makeDouble(op_hi.data.bytes, op_lo.data.bytes); 
+
+    int64_t longVal = (int64_t) doubleVal;
+
+    uint64_t finalVal = (uint64_t) longVal;
+
+    op_long_hi.data.bytes = (uint32_t)(finalVal >> 32) & 0x00000000FFFFFFFF;
+    op_long_lo.data.bytes = (uint32_t)(finalVal & 0x00000000FFFFFFFF);
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_long_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_long_hi);
+ 
 }
 void D2f(code_attribute *code) {
     if (DEBUG) printf("D2F\n");
+
+    operand op_hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    operand op_lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand op_float;
+    op_float.cat = UNIQUE;
+    op_float.type = FLOAT_TYPE;
+
+    double doubleVal = (double) makeDouble(op_hi.data.bytes, op_lo.data.bytes); 
+
+    float floatVal = (float) doubleVal;
+
+    uint32_t finalVal = floatToUint32(floatVal);
+
+    op_float.data.bytes = finalVal;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_float);
 }
 void I2b(code_attribute *code) {
     if (DEBUG) printf("I2B\n");
+
+    operand op_int = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand op_byte;
+    op_byte.cat = UNIQUE;
+    op_byte.type = BYTE_TYPE;
+
+    int32_t byteVal = (int32_t)((int8_t) op_int.data.bytes);
+
+    op_byte.data.bytes = (uint32_t) byteVal;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_byte);
 }
 void I2c(code_attribute *code) {
     if (DEBUG) printf("I2C\n");
+
+    operand op_int = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand op_char;
+    op_char.cat = UNIQUE;
+    op_char.type = CHAR_TYPE;
+
+    uint32_t charVal = (uint32_t)((int8_t) op_int.data.bytes);
+
+    op_char.data.bytes = charVal;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_char);
+
 }
 void I2s(code_attribute *code) {
     if (DEBUG) printf("I2S\n");
+
+    operand op_int = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    operand op_byte;
+    op_byte.cat = UNIQUE;
+    op_byte.type = SHORT_TYPE;
+
+    int32_t byteVal = (int32_t)((int16_t) op_int.data.bytes);
+
+    op_byte.data.bytes = (uint32_t) byteVal;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_byte);
 }
 void Lcmp(code_attribute *code) {
     if (DEBUG) printf("LCMP\n");

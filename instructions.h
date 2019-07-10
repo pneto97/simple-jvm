@@ -148,21 +148,21 @@ void Lxor   (code_attribute *); //Feito e testado
 void Iinc   (code_attribute *); //Feito e testado
 
 //PAULIN
-void I2l (code_attribute *);
-void I2f (code_attribute *);
-void I2d (code_attribute *);
-void L2i (code_attribute *);
-void L2f (code_attribute *);
-void L2d (code_attribute *);
-void F2i (code_attribute *);
-void F2l (code_attribute *);
-void F2d (code_attribute *);
-void D2i (code_attribute *);
-void D2l (code_attribute *);
-void D2f (code_attribute *);
-void I2b (code_attribute *);
-void I2c (code_attribute *);
-void I2s (code_attribute *);
+void I2l (code_attribute *); //Feito, falta testar
+void I2f (code_attribute *); //Feito, falta testar
+void I2d (code_attribute *); //Feito, falta testar
+void L2i (code_attribute *); //Feito, falta testar
+void L2f (code_attribute *); //Feito, falta testar
+void L2d (code_attribute *); //Feito, falta testar
+void F2i (code_attribute *); //Feito, falta testar
+void F2l (code_attribute *); //Feito, falta testar
+void F2d (code_attribute *); //Feito, falta testar
+void D2i (code_attribute *); //Feito, falta testar
+void D2l (code_attribute *); //Feito, falta testar
+void D2f (code_attribute *); //Feito, falta testar
+void I2b (code_attribute *); //Feito, falta testar
+void I2c (code_attribute *); //Feito, falta testar
+void I2s (code_attribute *); //Feito, falta testar
 
 // Lucao
 void Lcmp     (code_attribute *); //Feito
