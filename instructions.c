@@ -2670,6 +2670,20 @@ void Invokedynamic(code_attribute *code) {
 }
 void New(code_attribute *code) {
     if (DEBUG) printf("NEW\n");
+
+    GLOBAL_jvm_stack->top->pc++;
+    uint8_t indexbyte1 = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc++;
+    uint8_t indexbyte2 = code->code[GLOBAL_jvm_stack->top->pc];
+
+    int16_t index = (indexbyte1 << 8) | indexbyte2;
+
+    char * class_name;
+    class_name = getUtf8Ref(index);
+    printf("CLASS: %s\n", class_name);
+    // loadClass(, class_name);
+
+    exit(1);
 }
 void Newarray(code_attribute *code) {
     if (DEBUG) printf("NEWARRAY\n");
