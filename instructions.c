@@ -2427,30 +2427,39 @@ void Getstatic(code_attribute *code) {
     name                      = getUtf8Name(index);
     type                      = getUtf8Type(index);
 
+    field *f = NULL;
+    class_loaded *lclass = NULL;
+
     if (!strcmp(class_name, "java/lang/System")) return;
 
-    // // Achar a classe
-    // class_loaded lclass = findClassLoaded(class_name);
+    do{
+        // Achar a classe
+        lclass = findClassLoaded((uint8_t *)class_name);
 
-    // // Ver se ela ta carregada
-    // if(lclass != NULL)
-    //     loadClass(path,class_name);
+        // Ver se ela ta carregada
+        if(lclass != NULL)
+            loadClass(GLOBAL_path, class_name);
 
-    // // Pegar o operando do field
-    // do{
-    //     field *f = getField(lclass, name, type);
+        // Pegar o operando do field
+        f = getField(lclass, name, type);
 
-    //     // Buscar nas classes pais
-    //     if(f == NULL){
-    //         getSuperClassName(lclass->class_str);
-    //     }
-    // }while();
+        // Buscar nas classes pais
+        if(f == NULL){
+            class_name = getSuperClassName(lclass->class_str);
+            if(DEBUG) printf("SuperClass: %s", class_name);
+            if (!strcmp(class_name, "java/lang/Object")) return;
+        }
+
+    }while(f == NULL);
     
 
-    // // Carrega na pilha de operandos
-    // push_op_stack(GLOBAL_jvm_stack->top->op_stack, f->lo);
-    // if(f->type == DOUBLE_TYPE || f->type == LONG_TYPE)
-    //     push_op_stack(GLOBAL_jvm_stack->top->op_stack, f->hi);
+    // Carrega na pilha de operandos
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, f->lo);
+    if(DEBUG) printf("f->lo: %x", f->lo.data.bytes);
+    if(f->type == DOUBLE_TYPE || f->type == LONG_TYPE){
+        push_op_stack(GLOBAL_jvm_stack->top->op_stack, f->hi);
+        if(DEBUG) printf("f->lo: %x", f->hi.data.bytes);
+    }
 
     printf("%s\n", class_name);
     printf("%s\n", name);
@@ -2458,6 +2467,53 @@ void Getstatic(code_attribute *code) {
 }
 void Putstatic(code_attribute *code) {
     if (DEBUG) printf("PUTSTATIC\n");
+
+
+    char *class_name, *name, *type;
+
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t indexbyte1        = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
+    uint8_t indexbyte2        = code->code[GLOBAL_jvm_stack->top->pc];
+    uint16_t index            = 0x0;
+    index                     = (indexbyte1 << 8) | indexbyte2;
+    class_name                = getUtf8Class(index);
+    name                      = getUtf8Name(index);
+    type                      = getUtf8Type(index);
+
+    field *f = NULL;
+    class_loaded *lclass = NULL;
+
+    if (!strcmp(class_name, "java/lang/System")) return;
+
+    do{
+        // Achar a classe
+        lclass = findClassLoaded((uint8_t *)class_name);
+
+        // Ver se ela ta carregada
+        if(lclass != NULL)
+            loadClass(GLOBAL_path, class_name);
+
+        // Pegar o operando do field
+        f = getField(lclass, name, type);
+
+        // Buscar nas classes pais
+        if(f == NULL){
+            class_name = getSuperClassName(lclass->class_str);
+            if (!strcmp(class_name, "java/lang/Object")) return;
+        }
+
+    }while(f == NULL);
+    
+
+    // Carrega na pilha de operandos
+    f->hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if(f->type == DOUBLE_TYPE || f->type == LONG_TYPE)
+        f->lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+    printf("%s\n", class_name);
+    printf("%s\n", name);
+    printf("%s\n", type);
 }
 void Getfield(code_attribute *code) {
     if (DEBUG) printf("GETFIELD\n");

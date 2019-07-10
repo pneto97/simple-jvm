@@ -10,6 +10,9 @@ jvm_stack *GLOBAL_jvm_stack;
 //code Global
 code_attribute *GLOBAL_code;
 
+//Path Global
+char *GLOBAL_path;
+
 /**
  * @brief Inicializa a Área de Métodos Global
  */

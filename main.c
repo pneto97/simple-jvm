@@ -67,7 +67,9 @@ int main(int argc, char *argv[]) {
             strcpy(ponto_class_path, argv[2]);
             strcpy(ponto_class_name, argv[3]);
         }
-        lclass               = loadClass(ponto_class_path, ponto_class_name);
+
+        GLOBAL_path = ponto_class_path;
+        lclass               = loadClass(GLOBAL_path, ponto_class_name);
         method_info *method  = findMain(lclass);
         code_attribute *code = findCode(lclass, method);
 
