@@ -2433,6 +2433,7 @@ void Getstatic(code_attribute *code) {
     if (!strcmp(class_name, "java/lang/System")) return;
 
     do{
+        if(DEBUG) printf("classname: %s\n", class_name);
         // Achar a classe
         lclass = findClassLoaded((uint8_t *)class_name);
 
@@ -2486,6 +2487,10 @@ void Putstatic(code_attribute *code) {
 
     if (!strcmp(class_name, "java/lang/System")) return;
 
+    if(DEBUG) printf("classname : %s\n", class_name);
+    if(DEBUG) printf("name : %s\n", name);
+    if(DEBUG) printf("type : %s\n", type);
+
     do{
         // Achar a classe
         lclass = findClassLoaded((uint8_t *)class_name);
@@ -2510,10 +2515,6 @@ void Putstatic(code_attribute *code) {
     f->hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     if(f->type == DOUBLE_TYPE || f->type == LONG_TYPE)
         f->lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-
-    printf("%s\n", class_name);
-    printf("%s\n", name);
-    printf("%s\n", type);
 }
 void Getfield(code_attribute *code) {
     if (DEBUG) printf("GETFIELD\n");
