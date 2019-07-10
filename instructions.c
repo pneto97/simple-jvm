@@ -540,8 +540,8 @@ void Laload(code_attribute *code) {
         exit(3);
     }
 
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->low[index]);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->high[index]);
-    push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->low[index + 1]);
 }
 void Faload(code_attribute *code) {
     if (DEBUG) printf("FALOAD \n");
@@ -821,7 +821,7 @@ void Lastore(code_attribute *code) {
         printf("NullPointerException\n");
         exit(3);
     }
-    array_ref->arrayref->low[index].data.bytes = hi;
+    array_ref->arrayref->high[index].data.bytes = hi;
     array_ref->arrayref->low[index].data.bytes = lo;
 }
 void Fastore(code_attribute *code) {
