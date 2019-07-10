@@ -11,6 +11,7 @@ typedef enum data_type {
     INT_TYPE,
     LONG_TYPE,
     CHAR_TYPE,
+    STRING_TYPE,
     BOOLEAN_TYPE,
     FLOAT_TYPE,
     DOUBLE_TYPE,
