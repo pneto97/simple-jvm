@@ -1,3 +1,7 @@
+/**
+ * @file primitive_types.h
+ * @brief Contêm defines para os tipos de dados primitivos
+ */
 #define T_BOOLEAN	4
 #define T_CHAR	    5
 #define T_FLOAT	    6
@@ -9,4 +13,9 @@
 
 #include <stdint.h>
 
+/**
+ * @brief Realiza o print do tipo primitivo
+ * 
+ * @param atype 
+ */
 void printPrimitiveType(int8_t atype);
