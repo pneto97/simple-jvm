@@ -566,9 +566,9 @@ void Daload(code_attribute *code) {
         printf("NullPointerException\n");
         exit(3);
     }
-
+    printf("INDEXXXXXXXX: %d\n",index);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->low[index]);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->high[index]);
-    push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->low[index + 1]);
 }
 void Aaload(code_attribute *code) {
     if (DEBUG) printf("AALOAD \n");
@@ -849,7 +849,7 @@ void Dastore(code_attribute *code) {
         printf("NullPointerException\n");
         exit(3);
     }
-    array_ref->arrayref->low[index].data.bytes = (uint32_t) hi;
+    array_ref->arrayref->high[index].data.bytes = (uint32_t) hi;
     array_ref->arrayref->low[index].data.bytes = (uint32_t) lo;
 }
 void Aastore(code_attribute *code) {
@@ -2481,7 +2481,7 @@ void Anewarray(code_attribute *code) {
                 reference->arrayref->low[i].type = ARRAY_TYPE;
                 reference->arrayref->low[i].data.ref = NULL;
             }
-            reference->arrayref->arraysize = count;
+        reference->arrayref->arraysize = count;
         break;
         default:
             printf("ERRO ANEWARRAY!\n");
