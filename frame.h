@@ -39,7 +39,6 @@ typedef struct class_loaded{
 
 typedef struct class_instance{
     uint8_t *name;
-    class_loaded *class; 
     field *fields;  // fields da instância
 } class_instance;
 

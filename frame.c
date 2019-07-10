@@ -104,6 +104,7 @@ void getFieldType(field *field, int field_index, class_structure *jclass) {
         }
         field->class_name = class_name;
         field->type       = CLASS_TYPE;
+        if(DEBUG) printf("class name - %s\n", field->class_name);   
         break;
     case 'S':
         field->type = SHORT_TYPE;
@@ -118,7 +119,6 @@ void getFieldType(field *field, int field_index, class_structure *jclass) {
         field->type = 0;
         break;
     }
-    if(DEBUG) printf("class name - %s\n", field->class_name);
 }
 
 class_loaded *loadClass(char *path, char *name) {

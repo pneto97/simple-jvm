@@ -2736,9 +2736,22 @@ void New(code_attribute *code) {
 
     char * class_name;
     class_name = getUtf8Ref(index);
-    printf("CLASS: %s\n", class_name);
-    // loadClass(, class_name);
 
+    class_loaded *lclass = findClassLoaded(class_name);
+    //Verificar se esta na area de metodos antes
+    if (lclass == NULL)
+    {
+        lclass = loadClass(GLOBAL_path, class_name);
+        if(lclass = NULL){
+            printf("InstantiationError: %s\n", class_name);
+            exit(3);
+        }
+    }
+    // Criar class instance via malloc
+    //
+    // reference_type ref = 
+    
+    printf("FALTA IMPLEMENTAR\n");
     exit(1);
 }
 void Newarray(code_attribute *code) {
