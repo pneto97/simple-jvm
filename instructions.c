@@ -2908,7 +2908,7 @@ void Ifnull(code_attribute *code) {
     operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
     if(op.type == NULL_TYPE)
-        GLOBAL_jvm_stack->top->pc += offset;
+        GLOBAL_jvm_stack->top->pc += offset -1;
 }
 void Ifnonnull(code_attribute *code) {
     if (DEBUG) printf("IFNONNULL\n");
@@ -2924,7 +2924,7 @@ void Ifnonnull(code_attribute *code) {
     operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
     if(op.type != NULL_TYPE)
-        GLOBAL_jvm_stack->top->pc += offset;
+        GLOBAL_jvm_stack->top->pc += offset -1;
 }
 void Goto_w(code_attribute *code) {
     if (DEBUG) printf("GOTO_W\n");
