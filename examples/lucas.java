@@ -1,8 +1,9 @@
 class lucas{
-    static int stat;
+    static double stat;
+
     public static void main(String[] args) {
-        stat = 5;
-        int var = 3;
+        stat = 5.1725123;
+        double var = stat;
         System.out.println(stat + var);
     }
 }

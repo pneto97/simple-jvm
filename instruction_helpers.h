@@ -94,5 +94,6 @@ uint32_t floatToUint32(float bytes);
  * @return data_type Tipo da variável já definido
  */
 data_type PrimitiveType(int8_t atype);
+int countArgs(char * type);
 
 #endif

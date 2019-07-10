@@ -914,6 +914,7 @@ void Areturn     (code_attribute *); //Feito Verificar!
  * @param code_attribute
  */
 void Return      (code_attribute *); //Feito Verificar!
+<<<<<<< HEAD
 /**
  * @brief Funcao que realiza um Getstatic  
  * @param code_attribute
@@ -938,6 +939,12 @@ void Putfield       (code_attribute *);
  * @brief Funcao que realiza um Invokevirtual
  * @param code_attribute
  */
+=======
+void Getstatic      (code_attribute *); //Feito
+void Putstatic      (code_attribute *); //Feito
+void Getfield       (code_attribute *); //Feito
+void Putfield       (code_attribute *); //Feito
+>>>>>>> 73282709b629a0779bcde16ad9481d4537fb38b0
 void Invokevirtual  (code_attribute *); //Incompleto
 /**
  * @brief Funcao que realiza um Invokespecial
@@ -959,6 +966,7 @@ void Invokeinterface(code_attribute *);
  * @param code_attribute
  */
 void Invokedynamic  (code_attribute *);
+<<<<<<< HEAD
 /**
  * @brief Funcao que realiza um New        
  * @param code_attribute
@@ -968,6 +976,9 @@ void New            (code_attribute *);
  * @brief Funcao que realiza um Newarray   
  * @param code_attribute
  */
+=======
+void New            (code_attribute *); //Feito!!!!_!_!!!!
+>>>>>>> 73282709b629a0779bcde16ad9481d4537fb38b0
 void Newarray       (code_attribute *); //Feito e testado
 /**
  * @brief Funcao que realiza um Anewarray  
@@ -979,6 +990,7 @@ void Anewarray      (code_attribute *); //Feito falta testar!!
  * @param code_attribute
  */
 void Arraylength    (code_attribute *); //Feito e testado
+<<<<<<< HEAD
 /**
  * @brief Funcao que realiza um Athrow     
  * @param code_attribute
@@ -993,6 +1005,10 @@ void Checkcast      (code_attribute *);
  * @brief Funcao que realiza um Instanceof 
  * @param code_attribute
  */
+=======
+void Athrow         (code_attribute *); // Não necessário
+void Checkcast      (code_attribute *); // Não necessário
+>>>>>>> 73282709b629a0779bcde16ad9481d4537fb38b0
 void Instanceof     (code_attribute *);
 /**
  * @brief Funcao que realiza um Monitorenter
@@ -1004,6 +1020,7 @@ void Monitorenter   (code_attribute *); // Não necessário
  * @param code_attribute
  */
 void Monitorexit    (code_attribute *); // Não necessário
+<<<<<<< HEAD
 /**
  * @brief Funcao que realiza um Wide       
  * @param code_attribute
@@ -1013,6 +1030,9 @@ void Wide           (code_attribute *);
  * @brief Funcao que realiza um Multianewarray
  * @param code_attribute
  */
+=======
+void Wide           (code_attribute *); // Não necessário
+>>>>>>> 73282709b629a0779bcde16ad9481d4537fb38b0
 void Multianewarray (code_attribute *); // Não feito
 /**
  * @brief Funcao que realiza um Ifnull     

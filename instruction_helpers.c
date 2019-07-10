@@ -124,3 +124,24 @@ object* buildObject(class_loaded *lclass){
 
     return obj;
 }
+
+int countArgs(char * type){
+
+    int count  = 0;
+    uint16_t i = 1;
+    while (type[i] != ')') {
+
+        if (type[i] == 'L'){
+            while (type[++i] != ';');
+        }
+        else if (type[i] == '[') {
+            while (type[++i] != '[');
+            if (type[i] == 'L'){
+                while (type[++i] != ';');
+                count++;
+                i++;
+            }
+        }
+    }
+    return count;
+}
