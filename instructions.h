@@ -6,227 +6,1039 @@
 #define INSTRUCTIONS_H
 #include <stdio.h>
 
+/**
+ * @brief Funcao que realiza um NOP
+ * @param code_attribute
+ */
 void Nop         (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Aconst_null
+ * @param code_attribute
+ */
 void Aconst_null (code_attribute *); //Verificar
+/**
+ * @brief Funcao que realiza um Iconst_m1
+ * @param code_attribute
+ */
 void Iconst_m1   (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Iconst_0
+ * @param code_attribute
+ */
 void Iconst_0    (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Iconst_1
+ * @param code_attribute
+ */
 void Iconst_1    (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Iconst_2
+ * @param code_attribute
+ */
 void Iconst_2    (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Iconst_3
+ * @param code_attribute
+ */
 void Iconst_3    (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Iconst_4
+ * @param code_attribute
+ */
 void Iconst_4    (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Iconst_5
+ * @param code_attribute
+ */
 void Iconst_5    (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Lconst_0
+ * @param code_attribute
+ */
 void Lconst_0    (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Lconst_1
+ * @param code_attribute
+ */
 void Lconst_1    (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Fconst_0
+ * @param code_attribute
+ */
 void Fconst_0    (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Fconst_1
+ * @param code_attribute
+ */
 void Fconst_1    (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Fconst_2
+ * @param code_attribute
+ */
 void Fconst_2    (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Dconst_0 
+ * @param code_attribute
+ */
 void Dconst_0    (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Dconst_1
+ * @param code_attribute
+ */
 void Dconst_1    (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Bipush
+ * @param code_attribute
+ */
 void Bipush      (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Sipush 
+ * @param code_attribute
+ */
 void Sipush      (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Ldc
+ * @param code_attribute
+ */
 void Ldc         (code_attribute *); //Feito (verificar case String)
+/**
+ * @brief Funcao que realiza um Ldc_w
+ * @param code_attribute
+ */
 void Ldc_w       (code_attribute *); //Feito (verificar case String)
+/**
+ * @brief Funcao que realiza um Ldc2_w
+ * @param code_attribute
+ */
 void Ldc2_w      (code_attribute *); //Feito
 // Paulo
+/**
+ * @brief Funcao que realiza um Iload
+ * @param code_attribute
+ */
 void Iload  (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Lload 
+ * @param code_attribute
+ */
 void Lload  (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Fload 
+ * @param code_attribute
+ */
 void Fload  (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Dload
+ * @param code_attribute
+ */
 void Dload  (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Aload
+ * @param code_attribute
+ */
 void Aload  (code_attribute *); //Verificar
+/**
+ * @brief Funcao que realiza um Iload_0
+ * @param code_attribute
+ */
 void Iload_0(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Iload_1
+ * @param code_attribute
+ */
 void Iload_1(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Iload_2
+ * @param code_attribute
+ */
 void Iload_2(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Iload_3
+ * @param code_attribute
+ */
 void Iload_3(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Lload_0
+ * @param code_attribute
+ */
 void Lload_0(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Lload_1
+ * @param code_attribute
+ */
 void Lload_1(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Lload_2
+ * @param code_attribute
+ */
 void Lload_2(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Lload_3
+ * @param code_attribute
+ */
 void Lload_3(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Fload_0
+ * @param code_attribute
+ */
 void Fload_0(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Fload_1
+ * @param code_attribute
+ */
 void Fload_1(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Fload_2
+ * @param code_attribute
+ */
 void Fload_2(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Fload_3
+ * @param code_attribute
+ */
 void Fload_3(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Dload_0
+ * @param code_attribute
+ */
 void Dload_0(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Dload_1
+ * @param code_attribute
+ */
 void Dload_1(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Dload_2
+ * @param code_attribute
+ */
 void Dload_2(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Dload_3
+ * @param code_attribute
+ */
 void Dload_3(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Aload_0
+ * @param code_attribute
+ */
 void Aload_0(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Aload_1
+ * @param code_attribute
+ */
 void Aload_1(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Aload_2
+ * @param code_attribute
+ */
 void Aload_2(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Aload_3
+ * @param code_attribute
+ */
 void Aload_3(code_attribute *); //Feito
 
 //Jominha
+/**
+ * @brief Funcao que realiza um Iaload
+ * @param code_attribute
+ */
 void Iaload (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Laload
+ * @param code_attribute
+ */
 void Laload (code_attribute *); //Feito (NECESSITA VERIFICAR)
+/**
+ * @brief Funcao que realiza um Faload
+ * @param code_attribute
+ */
 void Faload (code_attribute *); //Feito (NECESSITA VERIFICAR)
+/**
+ * @brief Funcao que realiza um Daload
+ * @param code_attribute
+ */
 void Daload (code_attribute *); //Feito (NECESSITA VERIFICAR)
+/**
+ * @brief Funcao que realiza um Aaload
+ * @param code_attribute
+ */
 void Aaload (code_attribute *); //Feito falta testar!!
+/**
+ * @brief Funcao que realiza um Baload
+ * @param code_attribute
+ */
 void Baload (code_attribute *); //Feito (NECESSITA VERIFICAR)
+/**
+ * @brief Funcao que realiza um Caload
+ * @param code_attribute
+ */
 void Caload (code_attribute *); //Feito (NECESSITA VERIFICAR)
+/**
+ * @brief Funcao que realiza um Saload
+ * @param code_attribute
+ */
 void Saload (code_attribute *); //Feito (NECESSITA VERIFICAR)
+/**
+ * @brief Funcao que realiza um Istore
+ * @param code_attribute
+ */
 void Istore   (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Lstore
+ * @param code_attribute
+ */
 void Lstore   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Fstore
+ * @param code_attribute
+ */
 void Fstore   (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Dstore
+ * @param code_attribute
+ */
 void Dstore   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Astore
+ * @param code_attribute
+ */
 void Astore   (code_attribute *); //Feito (NECESSSITA VERIFICAR)
+/**
+ * @brief Funcao que realiza um Istore_0
+ * @param code_attribute
+ */
 void Istore_0 (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Istore_1
+ * @param code_attribute
+ */
 void Istore_1 (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Istore_2
+ * @param code_attribute
+ */
 void Istore_2 (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Istore_3
+ * @param code_attribute
+ */
 void Istore_3 (code_attribute *); //Feito
 
 // Jomas
+/**
+ * @brief Funcao que realiza um Lstore_0
+ * @param code_attribute
+ */
 void Lstore_0 (code_attribute *);   //Feito
+/**
+ * @brief Funcao que realiza um Lstore_1
+ * @param code_attribute
+ */
 void Lstore_1 (code_attribute *);   //Feito
+/**
+ * @brief Funcao que realiza um Lstore_2
+ * @param code_attribute
+ */
 void Lstore_2 (code_attribute *);   //Feito
+/**
+ * @brief Funcao que realiza um Lstore_3
+ * @param code_attribute
+ */
 void Lstore_3 (code_attribute *);   //Feito
+/**
+ * @brief Funcao que realiza um Fstore_0
+ * @param code_attribute
+ */
 void Fstore_0 (code_attribute *);   //Feito
+/**
+ * @brief Funcao que realiza um Fstore_1
+ * @param code_attribute
+ */
 void Fstore_1 (code_attribute *);   //Feito e testado
+/**
+ * @brief Funcao que realiza um Fstore_2
+ * @param code_attribute
+ */
 void Fstore_2 (code_attribute *);   //Feito e testado
+/**
+ * @brief Funcao que realiza um Fstore_3
+ * @param code_attribute
+ */
 void Fstore_3 (code_attribute *);   //Feito e testado
+/**
+ * @brief Funcao que realiza um Dstore_0
+ * @param code_attribute
+ */
 void Dstore_0 (code_attribute *);   //Feito
+/**
+ * @brief Funcao que realiza um Dstore_1
+ * @param code_attribute
+ */
 void Dstore_1 (code_attribute *);   //Feito
+/**
+ * @brief Funcao que realiza um Dstore_2
+ * @param code_attribute
+ */
 void Dstore_2 (code_attribute *);   //Feito
+/**
+ * @brief Funcao que realiza um Dstore_3
+ * @param code_attribute
+ */
 void Dstore_3 (code_attribute *);   //Feito
+/**
+ * @brief Funcao que realiza um Astore_0
+ * @param code_attribute
+ */
 void Astore_0 (code_attribute *);   //Feito (NECESSSITA VERIFICAR)
+/**
+ * @brief Funcao que realiza um Astore_1
+ * @param code_attribute
+ */
 void Astore_1 (code_attribute *);   //Feito (NECESSSITA VERIFICAR)
+/**
+ * @brief Funcao que realiza um Astore_2
+ * @param code_attribute
+ */
 void Astore_2 (code_attribute *);   //Feito (NECESSSITA VERIFICAR)
+/**
+ * @brief Funcao que realiza um Astore_3
+ * @param code_attribute
+ */
 void Astore_3 (code_attribute *);   //Feito (NECESSSITA VERIFICAR)
 //Lucao
+/**
+ * @brief Funcao que realiza um Iastore
+ * @param code_attribute
+ */
 void Iastore  (code_attribute *);   //Feito e testado
+/**
+ * @brief Funcao que realiza um Lastore 
+ * @param code_attribute
+ */
 void Lastore  (code_attribute *);   //Feito Verificar!
+/**
+ * @brief Funcao que realiza um Fastore
+ * @param code_attribute
+ */
 void Fastore  (code_attribute *);   //Feito Verificar!
+/**
+ * @brief Funcao que realiza um Dastore
+ * @param code_attribute
+ */
 void Dastore  (code_attribute *);   //Feito Verificar!
+/**
+ * @brief Funcao que realiza um Aastore
+ * @param code_attribute
+ */
 void Aastore  (code_attribute *);   //Feito e testado
+/**
+ * @brief Funcao que realiza um Bastore
+ * @param code_attribute
+ */
 void Bastore  (code_attribute *);   //Feito Verificar!
+/**
+ * @brief Funcao que realiza um Castore
+ * @param code_attribute
+ */
 void Castore  (code_attribute *);   //Feito Verificar!
+/**
+ * @brief Funcao que realiza um Sastore
+ * @param code_attribute
+ */
 void Sastore  (code_attribute *);   //Feito Verificar!
 
 // Lucao
+/**
+ * @brief Funcao que realiza um Pop
+ * @param code_attribute
+ */
 void Pop      (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Pop2
+ * @param code_attribute
+ */
 void Pop2     (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Dup
+ * @param code_attribute
+ */
 void Dup      (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Dup_x1
+ * @param code_attribute
+ */
 void Dup_x1   (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Dup_x2
+ * @param code_attribute
+ */
 void Dup_x2   (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Dup2
+ * @param code_attribute
+ */
 void Dup2     (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Dup2_x1
+ * @param code_attribute
+ */
 void Dup2_x1  (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Dup2_x2
+ * @param code_attribute
+ */
 void Dup2_x2  (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Swap
+ * @param code_attribute
+ */
 void Swap     (code_attribute *); //Feito
 
+/**
+ * @brief Funcao que realiza um Iadd
+ * @param code_attribute
+ */
 void Iadd   (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Ladd
+ * @param code_attribute
+ */
 void Ladd   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Fadd
+ * @param code_attribute
+ */
 void Fadd   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Dadd
+ * @param code_attribute
+ */
 void Dadd   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Isub
+ * @param code_attribute
+ */
 void Isub   (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Lsub
+ * @param code_attribute
+ */
 void Lsub   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Fsub
+ * @param code_attribute
+ */
 void Fsub   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Dsub
+ * @param code_attribute
+ */
 void Dsub   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Imul
+ * @param code_attribute
+ */
 void Imul   (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Lmul
+ * @param code_attribute
+ */
 void Lmul   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Fmul
+ * @param code_attribute
+ */
 void Fmul   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Dmul
+ * @param code_attribute
+ */
 void Dmul   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Idiv
+ * @param code_attribute
+ */
 void Idiv   (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Ldiv
+ * @param code_attribute
+ */
 void Ldiv   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Fdiv   (cod
+ * @param code_attribute
+ */
 void Fdiv   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Ddiv
+ * @param code_attribute
+ */
 void Ddiv   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Irem
+ * @param code_attribute
+ */
 void Irem   (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Lrem
+ * @param code_attribute
+ */
 void Lrem   (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Frem
+ * @param code_attribute
+ */
 void Frem   (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Drem
+ * @param code_attribute
+ */
 void Drem   (code_attribute *); //Feito
 
 // Chris 
+/**
+ * @brief Funcao que realiza um Ineg
+ * @param code_attribute
+ */
 void Ineg   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Lneg
+ * @param code_attribute
+ */
 void Lneg   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Fneg
+ * @param code_attribute
+ */
 void Fneg   (code_attribute *); //Feito e testado 
+/**
+ * @brief Funcao que realiza um Dneg
+ * @param code_attribute
+ */
 void Dneg   (code_attribute *); //Feito e testado 
+/**
+ * @brief Funcao que realiza um Ishl
+ * @param code_attribute
+ */
 void Ishl   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Lshl
+ * @param code_attribute
+ */
 void Lshl   (code_attribute *); //Feito e testado 
+/**
+ * @brief Funcao que realiza um Ishr
+ * @param code_attribute
+ */
 void Ishr   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Lshr
+ * @param code_attribute
+ */
 void Lshr   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Iushr
+ * @param code_attribute
+ */
 void Iushr  (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Lushr
+ * @param code_attribute
+ */
 void Lushr  (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Iand
+ * @param code_attribute
+ */
 void Iand   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Land
+ * @param code_attribute
+ */
 void Land   (code_attribute *); //Feito e testado 
+/**
+ * @brief Funcao que realiza um Ior
+ * @param code_attribute
+ */
 void Ior    (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Lor
+ * @param code_attribute
+ */
 void Lor    (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Ixor
+ * @param code_attribute
+ */
 void Ixor   (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Lxor
+ * @param code_attribute
+ */
 void Lxor   (code_attribute *); //Feito e testado 
+/**
+ * @brief Funcao que realiza um Iinc
+ * @param code_attribute
+ */
 void Iinc   (code_attribute *); //Feito e testado
 
 //PAULIN
+/**
+ * @brief Funcao que realiza um I2l (code_a
+ * @param code_attribute
+ */
 void I2l (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um I2f
+ * @param code_attribute
+ */
 void I2f (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um I2d
+ * @param code_attribute
+ */
 void I2d (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um L2i
+ * @param code_attribute
+ */
 void L2i (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um L2f
+ * @param code_attribute
+ */
 void L2f (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um L2d
+ * @param code_attribute
+ */
 void L2d (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um F2i
+ * @param code_attribute
+ */
 void F2i (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um F2l
+ * @param code_attribute
+ */
 void F2l (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um F2d
+ * @param code_attribute
+ */
 void F2d (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um D2i
+ * @param code_attribute
+ */
 void D2i (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um D2l
+ * @param code_attribute
+ */
 void D2l (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um D2f
+ * @param code_attribute
+ */
 void D2f (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um I2b
+ * @param code_attribute
+ */
 void I2b (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um I2c
+ * @param code_attribute
+ */
 void I2c (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um I2s
+ * @param code_attribute
+ */
 void I2s (code_attribute *); //Feito e testado
 
 // Lucao
+/**
+ * @brief Funcao que realiza um Lcmp
+ * @param code_attribute
+ */
 void Lcmp     (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Fcmpl
+ * @param code_attribute
+ */
 void Fcmpl    (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Fcmpg
+ * @param code_attribute
+ */
 void Fcmpg    (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Dcmpl
+ * @param code_attribute
+ */
 void Dcmpl    (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Dcmpg
+ * @param code_attribute
+ */
 void Dcmpg    (code_attribute *); //Feito
 
 // Demetrio
+/**
+ * @brief Funcao que realiza um Ifeq
+ * @param code_attribute
+ */
 void Ifeq     (code_attribute *); //Feito 
+/**
+ * @brief Funcao que realiza um Ifne
+ * @param code_attribute
+ */
 void Ifne     (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Iflt
+ * @param code_attribute
+ */
 void Iflt     (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Ifge
+ * @param code_attribute
+ */
 void Ifge     (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Ifgt
+ * @param code_attribute
+ */
 void Ifgt     (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Ifle
+ * @param code_attribute
+ */
 void Ifle     (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um If_icmpeq
+ * @param code_attribute
+ */
 void If_icmpeq(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um If_icmpne
+ * @param code_attribute
+ */
 void If_icmpne(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um If_icmplt
+ * @param code_attribute
+ */
 void If_icmplt(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um If_icmpge
+ * @param code_attribute
+ */
 void If_icmpge(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um If_icmpgt
+ * @param code_attribute
+ */
 void If_icmpgt(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um If_icmple
+ * @param code_attribute
+ */
 void If_icmple(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um If_acmpeq
+ * @param code_attribute
+ */
 void If_acmpeq(code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um If_acmpne
+ * @param code_attribute
+ */
 void If_acmpne(code_attribute *); //Feito
 
+/**
+ * @brief Funcao que realiza um GoTo       
+ * @param code_attribute
+ */
 void GoTo        (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Jsr        
+ * @param code_attribute
+ */
 void Jsr         (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Ret        
+ * @param code_attribute
+ */
 void Ret         (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Tableswitch
+ * @param code_attribute
+ */
 void Tableswitch (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Lookupswitch
+ * @param code_attribute
+ */
 void Lookupswitch(code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Ireturn    
+ * @param code_attribute
+ */
 void Ireturn     (code_attribute *); //Feito Verificar!
+/**
+ * @brief Funcao que realiza um Lreturn    
+ * @param code_attribute
+ */
 void Lreturn     (code_attribute *); //Feito Verificar!
+/**
+ * @brief Funcao que realiza um Freturn    
+ * @param code_attribute
+ */
 void Freturn     (code_attribute *); //Feito Verificar!
+/**
+ * @brief Funcao que realiza um Dreturn    
+ * @param code_attribute
+ */
 void Dreturn     (code_attribute *); //Feito Verificar!
+/**
+ * @brief Funcao que realiza um Areturn    
+ * @param code_attribute
+ */
 void Areturn     (code_attribute *); //Feito Verificar!
+/**
+ * @brief Funcao que realiza um Return     
+ * @param code_attribute
+ */
 void Return      (code_attribute *); //Feito Verificar!
+/**
+ * @brief Funcao que realiza um Getstatic  
+ * @param code_attribute
+ */
 void Getstatic      (code_attribute *); //Incompleto
+/**
+ * @brief Funcao que realiza um Putstatic  
+ * @param code_attribute
+ */
 void Putstatic      (code_attribute *);
+/**
+ * @brief Funcao que realiza um Getfield   
+ * @param code_attribute
+ */
 void Getfield       (code_attribute *);
+/**
+ * @brief Funcao que realiza um Putfield   
+ * @param code_attribute
+ */
 void Putfield       (code_attribute *);
+/**
+ * @brief Funcao que realiza um Invokevirtual
+ * @param code_attribute
+ */
 void Invokevirtual  (code_attribute *); //Incompleto
+/**
+ * @brief Funcao que realiza um Invokespecial
+ * @param code_attribute
+ */
 void Invokespecial  (code_attribute *);
+/**
+ * @brief Funcao que realiza um Invokestatic
+ * @param code_attribute
+ */
 void Invokestatic   (code_attribute *);
+/**
+ * @brief Funcao que realiza um Invokeinterface
+ * @param code_attribute
+ */
 void Invokeinterface(code_attribute *);
+/**
+ * @brief Funcao que realiza um Invokedynamic
+ * @param code_attribute
+ */
 void Invokedynamic  (code_attribute *);
+/**
+ * @brief Funcao que realiza um New        
+ * @param code_attribute
+ */
 void New            (code_attribute *);
+/**
+ * @brief Funcao que realiza um Newarray   
+ * @param code_attribute
+ */
 void Newarray       (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Anewarray  
+ * @param code_attribute
+ */
 void Anewarray      (code_attribute *); //Feito falta testar!!
+/**
+ * @brief Funcao que realiza um Arraylength
+ * @param code_attribute
+ */
 void Arraylength    (code_attribute *); //Feito e testado
+/**
+ * @brief Funcao que realiza um Athrow     
+ * @param code_attribute
+ */
 void Athrow         (code_attribute *); 
+/**
+ * @brief Funcao que realiza um Checkcast  
+ * @param code_attribute
+ */
 void Checkcast      (code_attribute *);
+/**
+ * @brief Funcao que realiza um Instanceof 
+ * @param code_attribute
+ */
 void Instanceof     (code_attribute *);
+/**
+ * @brief Funcao que realiza um Monitorenter
+ * @param code_attribute
+ */
 void Monitorenter   (code_attribute *); // Não necessário
+/**
+ * @brief Funcao que realiza um Monitorexit
+ * @param code_attribute
+ */
 void Monitorexit    (code_attribute *); // Não necessário
+/**
+ * @brief Funcao que realiza um Wide       
+ * @param code_attribute
+ */
 void Wide           (code_attribute *);
+/**
+ * @brief Funcao que realiza um Multianewarray
+ * @param code_attribute
+ */
 void Multianewarray (code_attribute *); // Não feito
+/**
+ * @brief Funcao que realiza um Ifnull     
+ * @param code_attribute
+ */
 void Ifnull         (code_attribute *); //Feito Verificar!
+/**
+ * @brief Funcao que realiza um Ifnonnull  
+ * @param code_attribute
+ */
 void Ifnonnull      (code_attribute *); //Feito Verificar!
+/**
+ * @brief Funcao que realiza um Goto_w     
+ * @param code_attribute
+ */
 void Goto_w         (code_attribute *); //Feito
+/**
+ * @brief Funcao que realiza um Jsr_w      
+ * @param code_attribute
+ */
 void Jsr_w          (code_attribute *); //Feito
 
+/**
+ * @brief vetor de ponteiro para função
+ * 
+ */
 void (*inst_vector[256])(code_attribute *) = {
 Nop         	/*0x00 */,
 Aconst_null 	/*0x01 */,
