@@ -1671,7 +1671,7 @@ void I2f(code_attribute *code) {
     op_float.cat = UNIQUE;
     op_float.type = FLOAT_TYPE;
 
-    float floatValue = (float) op_int.data.bytes;
+    float floatValue = (float) ((int32_t)op_int.data.bytes);
 
     op_float.data.bytes = floatToUint32(floatValue);
 
@@ -1792,8 +1792,8 @@ void F2l(code_attribute *code) {
     op_long_hi.data.bytes = (uint32_t)(finalVal >> 32) & 0x00000000FFFFFFFF;
     op_long_lo.data.bytes = (uint32_t)(finalVal & 0x00000000FFFFFFFF);
 
-    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_long_hi);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_long_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_long_hi);
 }
 void F2d(code_attribute *code) {
     if (DEBUG) printf("F2D\n");
@@ -2844,6 +2844,56 @@ void Wide(code_attribute *code) {
 }
 void Multianewarray(code_attribute *code) {
     if (DEBUG) printf("MULTIANEWARRAY\n");
+    operand op;
+    GLOBAL_jvm_stack->top->pc ++;
+    uint8_t indexbyte1 = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc ++;
+    uint8_t indexbyte2 = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc ++;
+    uint8_t dimensions = code->code[GLOBAL_jvm_stack->top->pc];
+    int32_t * counts = (int32_t * ) malloc (dimensions * sizeof(int32_t)); 
+
+    for (int i = 0;i<dimensions;i++){
+        counts[i] = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+        if (DEBUG) printf("count[%d]:%d\n",i,counts[i]);
+    }
+
+
+
+    if (DEBUG) printf("Dimensões:%d\n",dimensions);
+    int16_t index = (indexbyte1 << 8) | indexbyte2;
+    char * type;
+    type = getUtf8Ref(index);
+    cp_info cp = GLOBAL_jvm_stack->top->constant_pool[index - 1];
+    if (DEBUG) printf("[%d]-> %s \n",cp.tag,type);
+
+
+    reference_type * reference = (reference_type * ) malloc ((1) * sizeof( reference_type));
+    // if (DEBUG) printf("Buggggggggggggggggggg \n");
+    reference->arrayref = (array * ) malloc ((1) * sizeof(array));
+    for(int i=0;i<dimensions;i++){
+        reference->arrayref->low = (operand *) malloc (counts[i]*sizeof(operand));
+    }
+    
+    switch (cp.tag){
+        case (CONSTANT_Class):
+            for(int i = 0;i < dimensions; i++){
+                for(int j = 0;j < counts[i]; j++){
+                    reference->arrayref->low[j].type = ARRAY_TYPE;
+                    reference->arrayref->low[j].data.ref = NULL;
+                }
+                reference->arrayref->arraysize = counts[i];
+            }
+        break;
+        default:
+            printf("ERRO MULTIANEWARRAY!\n");
+    }
+
+
+    op.data.ref= reference;
+    op.type = ARRAY_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Ifnull(code_attribute *code) {
     if (DEBUG) printf("IFNULL\n");
