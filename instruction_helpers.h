@@ -5,6 +5,7 @@
 char *getUtf8Class(uint16_t index);
 char *getUtf8Name(uint16_t index);
 char *getUtf8Type(uint16_t index);
+char *getUtf8Ref(uint16_t index);
 double makeDouble(uint32_t high, uint32_t low);
 float makeFloat(uint32_t bytes);
 long makeLong(uint32_t high, uint32_t low);

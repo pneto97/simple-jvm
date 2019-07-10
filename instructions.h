@@ -210,7 +210,7 @@ void Invokedynamic  (code_attribute *);
 void New            (code_attribute *);
 void Newarray       (code_attribute *); //Feito e testado
 void Anewarray      (code_attribute *); //demetrio
-void Arraylength    (code_attribute *); //demetrio
+void Arraylength    (code_attribute *); //Feito e testado
 void Athrow         (code_attribute *); 
 void Checkcast      (code_attribute *);
 void Instanceof     (code_attribute *);

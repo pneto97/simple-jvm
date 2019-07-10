@@ -27,6 +27,15 @@ char *getUtf8Type(uint16_t index) {
     return (char *)descriptor.info.utf8Info.bytes;
 }
 
+char *getUtf8Ref(uint16_t index) {
+    cp_info field          = GLOBAL_jvm_stack->top->constant_pool[index - 1];
+    cp_info name_index = GLOBAL_jvm_stack->top->constant_pool[field.info.classInfo.name_index - 1];
+    // cp_info name           = GLOBAL_jvm_stack->top->constant_pool[name_index.info.refInfo.class_index - 1];
+
+    // printf("%s\n", name.info.utf8Info.bytes);
+    return (char *)name_index.info.utf8Info.bytes;
+}
+
 double makeDouble(uint32_t high, uint32_t low) {
     uint64_t number;
 

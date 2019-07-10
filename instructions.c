@@ -2260,9 +2260,58 @@ void Newarray(code_attribute *code) {
 }
 void Anewarray(code_attribute *code) {
     if (DEBUG) printf("ANEWARRAY\n");
+    int32_t count = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.bytes;
+    if (count < 0) {
+        printf("NegativeArraySizeException\n");
+        exit(3);
+    }
+    operand op;
+    GLOBAL_jvm_stack->top->pc ++;
+    uint8_t indexbyte1 = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc ++;
+    uint8_t indexbyte2 = code->code[GLOBAL_jvm_stack->top->pc];
+    int16_t index = (indexbyte1 << 8) | indexbyte2;
+    char * type;
+    type = getUtf8Ref(index);
+    cp_info cp = GLOBAL_jvm_stack->top->constant_pool[index - 1];
+    if (DEBUG) printf("[%d]-> %s \n",cp.tag,type);
+
+
+    reference_type * reference = (reference_type * ) malloc ((1) * sizeof(reference_type));
+    
+    reference->arrayref = (array * ) malloc ((1) * sizeof(array));
+    reference->arrayref->low = (operand *) malloc (count*sizeof(operand));
+    switch (cp.tag){
+        case (CONSTANT_Class):
+            for(int i = 0;i < count; i++){
+                reference->arrayref->low[i].type = ARRAY_TYPE;
+                reference->arrayref->low[i].data.ref = NULL;
+            }
+            reference->arrayref->arraysize = count;
+        break;
+        default:
+            printf("Falta implementar essa parte do anewarray\n");
+    }
+
+
+    op.data.ref= reference;
+    op.type = ARRAY_TYPE;
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
+    
 }
 void Arraylength(code_attribute *code) {
     if (DEBUG) printf("ARRAYLENGTH\n");
+    operand op;
+    reference_type * arr = pop_op_stack(GLOBAL_jvm_stack->top->op_stack).data.ref;
+    if (arr == NULL) {
+        printf("NullPointerException\n");
+        exit(3);
+    }
+    op.data.bytes = arr->arrayref->arraysize;
+    op.type = INT_TYPE;
+    op.cat = UNIQUE;
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Athrow(code_attribute *code) {
     if (DEBUG) printf("ATHROW\n");
