@@ -223,9 +223,9 @@ void Ldc(code_attribute *code) {
         op.type = FLOAT_TYPE;
         break;
     case CONSTANT_String:
-        op.data.bytes = (uint32_t)GLOBAL_jvm_stack->top->constant_pool[cp.info.stringInfo.string_index - 1].info.utf8Info.bytes;
+        op.data.ref = GLOBAL_jvm_stack->top->constant_pool[cp.info.stringInfo.string_index - 1].info.utf8Info.bytes;
         op.cat  = UNIQUE;
-        op.type = CHAR_TYPE;
+        op.type = STRING_TYPE;
         break;
     //case CONSTANT_Class:
         // op.data.bytes = cp.info.classInfo.name_index;
@@ -2585,19 +2585,21 @@ void Invokevirtual(code_attribute *code) {
             case NULL_TYPE:
                 printf("NULL");
                 break;
-            case DOUBLE_TYPE: {
+            case DOUBLE_TYPE: 
                 op2 = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
                 printf("%lf", makeDouble(op.data.bytes, op2.data.bytes));
                 break;
-            }
-            case CLASS_TYPE: {
+            case CLASS_TYPE: 
                 //             Instance *class_instance  = op->class_instance;
                 //             ClassLoader *class_loader = class_instance->classe;
                 //             std::string class_name    = cpAttrAux.getUTF8(class_loader->getConstPool(), class_loader->getThisClass());
                 //             std::cout << class_name << "@" << class_instance;
                 printf("INVOKEVIRTUAL: CLASS_TYPE N IMPLEMENTADO\n");
                 break;
-            }
+            
+            case STRING_TYPE:
+                printf("%s", (char *) op.data.ref);
+                break;
             default:
                 printf("====BUG====");
                 break;
