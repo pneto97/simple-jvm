@@ -2819,9 +2819,14 @@ void Invokespecial(code_attribute *code) {
         // Procura nas superinterfaces 
 
     class_loaded *lclass = findClassLoaded((uint8_t *)class_name);
+    if(lclass == NULL)
+        lclass = loadClass(GLOBAL_path, class_name);
     method_info *method  = findMethod(lclass, name);
 
+    
     // achou o método
+
+
     // pega o code
     // cria o frame
     // push do frame
