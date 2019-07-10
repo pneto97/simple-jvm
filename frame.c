@@ -70,7 +70,7 @@ void getFieldType(field *field, int field_index, class_structure *jclass) {
     uint8_t *utf8             = jclass->constant_pool[descriptor_index - 1].info.utf8Info.bytes;
     uint8_t *class_name       = NULL;
     field->class_name         = NULL;
-    printf("utf8 - %c\n", utf8[0]);
+    if(DEBUG) printf("utf8 - %c\n", utf8[0]);
     switch ((char)utf8[0]) {
     case 'B':
         field->type = BYTE_TYPE;
@@ -118,7 +118,7 @@ void getFieldType(field *field, int field_index, class_structure *jclass) {
         field->type = 0;
         break;
     }
-    printf("class name - %s\n", field->class_name);
+    if(DEBUG) printf("class name - %s\n", field->class_name);
 }
 
 class_loaded *loadClass(char *path, char *name) {
@@ -331,3 +331,8 @@ field * getField(class_loaded *lclass, char *name, char *type){
     return NULL;
 }
 
+char * getSuperClassName(class_structure *jclass){
+    uint32_t class_index = jclass->super_class;
+    uint32_t utf8_index = jclass->constant_pool[class_index].info.classInfo.name_index;
+    return (char *) jclass->constant_pool[utf8_index].info.utf8Info.bytes;
+}

@@ -203,4 +203,8 @@ void PrintOpStack();
 
 void pushMethodArea(class_loaded *lclass);
 
+field * getField(class_loaded *lclass, char *name, char *type);
+
+char * getSuperClassName(class_structure *jclass);
+
 #endif
