@@ -1,8 +1,9 @@
+import pasta_teste.chrisport;
+
 public class chris{
+    static int lucaomito;
     public static void main(String[] args) {
-        long test = 4369;
-        long test2 = 257;
-        test = test & test2;
-        System.out.println(test);
+        // chris test = new chris;
+        chrisport cris = new chrisport();
     }
 }

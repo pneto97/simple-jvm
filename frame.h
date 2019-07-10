@@ -39,8 +39,8 @@ typedef struct class_loaded{
 
 typedef struct class_instance{
     uint8_t *name;
-    class_loaded *class; 
     field *fields;  // fields da instância
+    int field_count; // fields dinamicos
 } class_instance;
 
 typedef struct array{
@@ -206,5 +206,8 @@ void pushMethodArea(class_loaded *lclass);
 field * getField(class_loaded *lclass, char *name, char *type);
 
 char * getSuperClassName(class_structure *jclass);
+
+void insertDynamicFieldName(field *field, int field_index, object *obj);
+void insertDynamicFieldType(field *field, int field_index, object *obj);
 
 #endif

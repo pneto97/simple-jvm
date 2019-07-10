@@ -105,6 +105,71 @@ void getFieldType(field *field, int field_index, class_structure *jclass) {
         if(DEBUG) printf("class name - %s\n", field->class_name);
         field->class_name = class_name;
         field->type       = CLASS_TYPE;
+        if(DEBUG) printf("class name - %s\n", field->class_name);   
+        break;
+    case 'S':
+        field->type = SHORT_TYPE;
+        break;
+    case 'Z':
+        field->type = BOOLEAN_TYPE;
+        break;
+    case '[':
+        field->type = ARRAY_TYPE;
+        break;
+    default:
+        field->type = 0;
+        break;
+    }
+}
+
+void insertDynamicFieldName(field *field, int field_index, object *obj) {
+    uint16_t name_index = obj->class->class_str->fields[field_index].name_index;
+    uint8_t *utf8       = obj->class->class_str->constant_pool[name_index - 1].info.utf8Info.bytes;
+    uint8_t *name       = (uint8_t *)calloc((strlen((char *)utf8) + 1), sizeof(uint8_t));
+    strcpy((char *)name, (char *)utf8);
+    field->name = name;
+}
+
+void insertDynamicFieldType(field *field, int field_index, object *obj) {
+    uint16_t descriptor_index = obj->class->class_str->fields[field_index].descriptor_index;
+    uint8_t *utf8             = obj->class->class_str->constant_pool[descriptor_index - 1].info.utf8Info.bytes;
+    uint8_t *class_name       = NULL;
+    field->class_name         = NULL;
+    if(DEBUG) printf("utf8 - %c\n", utf8[0]);
+    switch ((char)utf8[0]) {
+    case 'B':
+        field->type = BYTE_TYPE;
+        break;
+    case 'C':
+        field->type = CHAR_TYPE;
+        break;
+    case 'D':
+        field->type = DOUBLE_TYPE;
+        break;
+    case 'F':
+        field->type = FLOAT_TYPE;
+        break;
+    case 'I':
+        field->type = INT_TYPE;
+        break;
+    case 'J':
+        field->type = LONG_TYPE;
+        break;
+    case 'L':
+        class_name = (uint8_t *)calloc(strlen((char *)utf8) - 1, sizeof(uint8_t));
+        if (class_name == NULL) {
+            printf("Erro na alocação de memória");
+            exit(1);
+        }
+        for (int i = 0, j = 0; i < strlen((char *)utf8) + 1; i++) {
+            if (i != 0 && i != (strlen((char *)utf8) - 1)) {
+                class_name[j] = utf8[i]; // LClass;\0 -> retira o L e o ;
+                j++;
+            }
+        }
+        field->class_name = class_name;
+        field->type       = CLASS_TYPE;
+        if(DEBUG) printf("class name - %s\n", field->class_name);   
         break;
     case 'S':
         field->type = SHORT_TYPE;
@@ -159,25 +224,35 @@ class_loaded *loadClass(char *path, char *name) {
     int field_count        = jclass->fields_count;
     // printf("fields count: %d\n",field_count );
     // Obtendo quantidade de fields
-    for (int i = 0; i < field_count; i++)
-        if (jclass->fields->access_flags & ACC_STATIC)
+    for (int i = 0; i < field_count; i++){
+        if (jclass->fields[i].access_flags & ACC_STATIC){
             static_field_count++;
-
-    for (int i = 0, j = 0; i < field_count; i++) {
-        field *fields = (field *)calloc(static_field_count, sizeof(field));
-        if (fields == NULL) {
-            printf("Erro na alocação de memória");
-            exit(1);
         }
-        if (jclass->fields->access_flags & ACC_STATIC) {
+    }
+    lclass->field_count = static_field_count;
+    field *fields = (field *)calloc(static_field_count, sizeof(field));
+    if (fields == NULL) {
+        printf("Erro na alocação de memória");
+        exit(1);
+    }
+    for (int i = 0, j = 0; i < field_count; i++) {
+        if (jclass->fields[i].access_flags & ACC_STATIC) {
             // printf("Entrou no if do getFieldNAme\n");
             getFieldType(&fields[j], i, jclass);
             getFieldName(&fields[j], i, jclass);
-            lclass->field_count = static_field_count;
             j++;
         }
     }
+    lclass->fields = fields;
 
+    // printf("LOADING CLASS ");
+    // printf("CLASS NAME: %s\n", lclass->name);
+    // printf("STATIC FIELD COUNT: %d\n", lclass->field_count);
+    // for (int i = 0; i < lclass->field_count; i++)
+    // {
+    //     printf("STATIC FIELDS: %s\n", lclass->fields[i].name);
+    // }
+    // printf("=======ENDLOADINGCLASS=======\n");
     pushMethodArea(lclass);
 
     return lclass;
@@ -189,6 +264,7 @@ void getFieldName(field *field, int field_index, class_structure *jclass) {
     uint8_t *name       = (uint8_t *)calloc((strlen((char *)utf8) + 1), sizeof(uint8_t));
     strcpy((char *)name, (char *)utf8);
     field->name = name;
+    // printf("GETFIELDNAME DEBUG: %s\n", field[field_index].name);
 }
 
 uint8_t *getClassName(class_structure *jclass) {

@@ -1,7 +1,8 @@
+#include "access_flags.h"
 #include "global.h"
 #include "primitive_types.h"
 #include <stdio.h>
-
+#include <stdlib.h>
 char *getUtf8Class(uint16_t index) {
     cp_info field       = GLOBAL_jvm_stack->top->constant_pool[index - 1];
     cp_info class_name2 = GLOBAL_jvm_stack->top->constant_pool[field.info.refInfo.class_index - 1];
@@ -83,4 +84,43 @@ data_type PrimitiveType(int8_t atype) {
         printf("Primitive Type ERROR!");
         return NULL_TYPE;
     }
+}
+
+object* buildObject(class_loaded *lclass){
+    object *obj = (object*)malloc(sizeof(object));
+    class_instance *iclass = (class_instance*)malloc(sizeof(class_instance));
+
+    obj->class = lclass;
+    iclass->name = lclass->name;
+    
+    int dynamic_field_count = 0;
+    int field_count         = lclass->class_str->fields_count;
+
+    class_structure *jclass = lclass->class_str;
+
+    for (int i = 0; i < field_count; i++){
+        if (!(jclass->fields[i].access_flags & ACC_STATIC)){
+            dynamic_field_count++;
+        }
+    }
+    
+    iclass->field_count = dynamic_field_count;
+    field *fields = (field *)calloc(dynamic_field_count, sizeof(field));
+    if (fields == NULL) {
+        printf("Erro na alocação de memória");
+        exit(1);
+    }
+    for (int i = 0, j = 0; i < field_count; i++) {
+        if (!(jclass->fields[i].access_flags & ACC_STATIC)) {
+            // printf("Entrou no if do getFieldNAme\n");
+            insertDynamicFieldName(&fields[j], i, obj);
+            insertDynamicFieldType(&fields[j], i, obj);
+            j++;
+        }
+    }
+    iclass->fields = fields;
+
+    obj->class_instance = iclass;
+
+    return obj;
 }

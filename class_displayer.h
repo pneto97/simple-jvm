@@ -1,5 +1,3 @@
-//j8_class_displayer.h
-
 /**
  * @file j8_class_displayer.h
  * @brief Recursos usados para fazer o display dos dados lidos do .class

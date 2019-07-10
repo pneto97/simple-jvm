@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #define DEBUG 1
 
 void Nop(code_attribute *code) {
@@ -566,7 +567,6 @@ void Daload(code_attribute *code) {
         printf("NullPointerException\n");
         exit(3);
     }
-    printf("INDEXXXXXXXX: %d\n",index);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->low[index]);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->high[index]);
 }
@@ -2305,7 +2305,6 @@ void Tableswitch(code_attribute *code) {
         offset = default_variable;
     }
     else {
-        printf("index-low: %d\n",index - low_variable);
         offset = jump_table[index - low_variable];
     }
     
@@ -2727,6 +2726,55 @@ void Invokedynamic(code_attribute *code) {
 }
 void New(code_attribute *code) {
     if (DEBUG) printf("NEW\n");
+
+    GLOBAL_jvm_stack->top->pc++;
+    uint8_t indexbyte1 = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc++;
+    uint8_t indexbyte2 = code->code[GLOBAL_jvm_stack->top->pc];
+
+    int16_t index = (indexbyte1 << 8) | indexbyte2;
+
+    char * class_name;
+    class_name = getUtf8Ref(index);
+
+    class_loaded *lclass = findClassLoaded((uint8_t*) class_name);
+    //Verificar se esta na area de metodos antes
+    if (lclass == NULL)
+    {
+        lclass = loadClass(GLOBAL_path, class_name);
+        if(lclass == NULL){
+            printf("InstantiationError: %s\n", class_name);
+            exit(3);
+        }
+    }
+
+    // Criar class instance via malloc
+    class_instance *instance = (class_instance *)malloc(sizeof(instance));
+    instance->name = lclass->name;
+
+    object *obj = buildObject(lclass);
+
+    reference_type * ref = (reference_type * ) malloc (sizeof(reference_type));
+    ref->objectref = obj;
+
+    operand op;
+    op.data.ref = ref;
+    op.type = CLASS_TYPE;
+
+    // printf("NEW CLASS LOAD\n");
+    // printf("CLASS NAME: %s\n", op.data.ref->objectref->class->name);
+    // printf("STATIC FIELD COUNT: %d\n", op.data.ref->objectref->class->field_count);
+    // printf("DYNAMIC FIELD COUNT: %d\n", op.data.ref->objectref->class_instance->field_count);
+    // for (int i = 0; i < op.data.ref->objectref->class->field_count; i++)
+    // {
+    //     printf("STATIC FIELDS: %s\n", op.data.ref->objectref->class->fields[i].name);
+    // } 
+    // for (int i = 0; i < op.data.ref->objectref->class_instance->field_count; i++)
+    // {
+    //     printf("DYNAMIC FIELDS: %s\n", op.data.ref->objectref->class_instance->fields[i].name);
+    // }    
+
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }
 void Newarray(code_attribute *code) {
     if (DEBUG) printf("NEWARRAY\n");
@@ -2909,7 +2957,7 @@ void Ifnull(code_attribute *code) {
     operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
     if(op.type == NULL_TYPE)
-        GLOBAL_jvm_stack->top->pc += offset;
+        GLOBAL_jvm_stack->top->pc += offset -1;
 }
 void Ifnonnull(code_attribute *code) {
     if (DEBUG) printf("IFNONNULL\n");
@@ -2925,7 +2973,7 @@ void Ifnonnull(code_attribute *code) {
     operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
     if(op.type != NULL_TYPE)
-        GLOBAL_jvm_stack->top->pc += offset;
+        GLOBAL_jvm_stack->top->pc += offset -1;
 }
 void Goto_w(code_attribute *code) {
     if (DEBUG) printf("GOTO_W\n");
