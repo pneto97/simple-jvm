@@ -2429,6 +2429,10 @@ void Getstatic(code_attribute *code) {
     field *f = NULL;
     class_loaded *lclass = NULL;
 
+    if(DEBUG) printf("classname : %s\n", class_name);
+    if(DEBUG) printf("name : %s\n", name);
+    if(DEBUG) printf("type : %s\n", type);
+
     if (!strcmp(class_name, "java/lang/System")) return;
 
     do{
@@ -2455,15 +2459,12 @@ void Getstatic(code_attribute *code) {
 
     // Carrega na pilha de operandos
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, f->lo);
-    if(DEBUG) printf("f->lo: %x", f->lo.data.bytes);
+    if(DEBUG) printf("\tf->lo: %x\n", f->lo.data.bytes);
     if(f->type == DOUBLE_TYPE || f->type == LONG_TYPE){
         push_op_stack(GLOBAL_jvm_stack->top->op_stack, f->hi);
-        if(DEBUG) printf("f->lo: %x", f->hi.data.bytes);
+        if(DEBUG) printf("\tf->hi: %x\n", f->hi.data.bytes);
     }
 
-    printf("%s\n", class_name);
-    printf("%s\n", name);
-    printf("%s\n", type);
 }
 void Putstatic(code_attribute *code) {
     if (DEBUG) printf("PUTSTATIC\n");
@@ -2484,11 +2485,11 @@ void Putstatic(code_attribute *code) {
     field *f = NULL;
     class_loaded *lclass = NULL;
 
-    if (!strcmp(class_name, "java/lang/System")) return;
-
     if(DEBUG) printf("classname : %s\n", class_name);
     if(DEBUG) printf("name : %s\n", name);
     if(DEBUG) printf("type : %s\n", type);
+
+    if (!strcmp(class_name, "java/lang/System")) return;
 
     do{
         // Achar a classe
@@ -2510,10 +2511,17 @@ void Putstatic(code_attribute *code) {
     }while(f == NULL);
     
 
-    // Carrega na pilha de operandos
-    f->hi = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-    if(f->type == DOUBLE_TYPE || f->type == LONG_TYPE)
+    // Carrega no field
+    operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    if(f->type == DOUBLE_TYPE || f->type == LONG_TYPE){
+        f->hi = op;
         f->lo = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+        if(DEBUG) printf("\tf->hi: %x\n", f->hi.data.bytes);
+        if(DEBUG) printf("\tf->lo: %x\n", f->lo.data.bytes);
+    }else{
+        f->lo = op;
+        if(DEBUG) printf("\tf->lo: %x\n", f->lo.data.bytes);
+    }
 }
 void Getfield(code_attribute *code) {
     if (DEBUG) printf("GETFIELD\n");

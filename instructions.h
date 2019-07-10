@@ -198,8 +198,8 @@ void Freturn     (code_attribute *); //Feito Verificar!
 void Dreturn     (code_attribute *); //Feito Verificar!
 void Areturn     (code_attribute *); //Feito Verificar!
 void Return      (code_attribute *); //Feito Verificar!
-void Getstatic      (code_attribute *); //Incompleto
-void Putstatic      (code_attribute *);
+void Getstatic      (code_attribute *); //Feito
+void Putstatic      (code_attribute *); //Feito
 void Getfield       (code_attribute *);
 void Putfield       (code_attribute *);
 void Invokevirtual  (code_attribute *); //Incompleto
@@ -207,7 +207,7 @@ void Invokespecial  (code_attribute *);
 void Invokestatic   (code_attribute *);
 void Invokeinterface(code_attribute *);
 void Invokedynamic  (code_attribute *);
-void New            (code_attribute *);
+void New            (code_attribute *); //Feito!!!!_!_!!!!
 void Newarray       (code_attribute *); //Feito e testado
 void Anewarray      (code_attribute *); //Feito falta testar!!
 void Arraylength    (code_attribute *); //Feito e testado
