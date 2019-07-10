@@ -255,6 +255,14 @@ class_loaded *loadClass(char *path, char *name) {
     // printf("=======ENDLOADINGCLASS=======\n");
     pushMethodArea(lclass);
 
+    //executa o <clinit>
+    method_info *method  = findMethod(lclass, "<clinit>");
+    if(method != NULL){
+        code_attribute *code = findCode(lclass, method);
+        createFrame(code, lclass->class_str->constant_pool);
+        execute(code);
+    }
+
     return lclass;
 }
 
