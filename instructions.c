@@ -2304,7 +2304,6 @@ void Tableswitch(code_attribute *code) {
         offset = default_variable;
     }
     else {
-        printf("index-low: %d\n",index - low_variable);
         offset = jump_table[index - low_variable];
     }
     
