@@ -2158,8 +2158,9 @@ void Return(code_attribute *code) {
 }
 void Getstatic(code_attribute *code) {
     if (DEBUG) printf("GETSTATIC\n");
+
     char *class_name, *name, *type;
-    // GLOBAL_jvm_stack->top->pc = 10;
+
     GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
     uint8_t indexbyte1        = code->code[GLOBAL_jvm_stack->top->pc];
     GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
@@ -2171,6 +2172,29 @@ void Getstatic(code_attribute *code) {
     type                      = getUtf8Type(index);
 
     if (!strcmp(class_name, "java/lang/System")) return;
+
+    // // Achar a classe
+    // class_loaded lclass = findClassLoaded(class_name);
+
+    // // Ver se ela ta carregada
+    // if(lclass != NULL)
+    //     loadClass(path,class_name);
+
+    // // Pegar o operando do field
+    // do{
+    //     field *f = getField(lclass, name, type);
+
+    //     // Buscar nas classes pais
+    //     if(f == NULL){
+    //         getSuperClassName(lclass->class_str);
+    //     }
+    // }while();
+    
+
+    // // Carrega na pilha de operandos
+    // push_op_stack(GLOBAL_jvm_stack->top->op_stack, f->lo);
+    // if(f->type == DOUBLE_TYPE || f->type == LONG_TYPE)
+    //     push_op_stack(GLOBAL_jvm_stack->top->op_stack, f->hi);
 
     printf("%s\n", class_name);
     printf("%s\n", name);

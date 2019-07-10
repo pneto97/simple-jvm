@@ -9,19 +9,6 @@
 #include "class_structure.h"
 #include "data_type.h"
 
-
-typedef uint32_t var_cat1;
-
-typedef struct var_cat2{
-    uint32_t high;
-    uint32_t low;
-}var_cat2;
-
-typedef union data{
-    var_cat1 datac1;
-    var_cat2 datac2;
-} data;
-
 typedef struct operand
 {   
     cat_type cat;
@@ -37,12 +24,15 @@ typedef struct field{
     uint8_t *name;
     uint8_t *class_name;
     data_type type;
-    data data;
+    operand hi;
+    operand lo;
 } field;
+
 typedef struct class_loaded{
     uint8_t *name;
     class_structure *class_str;
     field *fields; // fields estáticos
+    int field_count;
 
     struct class_loaded *next;
 }class_loaded;
@@ -210,5 +200,7 @@ void execute(code_attribute *code);
 void PrintLocalVar();
 
 void PrintOpStack();
+
+void pushMethodArea(class_loaded *lclass);
 
 #endif

@@ -173,16 +173,12 @@ class_loaded *loadClass(char *path, char *name) {
             // printf("Entrou no if do getFieldNAme\n");
             getFieldType(&fields[j], i, jclass);
             getFieldName(&fields[j], i, jclass);
+            lclass->field_count = static_field_count;
             j++;
         }
     }
 
-    if (GLOBAL_method_area->last != NULL) {
-        GLOBAL_method_area->last->next = lclass;
-    } else {
-        GLOBAL_method_area->last = lclass;
-    }
-    lclass->next = NULL;
+    pushMethodArea(lclass);
 
     return lclass;
 }
@@ -308,3 +304,29 @@ void PrintOpStack() {
         printf("\n\n");
     }
 }
+
+
+void pushMethodArea(class_loaded *lclass){
+
+    if (GLOBAL_method_area->last != NULL) {
+        GLOBAL_method_area->last->next = lclass;
+    } else {
+        GLOBAL_method_area->last = lclass;
+    }
+    if(GLOBAL_method_area->first == NULL)
+        GLOBAL_method_area->first = lclass;
+        
+    lclass->next = NULL;
+}
+
+field * getField(class_loaded *lclass, char *name, char *type){
+    
+    for (int i = 0; i < lclass->field_count; i++)
+    {
+        if(!strcmp((char*)lclass->fields[i].name, name)){
+            return &lclass->fields[i];
+        }
+    }
+    return NULL;
+}
+
