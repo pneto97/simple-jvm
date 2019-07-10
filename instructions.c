@@ -566,7 +566,6 @@ void Daload(code_attribute *code) {
         printf("NullPointerException\n");
         exit(3);
     }
-    printf("INDEXXXXXXXX: %d\n",index);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->low[index]);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->high[index]);
 }
