@@ -1671,7 +1671,7 @@ void I2f(code_attribute *code) {
     op_float.cat = UNIQUE;
     op_float.type = FLOAT_TYPE;
 
-    float floatValue = (float) op_int.data.bytes;
+    float floatValue = (float) ((int32_t)op_int.data.bytes);
 
     op_float.data.bytes = floatToUint32(floatValue);
 
@@ -1792,8 +1792,8 @@ void F2l(code_attribute *code) {
     op_long_hi.data.bytes = (uint32_t)(finalVal >> 32) & 0x00000000FFFFFFFF;
     op_long_lo.data.bytes = (uint32_t)(finalVal & 0x00000000FFFFFFFF);
 
-    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_long_hi);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_long_lo);
+    push_op_stack(GLOBAL_jvm_stack->top->op_stack, op_long_hi);
 }
 void F2d(code_attribute *code) {
     if (DEBUG) printf("F2D\n");
