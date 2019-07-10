@@ -264,7 +264,9 @@ void printMethods(class_structure *jclass) {
 
     for (int i = 0; i < methods_count; i++) {
         printf("\n------------------------------\n");
-        printf("METHOD: %d\n", i);
+        printf("METHOD: [%d] ", i);
+        printUtf8(jclass->methods[i].name_index, jclass);
+        printf("\n");
         // printf("Access Flag: %u\n", jclass->methods[i].access_flags);
         printAccessFlags(jclass->methods[i].access_flags, METHOD);
         printf("Name Index: #%u ", jclass->methods[i].name_index);
