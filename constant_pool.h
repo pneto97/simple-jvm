@@ -1,10 +1,12 @@
-//constant_pool.h
-//estruturas de dados necessarias para o constant pool
+/**
+ * @file constant_pool.h
+ * @brief Estruturas de dados necessarias para o constant pool
+ */
+
 #ifndef CONSTANT_POOL_H
 #define CONSTANT_POOL_H
 #include <stdint.h>
 
-//Constant POOL TAGS
 #define CONSTANT_Class 7
 #define CONSTANT_Fieldref 9
 #define CONSTANT_Methodref 10
@@ -20,57 +22,87 @@
 #define CONSTANT_MethodType 16
 #define CONSTANT_InvokeDynamic 18
 
-//para CONSTANT_Class_info
+/**
+ * @brief name_index para CONSTANT_Class_info
+ * 
+ */
 typedef struct class_info {
 	uint16_t name_index;
 } ClassInfo;
 
-//referencias para Fiedref_info, Methodref_info e InterfaceMethodref_info
+/**
+ * @brief Rêferencias para Fiedref_info, Methodref_info e InterfaceMethodref_info
+ * 
+ */
 typedef struct references {
 	uint16_t class_index;
 	uint16_t name_and_type_index;
 } Ref;
 
-//CONSTANT_String_info
+/**
+ * @brief CONSTANT_String_info
+ * 
+ */
 typedef struct string_info {
 	uint16_t string_index;
 } StringInfo;
 
-//CONSTANT_Integer_info e CONSTANT_Float_info
+/**
+ * @brief CONSTANT_Integer_info e CONSTANT_Float_info
+ * 
+ */
 typedef struct number32 {
 	uint32_t bytes;
 } Number32;
 
-//CONSTANT_Long_info e CONSTANT_Double_info
+/**
+ * @brief CONSTANT_Long_info e CONSTANT_Double_info
+ * 
+ */
 typedef struct number64 {
 	uint32_t high_bytes;
 	uint32_t low_bytes;
 } Number64;
 
-//CONSTANT_NameAndType_info
+/**
+ * @brief CONSTANT_NameAndType_info
+ * 
+ */
 typedef struct name_and_type_info {
 	uint16_t name_index;
 	uint16_t descriptor_index;
 } NameAndTypeInfo;
 
-//CONSTANT_Utf8_info
+/**
+ * @brief CONSTANT_Utf8_info
+ * 
+ */
 typedef struct utf8_info {
 	uint16_t length;
 	uint8_t *bytes;
 } Utf8Info;
 
-//CONSTANT_MethodHandle_info
+/**
+ * @brief CONSTANT_MethodHandle_info
+ * 
+ */
 typedef struct method_handle_info {
 	uint8_t reference_kind;
 	uint16_t reference_index;
 } MethodHandleInfo;
 
-//CONSTANT_MethodType_info
+/**
+ * @brief CONSTANT_MethodType_info
+ * 
+ */
 typedef struct Method_Type_info {
 	uint16_t descriptor_index;
 } MethodTypeInfo;
 
-//CONSTANT_InvokeDynamic_info
+/**
+ * @brief CONSTANT_InvokeDynamic_info
+ * 
+ */
 typedef struct invoke_dynamic_info {
 	uint16_t bootstrap_method_attr_index;
 	uint16_t name_and_type_index;

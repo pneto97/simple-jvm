@@ -1,12 +1,18 @@
-//j8_class_structure.h
-//Estruturas de dados necessárias para armazenar os dados do .class
+/**
+ * @file class_structure.h
+ * @brief Arquivo contendo as principais estruturas de dados necessárias para armazenar os dados do .class
+ */
+
 #ifndef CLASS_STRUCTURE_H
 #define CLASS_STRUCTURE_H
 #include "attribute.h"
 #include "constant_pool.h"
 #include <stdint.h>
 
-//um item do constant pool, possui a tag que informa o tipo de dado e mais alguns bytes que dependem da tag
+/**
+ * @brief Estrutura de dados para armazenar o constant pool, possui tag inteiro de 8 bits em comum para todos os elementos  
+ * Na union, possui todos os tipos de info possíveis
+ */
 typedef struct constant_pool {
 	uint8_t tag;
 	// uint8_t* info;
@@ -25,6 +31,10 @@ typedef struct constant_pool {
 
 } cp_info;
 
+/**
+ * @brief Estrutura de dados para armazenar as informações os fields
+ * 
+ */
 typedef struct field_info {
 	uint16_t access_flags;
 	uint16_t name_index;
@@ -33,6 +43,10 @@ typedef struct field_info {
 	attribute_info *attributes;
 } field_info;
 
+/**
+ * @brief Estrutura de dados para armazenar as informações os métodos
+ * 
+ */
 typedef struct method_info {
 	uint16_t access_flags;
 	uint16_t name_index;
@@ -41,7 +55,10 @@ typedef struct method_info {
 	attribute_info *attributes;
 } method_info;
 
-//estrutura da classe. Guarda os dados lidos do .class
+/**
+ * @brief Estrutura geral da classe. Guarda os dados lidos do .class
+ * 
+ */
 typedef struct class_structure {
 	uint32_t magic;
 	uint16_t minor_version;

@@ -1,3 +1,8 @@
+/**
+ * @file access_flags.h
+ * @brief Defines com todos os tipos de flags utilizadas
+ */
+
 #define ACC_PUBLIC          0x0001
 #define ACC_PRIVATE         0x0002
 #define ACC_PROTECTED       0x0004

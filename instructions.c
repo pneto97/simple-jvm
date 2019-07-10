@@ -566,7 +566,6 @@ void Daload(code_attribute *code) {
         printf("NullPointerException\n");
         exit(3);
     }
-    printf("INDEXXXXXXXX: %d\n",index);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->low[index]);
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, array_ref->arrayref->high[index]);
 }
@@ -2305,7 +2304,6 @@ void Tableswitch(code_attribute *code) {
         offset = default_variable;
     }
     else {
-        printf("index-low: %d\n",index - low_variable);
         offset = jump_table[index - low_variable];
     }
     
@@ -2935,7 +2933,7 @@ void Ifnull(code_attribute *code) {
     operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
     if(op.type == NULL_TYPE)
-        GLOBAL_jvm_stack->top->pc += offset;
+        GLOBAL_jvm_stack->top->pc += offset -1;
 }
 void Ifnonnull(code_attribute *code) {
     if (DEBUG) printf("IFNONNULL\n");
@@ -2951,7 +2949,7 @@ void Ifnonnull(code_attribute *code) {
     operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
 
     if(op.type != NULL_TYPE)
-        GLOBAL_jvm_stack->top->pc += offset;
+        GLOBAL_jvm_stack->top->pc += offset -1;
 }
 void Goto_w(code_attribute *code) {
     if (DEBUG) printf("GOTO_W\n");
