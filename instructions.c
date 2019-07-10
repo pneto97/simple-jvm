@@ -2538,10 +2538,11 @@ void Invokevirtual(code_attribute *code) {
 
     operand op2;
 
-    printf("CLASS NAME:  %s\n", class_name);
-    printf("METHOD NAME: %s\n", name);
-    printf("TYPE:        %s\n", type);
-
+    if(DEBUG){
+        printf("CLASS NAME:  %s\n", class_name);
+        printf("METHOD NAME: %s\n", name);
+        printf("TYPE:        %s\n", type);
+    }
     // /* Inicia-se o procedimento para verificar se o metodo a ser chamado é um print f */
     int isPrint = !strcmp(class_name, "java/io/PrintStream") &&
         (!strcmp(name, "println") || !strcmp(name, "print"));
