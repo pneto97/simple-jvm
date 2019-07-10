@@ -265,9 +265,9 @@ void Ldc_w(code_attribute *code) {
         op.type = FLOAT_TYPE;
         break;
     case CONSTANT_String:
-        op.data.bytes = (uint32_t)GLOBAL_jvm_stack->top->constant_pool[cp.info.stringInfo.string_index - 1].info.utf8Info.bytes;
+        op.data.ref = GLOBAL_jvm_stack->top->constant_pool[cp.info.stringInfo.string_index - 1].info.utf8Info.bytes;
         op.cat  = UNIQUE;
-        op.type = CHAR_TYPE;
+        op.type = STRING_TYPE;
         break;
     //case CONSTANT_Class:
         // op.data.bytes = cp.info.classInfo.name_index;
