@@ -256,7 +256,7 @@ class_loaded *loadClass(char *path, char *name) {
     pushMethodArea(lclass);
 
     //executa o <clinit>
-    method_info *method  = findMethod(lclass, "<clinit>");
+    method_info *method  = findMethod(lclass, "<clinit>", "()V");
     if(method != NULL){
         code_attribute *code = findCode(lclass, method);
         createFrame(code, lclass->class_str->constant_pool);
