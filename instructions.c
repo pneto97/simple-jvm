@@ -2657,9 +2657,6 @@ void Invokevirtual(code_attribute *code) {
         if (strcmp(type, "()V")) {
             operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
             switch (op.type) {
-            // case CONSTANT_String:
-            //     std::cout << *(op->type_string);
-            //     break;
             case RETURN_ADDR_TYPE:
             case ARRAY_TYPE:
             case INTERFACE_TYPE:
@@ -2695,10 +2692,7 @@ void Invokevirtual(code_attribute *code) {
                 printf("%lf", makeDouble(op.data.bytes, op2.data.bytes));
                 break;
             case CLASS_TYPE: 
-                //             Instance *class_instance  = op->class_instance;
-                //             ClassLoader *class_loader = class_instance->classe;
-                //             std::string class_name    = cpAttrAux.getUTF8(class_loader->getConstPool(), class_loader->getThisClass());
-                //             std::cout << class_name << "@" << class_instance;
+
                 printf("INVOKEVIRTUAL: CLASS_TYPE N IMPLEMENTADO\n");
                 break;
             
@@ -2713,61 +2707,8 @@ void Invokevirtual(code_attribute *code) {
             if (!strcmp(name, "println")) printf("\n");
         }
     } else if (!strcmp(class_name, "java/lang/StringBuilder") && !strcmp(name, "append")) {
-        //     MethodsArea maux;
-        //     Operand *op = this_frame->operand_stack.top();
-        //     this_frame->operand_stack.pop();
-        //     Operand *string_operand = this_frame->operand_stack.top();
-        //     this_frame->operand_stack.pop();
 
-        //     switch (op->tag) {
-        //     case CONSTANT_String:
-        //         *string_operand->type_string += (*op->type_string);
-        //         break;
-        //     case CONSTANT_Integer:
-        //         *string_operand->type_string += (patch::to_string(op->type_int));
-        //         break;
-        //     case CONSTANT_Long:
-        //         *string_operand->type_string += (patch::to_string(op->type_long));
-        //         break;
-        //     case CONSTANT_Float:
-        //         *string_operand->type_string += (patch::to_string(op->type_float));
-        //         break;
-        //     case CONSTANT_Double:
-        //         *string_operand->type_string += (patch::to_string(op->type_double));
-        //         break;
-        //     case CONSTANT_Short:
-        //         *string_operand->type_string += (patch::to_string(op->type_short));
-        //         break;
-        //     case CONSTANT_Char:
-        //         *string_operand->type_string += (patch::to_string(op->type_char));
-        //         break;
-        //     case CONSTANT_Byte:
-        //         *string_operand->type_string += (patch::to_string(op->type_byte));
-        //         break;
-        //     case CONSTANT_Boolean:
-        //         if (op->type_bool == 0)
-        //             *string_operand->type_string += "false";
-        //         else
-        //             *string_operand->type_string += "true";
-        //         break;
-        //     case CONSTANT_Class:
-        //         // @TODO colocar enderec
-        //         *string_operand->type_string += op->class_instance->name + "@";
-        //         break;
-        //     case CONSTANT_Array:
-        //         *string_operand->type_string += "Array[]";
-        //         break;
-        //     }
-        //     this_frame->operand_stack.push(string_operand);
-        // } else if (class_name == "java/lang/String" && method_name == "length") {
-        //     auto strOp = this_frame->operand_stack.top();
-        //     this_frame->operand_stack.pop();
 
-        //     Operand *strLen  = (Operand *)calloc(1, sizeof(Operand));
-        //     strLen->tag      = CONSTANT_Integer;
-        //     strLen->type_int = strOp->type_string->size();
-
-        //     this_frame->operand_stack.push(strLen);
     } else {
 
         int argsCount = countArgs(type);
