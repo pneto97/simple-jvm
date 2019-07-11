@@ -95,15 +95,31 @@ int main(int argc, char *argv[]) {
 }
 
 
-/*! \mainpage My Personal Index Page
+/*! \mainpage simple-jvm
  *
- * \section intro_sec Introduction
+ * \section intro_sec Introdução
  *
- * This is the introduction.
+ * Implementação de uma Java Virtual Machine para Java 8 incluindo um leitor e exibidor de arquivos .class, feito em C99.
+ * \section install_sec Como rodar
  *
- * \section install_sec Installation
+ *  - Passo 1: make
+ *  - Passo 2: LEITOR:         ./main l [NOME_CLASSE.class]
+ *  - Passo 3: INTERPRETADOR:  ./main e [DIRETORIO] [NOME_CLASSE]
  *
- * \subsection step1 Step 1: Opening the box
- *
- * etc...
+ * \section integrantes Integrantes do grupo
+ * 
+ *  - Paulo Borges - 15/0143753 
+ *  - Christian Luis - 15/0153538 
+ *  - Lucas Campos Jorge - 15/0154135 
+ *  - João Marcelo Nunes Chaves - 15/0132085 
+ *  - Rodrigo Demetrio Palma - 15/0147384
+ * 
+ * 
+ * \section main Estruturas principais
+ * 
+ * 
+ * - <a href="structjvm__stack.html">Pilha da JVM</a>
+ * - <a href="structmethod__area.html">Área de Métodos</a>
+ * - <a href="structclass__structure.html">Estrutura da classe</a>
+ * 
  */
