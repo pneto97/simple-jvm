@@ -142,6 +142,8 @@ int countArgs(char * type){
                 i++;
             }
         }
+        count++;
+        i++;
     }
     return count;
 }

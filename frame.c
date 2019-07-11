@@ -315,6 +315,8 @@ frame *createFrame(code_attribute *code, cp_info *cp) {
     fr->op_stack->top   = NULL;
     fr->pc              = 0;
 
+    if(DEBUG) printf("------- FRAME CRIADO -------\n");
+
     push_jvm_stack(GLOBAL_jvm_stack, fr);
 
     return fr;
@@ -335,7 +337,6 @@ void free_frame(frame *f) {
 
 void execute(code_attribute *code) {
     // frame *fr = GLOBAL_jvm_stack->top;
-
     // inst_vector[0xb2](code);
 
     while (GLOBAL_jvm_stack->top->pc < code->code_length) {
@@ -463,14 +464,16 @@ field * getStaticField(class_instance *iclass, char *name, char *type){
     return NULL;
 }
 
-method_info *findMethod(class_loaded *lclass, char *method_name) {
+method_info *findMethod(class_loaded *lclass, char *method_name, char *type) {
 
     class_structure *jclass = lclass->class_str;
     for (uint16_t i = 0; i < jclass->methods_count; i++) {
         uint16_t name_index = jclass->methods[i].name_index;
+        uint16_t type_index = jclass->methods[i].descriptor_index;
         char *name          = (char *)jclass->constant_pool[name_index - 1].info.utf8Info.bytes;
+        char *type_cp       = (char *)jclass->constant_pool[type_index - 1].info.utf8Info.bytes;
 
-        if (!strcmp(name, method_name))
+        if (!strcmp(name, method_name) && !strcmp(type, type_cp))
             return &jclass->methods[i];
         
     }

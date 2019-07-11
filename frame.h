@@ -351,6 +351,6 @@ data_type getDataType(char *utf8);
 
 field * getStaticField(class_instance *iclass, char *name, char *type);
 
-method_info *findMethod(class_loaded *lclass, char *method_name);
+method_info *findMethod(class_loaded *lclass, char *method_name, char *type);
 
 #endif

@@ -2791,16 +2791,37 @@ void Invokespecial(code_attribute *code) {
     char *name       = getUtf8Name(index);
     char *type       = getUtf8Type(index);
     // Conta os args a partir do MethodDesc
-
-    printf("CLASS NAME:  %s\n", class_name);
-    printf("METHOD NAME: %s\n", name);
-    printf("TYPE:        %s\n", type);
-
     int nargs = countArgs(type);
-    operand *args = (operand *) malloc(nargs * sizeof(operand));
+    int opCount = 0;
+    
+    if(DEBUG){
+        printf("CLASS NAME:  %s\n", class_name);
+        printf("METHOD NAME: %s\n", name);
+        printf("TYPE:        %s\n", type);
+        printf("nargs:       %d\n", nargs);
+    }
+    
+    if(!strcmp(class_name, "java/lang/Object")) return;
+
+    operand_item *op = GLOBAL_jvm_stack->top->op_stack->top;
+
+
+    // Conta a quantidade de operandos para os args
+    for (int i = 0; i < nargs; i++)
+    {
+        if (op->op.cat != UNIQUE)
+        {
+            opCount++;
+            op = op->next;
+        }
+        op = op->next;
+        opCount++;
+    }
+    
+    operand *args = (operand *) malloc(opCount * sizeof(operand));
 
     // Pop nos args
-    for (int i = nargs-1; i < 0; i--)
+    for (int i = opCount-1; i >= 0; i--)
     {
         args[i] = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     }
@@ -2817,21 +2838,34 @@ void Invokespecial(code_attribute *code) {
             // Se tiver o match - invoca
         // Se a class é uma interface e a classe objeto possui public no método dele, é invocado
         // Procura nas superinterfaces 
-
-    class_loaded *lclass = findClassLoaded((uint8_t *)class_name);
-    if(lclass == NULL)
-        lclass = loadClass(GLOBAL_path, class_name);
-    method_info *method  = findMethod(lclass, name);
-
+        
+    class_loaded *lclass = obj.data.ref->objectref->class;
+    printf("OPcount %d\n", opCount);
+    method_info *method  = findMethod(lclass, name, type);
     
-    // achou o método
+    if(method != NULL){
+        if(DEBUG) printf("ACHOU MÉTODO\n");
+        // pega o code
+        code_attribute *newCode = findCode(lclass, method);
 
 
-    // pega o code
-    // cria o frame
-    // push do frame
-    // execute()
+        if(DEBUG && newCode != NULL) printf("ACHOU Código\n");
+        // cria o frame
+        frame *fr = createFrame(newCode, lclass->class_str->constant_pool);
 
+        if(DEBUG && newCode != NULL) printf("Criou frame\n");
+
+        fr->local_vars[0] = obj;
+        for (int i = 1; i < opCount + 1; i++)
+        {
+            fr->local_vars[i] = args[i - 1];
+        }
+        getchar();
+        // execute()
+        execute(newCode);
+    }else{
+        if(DEBUG) printf("DEURUIM\n");
+    }
 }
 void Invokestatic(code_attribute *code) {
     if (DEBUG) printf("INVOKESTATIC\n");
