@@ -2441,7 +2441,7 @@ void Getstatic(code_attribute *code) {
         lclass = findClassLoaded((uint8_t *)class_name);
 
         // Ver se ela ta carregada
-        if(lclass != NULL)
+        if(lclass == NULL)
             loadClass(GLOBAL_path, class_name);
 
         // Pegar o operando do field
@@ -2469,7 +2469,6 @@ void Getstatic(code_attribute *code) {
 void Putstatic(code_attribute *code) {
     if (DEBUG) printf("PUTSTATIC\n");
 
-
     char *class_name, *name, *type;
 
     GLOBAL_jvm_stack->top->pc = GLOBAL_jvm_stack->top->pc + 1;
@@ -2496,7 +2495,7 @@ void Putstatic(code_attribute *code) {
         lclass = findClassLoaded((uint8_t *)class_name);
 
         // Ver se ela ta carregada
-        if(lclass != NULL)
+        if(lclass == NULL)
             loadClass(GLOBAL_path, class_name);
 
         // Pegar o operando do field
@@ -2509,7 +2508,6 @@ void Putstatic(code_attribute *code) {
         }
 
     }while(f == NULL);
-    
 
     // Carrega no field
     operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
@@ -2878,7 +2876,6 @@ void Invokedynamic(code_attribute *code) {
 }
 void New(code_attribute *code) {
     if (DEBUG) printf("NEW\n");
-
     GLOBAL_jvm_stack->top->pc++;
     uint8_t indexbyte1 = code->code[GLOBAL_jvm_stack->top->pc];
     GLOBAL_jvm_stack->top->pc++;
@@ -2913,18 +2910,18 @@ void New(code_attribute *code) {
     op.data.ref = ref;
     op.type = CLASS_TYPE;
 
-    // printf("NEW CLASS LOAD\n");
-    // printf("CLASS NAME: %s\n", op.data.ref->objectref->class->name);
-    // printf("STATIC FIELD COUNT: %d\n", op.data.ref->objectref->class->field_count);
-    // printf("DYNAMIC FIELD COUNT: %d\n", op.data.ref->objectref->class_instance->field_count);
-    // for (int i = 0; i < op.data.ref->objectref->class->field_count; i++)
-    // {
-    //     printf("STATIC FIELDS: %s\n", op.data.ref->objectref->class->fields[i].name);
-    // } 
-    // for (int i = 0; i < op.data.ref->objectref->class_instance->field_count; i++)
-    // {
-    //     printf("DYNAMIC FIELDS: %s\n", op.data.ref->objectref->class_instance->fields[i].name);
-    // }    
+    printf("NEW CLASS LOAD\n");
+    printf("CLASS NAME: %s\n", op.data.ref->objectref->class->name);
+    printf("STATIC FIELD COUNT: %d\n", op.data.ref->objectref->class->field_count);
+    printf("DYNAMIC FIELD COUNT: %d\n", op.data.ref->objectref->class_instance->field_count);
+    for (int i = 0; i < op.data.ref->objectref->class->field_count; i++)
+    {
+        printf("STATIC FIELDS: %s\n", op.data.ref->objectref->class->fields[i].name);
+    } 
+    for (int i = 0; i < op.data.ref->objectref->class_instance->field_count; i++)
+    {
+        printf("DYNAMIC FIELDS: %s\n", op.data.ref->objectref->class_instance->fields[i].name);
+    }        
 
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
 }

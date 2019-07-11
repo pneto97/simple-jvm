@@ -259,7 +259,7 @@ class_loaded *loadClass(char *path, char *name) {
     method_info *method  = findMethod(lclass, "<clinit>", "()V");
     if(method != NULL){
         code_attribute *code = findCode(lclass, method);
-        createFrame(code, lclass->class_str->constant_pool);
+        createFrame(code, lclass->class_str->constant_pool);        
         execute(code);
     }
 
@@ -321,7 +321,7 @@ frame *createFrame(code_attribute *code, cp_info *cp) {
     fr->local_vars      = (operand *)calloc(code->max_locals, sizeof(operand));
     fr->op_stack        = (operand_stack *)malloc(sizeof(operand_stack));
     fr->op_stack->top   = NULL;
-    fr->pc              = 0;
+    fr->pc              = -1;
 
     if(DEBUG) printf("------- FRAME CRIADO -------\n");
 
@@ -346,11 +346,14 @@ void free_frame(frame *f) {
 void execute(code_attribute *code) {
     // frame *fr = GLOBAL_jvm_stack->top;
     // inst_vector[0xb2](code);
+    int pc = 0;
 
-    while (GLOBAL_jvm_stack->top->pc < code->code_length) {
-        // printf("pc: %d\n",GLOBAL_jvm_stack->top->pc);
+    while (pc < (int32_t)code->code_length - 1) {
         // printOpcode(code->code[GLOBAL_jvm_stack->top->pc]);
         // printf("\n");
+        GLOBAL_jvm_stack->top->pc++;
+        pc = GLOBAL_jvm_stack->top->pc;
+        if (DEBUG) printf("CODELENGHT: %d\n", code->code_length);
         if (DEBUG) printf("(%d) ",GLOBAL_jvm_stack->top->pc);
         inst_vector[code->code[GLOBAL_jvm_stack->top->pc]](code);
         // printf("\n");
@@ -358,9 +361,10 @@ void execute(code_attribute *code) {
         if (DEBUG) {
             PrintLocalVar();
             PrintOpStack();
+            getchar();
         }
-        GLOBAL_jvm_stack->top->pc++;
     }
+
 
     // pop frame
 }

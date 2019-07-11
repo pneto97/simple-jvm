@@ -272,7 +272,9 @@ void printMethods(class_structure *jclass) {
         printf("Name Index: #%u ", jclass->methods[i].name_index);
         printUtf8(jclass->methods[i].name_index, jclass);
         printf("\n");
-        printf("Descriptor Index: %u\n", jclass->methods[i].descriptor_index);
+        printf("Descriptor Index: #%u ", jclass->methods[i].descriptor_index);
+        printUtf8(jclass->methods[i].descriptor_index, jclass);
+        printf("\n");
         printf("Attribute Count: %u\n", jclass->methods[i].attributes_count);
 
         uint16_t attribute_count = jclass->methods[i].attributes_count;
