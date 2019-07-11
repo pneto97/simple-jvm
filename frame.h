@@ -85,6 +85,7 @@ typedef struct object_handler{
 typedef union reference_type{
     object * objectref;
     array * arrayref;
+    char * stringref;
     // interface_instance;
     // null;
 } reference_type;

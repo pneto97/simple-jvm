@@ -353,20 +353,17 @@ void execute(code_attribute *code) {
         // printf("\n");
         GLOBAL_jvm_stack->top->pc++;
         pc = GLOBAL_jvm_stack->top->pc;
-        if (DEBUG) printf("CODELENGHT: %d\n", code->code_length);
         if (DEBUG) printf("(%d) ",GLOBAL_jvm_stack->top->pc);
         inst_vector[code->code[GLOBAL_jvm_stack->top->pc]](code);
         // printf("\n");
         if (GLOBAL_jvm_stack->top == NULL) break;
+        if (code->code[pc] >= 0xac && code->code[pc] <= 0xb1) break;
         if (DEBUG) {
             PrintLocalVar();
             PrintOpStack();
             getchar();
         }
     }
-
-
-    // pop frame
 }
 
 void PrintLocalVar() {

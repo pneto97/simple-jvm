@@ -51,5 +51,7 @@ public class paulo{
         short a2 = (short) a1;
         System.out.println(a1);
 
+        System.out.println("BrasiL!");
+
     }
 }

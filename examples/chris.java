@@ -1,15 +1,21 @@
-import pasta_teste.chrisport;
-
-public class chris{
-    static int lucaomito;
-    public static void main(String[] args) {
-        // chris test = new chris;
-        int c = 4;
-        chrisport cris = new chrisport(6,8);
-        c = c + cris.z;
-        System.out.println("O valor de C eh");
-        System.out.println(c);
-        System.out.println("O valor de Z eh");
-        System.out.println(cris.z);
+class Vehicle {
+    // protected String brand = "Ford";         // Vehicle attribute
+    public void honk() {                     // Vehicle method
+      System.out.println("Tuut, tuut!");
     }
-}
+  }
+  
+  class Car extends Vehicle {
+    // private String modelName = "Mustang";    // Car attribute
+    public static void main(String[] args) {
+  
+      // Create a myCar object
+      Car myCar = new Car();
+  
+      // Call the honk() method (from the Vehicle class) on the myCar object
+      myCar.honk();
+  
+      // Display the value of the brand attribute (from the Vehicle class) and the value of the modelName from the Car class
+      System.out.println("oi"); 
+    }
+  }

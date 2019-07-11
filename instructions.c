@@ -223,7 +223,8 @@ void Ldc(code_attribute *code) {
         op.type = FLOAT_TYPE;
         break;
     case CONSTANT_String:
-        op.data.ref = GLOBAL_jvm_stack->top->constant_pool[cp.info.stringInfo.string_index - 1].info.utf8Info.bytes;
+        op.data.ref = (reference_type *) malloc(sizeof (reference_type));
+        op.data.ref->stringref = (char *) GLOBAL_jvm_stack->top->constant_pool[cp.info.stringInfo.string_index - 1].info.utf8Info.bytes;
         op.cat  = UNIQUE;
         op.type = STRING_TYPE;
         break;
@@ -265,7 +266,8 @@ void Ldc_w(code_attribute *code) {
         op.type = FLOAT_TYPE;
         break;
     case CONSTANT_String:
-        op.data.ref = GLOBAL_jvm_stack->top->constant_pool[cp.info.stringInfo.string_index - 1].info.utf8Info.bytes;
+        op.data.ref = (reference_type *) malloc(sizeof (reference_type));
+        op.data.ref->stringref = (char *) GLOBAL_jvm_stack->top->constant_pool[cp.info.stringInfo.string_index - 1].info.utf8Info.bytes;
         op.cat  = UNIQUE;
         op.type = STRING_TYPE;
         break;
@@ -2697,7 +2699,7 @@ void Invokevirtual(code_attribute *code) {
                 break;
             
             case STRING_TYPE:
-                printf("%s", (char *) op.data.ref);
+                printf("%s", (char *) op.data.ref->stringref);
                 break;
             default:
                 printf("====BUG====");
@@ -2706,17 +2708,174 @@ void Invokevirtual(code_attribute *code) {
 
             if (!strcmp(name, "println")) printf("\n");
         }
-    } else if (!strcmp(class_name, "java/lang/StringBuilder") && !strcmp(name, "append")) {
-
 
     } else {
 
-        int argsCount = countArgs(type);
-        if(DEBUG) printf("argsCount: %d\n", argsCount);
+
+        int nargs = countArgs(type);
+        int opCount = 0;
+        
+        if(DEBUG){
+            printf("CLASS NAME:  %s\n", class_name);
+            printf("METHOD NAME: %s\n", name);
+            printf("TYPE:        %s\n", type);
+            printf("nargs:       %d\n", nargs);
+        }
+        
+        if(!strcmp(class_name, "java/lang/Object")) return;
+
+        operand_item *op = GLOBAL_jvm_stack->top->op_stack->top;
+
+
+        // Conta a quantidade de operandos para os args
+        for (int i = 0; i < nargs; i++)
+        {
+            if (op->op.cat != UNIQUE)
+            {
+                opCount++;
+                op = op->next;
+            }
+            op = op->next;
+            opCount++;
+        }
+        
+        operand *args = (operand *) malloc(opCount * sizeof(operand));
+
+        // Pop nos args
+        for (int i = opCount-1; i >= 0; i--)
+        {
+            args[i] = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+        }
+        operand obj = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+        
+
+        class_loaded *lclass = obj.data.ref->objectref->class;
+        if(DEBUG) printf("OPcount %d\n", opCount);
+
+        do{
+            method_info *method  = findMethod(lclass, name, type);
+            
+            if(method == NULL){
+                char * superclass_name;
+                int superclass_index = lclass->class_str->super_class;
+                superclass_name = getUtf8Class(superclass_index);
+                lclass = findClassLoaded((uint8_t *)superclass_name);
+            }
+
+            else{
+                if(DEBUG) printf("ACHOU MÉTODO\n");
+                // pega o code
+                code_attribute *newCode = findCode(lclass, method);
+
+
+                if(DEBUG && newCode != NULL) printf("ACHOU Código\n");
+                // cria o frame
+                frame *fr = createFrame(newCode, lclass->class_str->constant_pool);
+
+                if(DEBUG && newCode != NULL) printf("Criou frame\n");
+
+                fr->local_vars[0] = obj;
+                for (int i = 1; i < opCount + 1; i++)
+                {
+                    fr->local_vars[i] = args[i - 1];
+                }
+                if(DEBUG) getchar();
+                // execute()
+                execute(newCode);
+                break;
+            }
+        }while(!strcmp("java/lang/Object", (char *) lclass->name));
     }
 }
 void Invokespecial(code_attribute *code) {
     if (DEBUG) printf("INVOKESPECIAL\n");
+
+    GLOBAL_jvm_stack->top->pc++;
+    int8_t indexbyte1 = code->code[GLOBAL_jvm_stack->top->pc];
+    GLOBAL_jvm_stack->top->pc++;
+    int8_t indexbyte2 = code->code[GLOBAL_jvm_stack->top->pc];
+
+    /* Constrói a referência */
+    uint16_t index = (indexbyte1 << 8) | indexbyte2;
+
+    char *class_name = getUtf8Class(index);
+    char *name       = getUtf8Name(index);
+    char *type       = getUtf8Type(index);
+    // Conta os args a partir do MethodDesc
+    int nargs = countArgs(type);
+    int opCount = 0;
+    
+    if(DEBUG){
+        printf("CLASS NAME:  %s\n", class_name);
+        printf("METHOD NAME: %s\n", name);
+        printf("TYPE:        %s\n", type);
+        printf("nargs:       %d\n", nargs);
+    }
+
+    
+
+    
+    if(!strcmp(class_name, "java/lang/Object")) return;
+
+    operand_item *op = GLOBAL_jvm_stack->top->op_stack->top;
+
+
+    // Conta a quantidade de operandos para os args
+    for (int i = 0; i < nargs; i++)
+    {
+        if (op->op.cat != UNIQUE)
+        {
+            opCount++;
+            op = op->next;
+        }
+        op = op->next;
+        opCount++;
+    }
+    
+    operand *args = (operand *) malloc(opCount * sizeof(operand));
+
+    // Pop nos args
+    for (int i = opCount-1; i >= 0; i--)
+    {
+        args[i] = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+    }
+    operand obj = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
+
+ 
+        
+    class_loaded *lclass = obj.data.ref->objectref->class;
+
+
+    if(DEBUG) printf("OPcount %d\n", opCount);
+    method_info *method  = findMethod(lclass, name, type);
+    
+    if(method != NULL){
+        if(DEBUG) printf("ACHOU MÉTODO\n");
+        // pega o code
+        code_attribute *newCode = findCode(lclass, method);
+
+
+        if(DEBUG && newCode != NULL) printf("ACHOU Código\n");
+        // cria o frame
+        frame *fr = createFrame(newCode, lclass->class_str->constant_pool);
+
+        if(DEBUG && newCode != NULL) printf("Criou frame\n");
+
+        fr->local_vars[0] = obj;
+        for (int i = 1; i < opCount + 1; i++)
+        {
+            fr->local_vars[i] = args[i - 1];
+        }
+        if(DEBUG) getchar();
+        // execute()
+        execute(newCode);
+    }else{
+        if(DEBUG) printf("DEURUIM\n");
+    }
+}
+void Invokestatic(code_attribute *code) {
+    if (DEBUG) printf("INVOKESTATIC\n");
 
     GLOBAL_jvm_stack->top->pc++;
     int8_t indexbyte1 = code->code[GLOBAL_jvm_stack->top->pc];
@@ -2764,22 +2923,9 @@ void Invokespecial(code_attribute *code) {
     {
         args[i] = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
     }
-    operand obj = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
-
-    // Verificações
-    // Se verdadeiras
-        // O método não é um init
-        // Se a referencia é uma classe, essa é superclass
-        // ACC_SUPER setada no class file
-    // LOOP
-        // Se a classe possui uma declaração igual ao método em questão, invoca o método
-        // Senão se C tem uma superclass procura pelo método -> Recursivo
-            // Se tiver o match - invoca
-        // Se a class é uma interface e a classe objeto possui public no método dele, é invocado
-        // Procura nas superinterfaces 
-        
-    class_loaded *lclass = obj.data.ref->objectref->class;
-    printf("OPcount %d\n", opCount);
+    class_loaded *lclass = findClassLoaded((uint8_t *) class_name);
+    
+    if(DEBUG) printf("OPcount %d\n", opCount);
     method_info *method  = findMethod(lclass, name, type);
     
     if(method != NULL){
@@ -2794,20 +2940,15 @@ void Invokespecial(code_attribute *code) {
 
         if(DEBUG && newCode != NULL) printf("Criou frame\n");
 
-        fr->local_vars[0] = obj;
-        for (int i = 1; i < opCount + 1; i++)
+        for (int i = 0; i < opCount; i++)
         {
-            fr->local_vars[i] = args[i - 1];
+            fr->local_vars[i] = args[i];
         }
-        getchar();
         // execute()
         execute(newCode);
     }else{
         if(DEBUG) printf("DEURUIM\n");
     }
-}
-void Invokestatic(code_attribute *code) {
-    if (DEBUG) printf("INVOKESTATIC\n");
 }
 void Invokeinterface(code_attribute *code) {
     if (DEBUG) printf("INVOKEINTERFACE\n");
@@ -2850,18 +2991,19 @@ void New(code_attribute *code) {
     operand op;
     op.data.ref = ref;
     op.type = CLASS_TYPE;
-
-    printf("NEW CLASS LOAD\n");
-    printf("CLASS NAME: %s\n", op.data.ref->objectref->class->name);
-    printf("STATIC FIELD COUNT: %d\n", op.data.ref->objectref->class->field_count);
-    printf("DYNAMIC FIELD COUNT: %d\n", op.data.ref->objectref->class_instance->field_count);
+    if(DEBUG) {
+        printf("NEW CLASS LOAD\n");
+        printf("CLASS NAME: %s\n", op.data.ref->objectref->class->name);
+        printf("STATIC FIELD COUNT: %d\n", op.data.ref->objectref->class->field_count);
+        printf("DYNAMIC FIELD COUNT: %d\n", op.data.ref->objectref->class_instance->field_count);
+    }
     for (int i = 0; i < op.data.ref->objectref->class->field_count; i++)
     {
-        printf("STATIC FIELDS: %s\n", op.data.ref->objectref->class->fields[i].name);
+        if(DEBUG) printf("STATIC FIELDS: %s\n", op.data.ref->objectref->class->fields[i].name);
     } 
     for (int i = 0; i < op.data.ref->objectref->class_instance->field_count; i++)
     {
-        printf("DYNAMIC FIELDS: %s\n", op.data.ref->objectref->class_instance->fields[i].name);
+        if(DEBUG) printf("DYNAMIC FIELDS: %s\n", op.data.ref->objectref->class_instance->fields[i].name);
     }        
 
     push_op_stack(GLOBAL_jvm_stack->top->op_stack, op);
