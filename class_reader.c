@@ -35,6 +35,8 @@ void checkConsistency(class_structure *jclass, char *file) {
 
     formatted_filename = getFilename(file);
     name_index = getFilename(name_index);
+    printf("Name Index: %s\n", formatted_filename);
+
 
     if (strcmp(name_index, formatted_filename) != 0) {
         printf("Falha de consistencia.\n");
@@ -43,21 +45,18 @@ void checkConsistency(class_structure *jclass, char *file) {
 }
 
 char *getFilename(char *sentence) {
-    char *buffer;
-    char *result    = sentence;
-    char split_by[] = "/\\";
-
-    buffer = strtok(sentence, split_by);
-
-    while (buffer != NULL) {
-        result = buffer;
-        buffer = strtok(NULL, split_by);
+    char *retVal = sentence, *p;
+    
+    for (p = sentence; *p; p++) {
+        if (*p == '/' || *p == '\\' || *p == ':') {
+            retVal = p;
+            retVal++;
+        }
     }
-
     //Remove tudo apos o '.', ou seja, o .class
-    sscanf(result, "%[^.]s", result);
+    sscanf(retVal, "%[^.]s", retVal);
 
-    return result;
+    return retVal;
 }
 
 int isClassFile(class_structure *jclass) {
