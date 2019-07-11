@@ -1,9 +1,10 @@
 public class helloworld{
     public static void main(String[] args) {
-        long first =  15;
+        double first =  -2.0;
         long second = 5;
-        long sum = first / second;
-        System.out.println(sum);
+        byte bytee = 3;
+        System.out.println();
+        System.out.println(bytee);
 
         //double third = 10.666666f;
         //double forth = 20f;

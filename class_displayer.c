@@ -540,7 +540,7 @@ int printCode(uint8_t *code, int pc, class_structure *jclass) {
         return 1;
     } else if (op == LDC_W || op == LDC2_W) {
         uint16_t ref = build16(code[pc + 1], code[pc + 2]);
-        printf(" #%d // ", ref);
+        printf(" #%lld // ", (int64_t) ref);
         printConstantPoolValue(ref - 1, jclass);
         return 2;
     } else if (op >= ILOAD && op <= ALOAD) {

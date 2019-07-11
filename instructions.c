@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DEBUG 1
+#define DEBUG 0
 
 void Nop(code_attribute *code) {
     if (DEBUG) printf("NOP\n");
@@ -2657,6 +2657,7 @@ void Invokevirtual(code_attribute *code) {
     if (isPrint) {
 
         if (strcmp(type, "()V")) {
+
             operand op = pop_op_stack(GLOBAL_jvm_stack->top->op_stack);
             switch (op.type) {
             case RETURN_ADDR_TYPE:
@@ -2671,7 +2672,7 @@ void Invokevirtual(code_attribute *code) {
                 printf("%f", makeFloat(op.data.bytes));
                 break;
             case BYTE_TYPE:
-                printf("%x", (uint8_t)op.data.bytes);
+                printf("%d", (int8_t)op.data.bytes);
                 break;
             case CHAR_TYPE:
                 printf("%c", (char)op.data.bytes);
@@ -2706,8 +2707,8 @@ void Invokevirtual(code_attribute *code) {
                 break;
             }
 
-            if (!strcmp(name, "println")) printf("\n");
         }
+        if (!strcmp(name, "println")) printf("\n");
 
     } else {
 
