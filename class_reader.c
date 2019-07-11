@@ -35,8 +35,6 @@ void checkConsistency(class_structure *jclass, char *file) {
 
     formatted_filename = getFilename(file);
     name_index = getFilename(name_index);
-    printf("Name Index: %s\n", formatted_filename);
-
 
     if (strcmp(name_index, formatted_filename) != 0) {
         printf("Falha de consistencia.\n");
